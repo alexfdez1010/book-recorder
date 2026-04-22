@@ -11,7 +11,7 @@ function make(over: Partial<BookCandidate>): BookCandidate {
     publicationDate: null,
     pages: null,
     coverUrl: null,
-    category: null,
+    category: 'Other',
     language: null,
     ...over,
   };

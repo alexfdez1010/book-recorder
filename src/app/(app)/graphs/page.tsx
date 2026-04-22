@@ -1,4 +1,5 @@
 import { listBooks } from '@/lib/books/repository';
+import { languageName } from '@/lib/books/language';
 
 export const dynamic = 'force-dynamic';
 import {
@@ -20,7 +21,10 @@ export default async function GraphsPage() {
   const data = {
     booksPerMonth: booksPerMonth(plain),
     categories: distribution(plain, 'category'),
-    languages: distribution(plain, 'language'),
+    languages: distribution(plain, 'language').map((e) => ({
+      label: languageName(e.label),
+      value: e.value,
+    })),
     cumulativePages: cumulativePages(plain),
     meanPagesPerDay: meanPagesPerDay(plain),
     totalBooks: books.length,

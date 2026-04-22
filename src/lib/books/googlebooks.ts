@@ -1,5 +1,6 @@
 import { BookCandidate } from './types';
 import { normalizeLanguage } from './language';
+import { normalizeCategory } from './categories';
 
 const SEARCH_URL = 'https://www.googleapis.com/books/v1/volumes';
 
@@ -40,7 +41,7 @@ function toCandidate(vol: GoogleVolume): BookCandidate | null {
     publicationDate: normalizePublishedDate(info.publishedDate),
     pages: typeof info.pageCount === 'number' && info.pageCount > 0 ? info.pageCount : null,
     coverUrl: cover ? cover.replace(/^http:\/\//, 'https://') : null,
-    category: info.categories?.[0] ?? null,
+    category: normalizeCategory(info.categories?.[0]),
     language: normalizeLanguage(info.language),
   };
 }

@@ -40,7 +40,7 @@ function mergeOne(a: BookCandidate, b: BookCandidate): BookCandidate {
     publicationDate: a.publicationDate ?? b.publicationDate,
     pages: a.pages ?? b.pages,
     coverUrl: a.coverUrl ?? b.coverUrl,
-    category: a.category ?? b.category,
+    category: a.category === 'Other' ? b.category : a.category,
     language: a.language ?? b.language,
   };
 }

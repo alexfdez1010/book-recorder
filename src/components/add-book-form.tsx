@@ -3,6 +3,8 @@
 import { useState, useTransition } from 'react';
 import { addBookAction } from '@/lib/books/actions';
 import type { BookCandidate } from '@/lib/books/types';
+import { BOOK_CATEGORIES } from '@/lib/books/categories';
+import { LANGUAGE_KEYS, LANGUAGE_NAMES } from '@/lib/books/language';
 
 function today(): string {
   return new Date().toISOString().slice(0, 10);
@@ -58,19 +60,18 @@ export function AddBookForm({
           defaultValue={candidate.pages ?? ''}
           required
         />
-        <Field
+        <SelectField
           label="Language"
           name="language"
           defaultValue={candidate.language ?? 'en'}
-          required
-          placeholder="en"
+          options={LANGUAGE_KEYS.map((k) => ({ value: k, label: LANGUAGE_NAMES[k] }))}
         />
       </div>
-      <Field
+      <SelectField
         label="Category"
         name="category"
-        defaultValue={candidate.category ?? ''}
-        required
+        defaultValue={candidate.category}
+        options={BOOK_CATEGORIES.map((c) => ({ value: c, label: c }))}
       />
       <Field
         label="Cover URL"
@@ -134,6 +135,36 @@ function Field({
         min={min}
         className="rounded-lg border border-neutral-300 px-3 py-2 outline-none focus:border-neutral-900"
       />
+    </label>
+  );
+}
+
+function SelectField({
+  label,
+  name,
+  defaultValue,
+  options,
+}: {
+  label: string;
+  name: string;
+  defaultValue: string;
+  options: ReadonlyArray<{ value: string; label: string }>;
+}) {
+  return (
+    <label className="flex flex-col gap-1">
+      <span className="text-xs font-medium text-neutral-600">{label}</span>
+      <select
+        name={name}
+        defaultValue={defaultValue}
+        required
+        className="rounded-lg border border-neutral-300 bg-white px-3 py-2 outline-none focus:border-neutral-900"
+      >
+        {options.map((o) => (
+          <option key={o.value} value={o.value}>
+            {o.label}
+          </option>
+        ))}
+      </select>
     </label>
   );
 }

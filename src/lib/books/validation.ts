@@ -1,4 +1,6 @@
 import { z } from 'zod';
+import { BOOK_CATEGORIES } from './categories';
+import { LANGUAGE_KEYS } from './language';
 
 export const newBookSchema = z.object({
   title: z.string().min(1, 'Title is required'),
@@ -10,8 +12,8 @@ export const newBookSchema = z.object({
     .or(z.literal('')),
   pages: z.coerce.number().int().positive('Pages must be positive'),
   coverUrl: z.string().url().optional().or(z.literal('')),
-  category: z.string().min(1, 'Category is required'),
-  language: z.string().min(2, 'Language is required').max(8),
+  category: z.enum(BOOK_CATEGORIES),
+  language: z.enum(LANGUAGE_KEYS),
   finishedOn: z
     .string()
     .regex(/^\d{4}-\d{2}-\d{2}$/, 'Finished-on must be YYYY-MM-DD'),

@@ -27,10 +27,8 @@ test('search, select, and add a book end-to-end', async ({ page }) => {
 
   const pages = page.getByLabel('Pages');
   if ((await pages.inputValue()) === '') await pages.fill('180');
-  const category = page.getByLabel('Category');
-  if ((await category.inputValue()) === '') await category.fill('Fiction');
-  const language = page.getByLabel('Language');
-  if ((await language.inputValue()) === '') await language.fill('en');
+  await page.getByLabel('Category').selectOption('Fiction');
+  await page.getByLabel('Language').selectOption('en');
 
   await page.getByRole('button', { name: 'Save book' }).click();
   await expect(page.getByRole('dialog')).toBeHidden();

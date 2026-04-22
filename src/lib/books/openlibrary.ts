@@ -1,5 +1,6 @@
 import { BookCandidate } from './types';
 import { normalizeLanguage } from './language';
+import { normalizeCategory } from './categories';
 
 const SEARCH_URL = 'https://openlibrary.org/search.json';
 
@@ -32,7 +33,7 @@ function toCandidate(doc: OpenLibraryDoc): BookCandidate | null {
     publicationDate: doc.first_publish_year ? `${doc.first_publish_year}-01-01` : null,
     pages: typeof doc.number_of_pages_median === 'number' ? doc.number_of_pages_median : null,
     coverUrl: coverUrlFromId(doc.cover_i),
-    category: doc.subject?.[0] ?? null,
+    category: normalizeCategory(doc.subject?.[0]),
     language: normalizeLanguage(doc.language?.[0]),
   };
 }

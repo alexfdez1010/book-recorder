@@ -3,6 +3,7 @@
 import { useState, useTransition } from 'react';
 import { searchBooksAction } from '@/lib/books/actions';
 import type { BookCandidate } from '@/lib/books/types';
+import { languageName } from '@/lib/books/language';
 
 export function BookSearchPanel({ onSelect }: { onSelect: (c: BookCandidate) => void }) {
   const [query, setQuery] = useState('');
@@ -69,7 +70,7 @@ export function BookSearchPanel({ onSelect }: { onSelect: (c: BookCandidate) => 
                 <p className="truncate text-sm text-neutral-600">{c.author}</p>
                 <p className="text-xs text-neutral-500">
                   {c.publicationDate?.slice(0, 4) ?? '—'} · {c.pages ?? '?'} pages ·{' '}
-                  {c.language ?? '—'} · {c.source}
+                  {languageName(c.language)} · {c.source}
                 </p>
               </div>
             </button>

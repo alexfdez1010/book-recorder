@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import { listBooks } from '@/lib/books/repository';
+import { languageName } from '@/lib/books/language';
 
 export const dynamic = 'force-dynamic';
 import { AddBookDialog } from '@/components/add-book-dialog';
@@ -59,7 +60,7 @@ export default async function BooksPage() {
                   <dt>Category</dt>
                   <dd className="truncate text-neutral-700">{b.category}</dd>
                   <dt>Language</dt>
-                  <dd className="text-neutral-700">{b.language}</dd>
+                  <dd className="text-neutral-700">{languageName(b.language)}</dd>
                   <dt>Pages</dt>
                   <dd className="text-neutral-700">{b.pages}</dd>
                   <dt>Published</dt>

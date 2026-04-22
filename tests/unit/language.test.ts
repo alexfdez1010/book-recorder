@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { normalizeLanguage } from '@/lib/books/language';
+import { languageName, normalizeLanguage } from '@/lib/books/language';
 
 describe('normalizeLanguage', () => {
   it('returns null for empty input', () => {
@@ -7,7 +7,7 @@ describe('normalizeLanguage', () => {
     expect(normalizeLanguage('')).toBeNull();
   });
 
-  it('keeps ISO 639-1 codes lowercased', () => {
+  it('keeps known ISO 639-1 codes lowercased', () => {
     expect(normalizeLanguage('EN')).toBe('en');
     expect(normalizeLanguage('es')).toBe('es');
   });
@@ -19,7 +19,25 @@ describe('normalizeLanguage', () => {
     expect(normalizeLanguage('ger')).toBe('de');
   });
 
-  it('passes unknown 3-letter codes through', () => {
-    expect(normalizeLanguage('xyz')).toBe('xyz');
+  it('returns null for unknown codes', () => {
+    expect(normalizeLanguage('xyz')).toBeNull();
+    expect(normalizeLanguage('zz')).toBeNull();
+  });
+});
+
+describe('languageName', () => {
+  it('returns the human name for known codes', () => {
+    expect(languageName('en')).toBe('English');
+    expect(languageName('es')).toBe('Spanish');
+    expect(languageName('JA')).toBe('Japanese');
+  });
+
+  it('returns Unknown for empty input', () => {
+    expect(languageName(null)).toBe('Unknown');
+    expect(languageName('')).toBe('Unknown');
+  });
+
+  it('passes unknown codes through unchanged', () => {
+    expect(languageName('xx')).toBe('xx');
   });
 });
