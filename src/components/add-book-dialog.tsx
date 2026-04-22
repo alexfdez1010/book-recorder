@@ -1,9 +1,20 @@
 'use client';
 
 import { useState } from 'react';
+import { Plus } from 'lucide-react';
 import { BookSearchPanel } from './book-search-panel';
 import { AddBookForm } from './add-book-form';
 import type { BookCandidate } from '@/lib/books/types';
+import { Button } from '@/components/ui/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogBody,
+  DialogTitle,
+  DialogDescription,
+  DialogTrigger,
+} from '@/components/ui/dialog';
 
 type Mode =
   | { kind: 'search' }
@@ -19,60 +30,54 @@ export function AddBookDialog() {
     setMode({ kind: 'search' });
   }
 
-  const showForm = mode.kind !== 'search';
+  const title =
+    mode.kind === 'manual'
+      ? 'Add by hand'
+      : mode.kind === 'selected'
+        ? 'Confirm details'
+        : 'Catalogue a volume';
+  const desc =
+    mode.kind === 'manual'
+      ? 'No match in the stacks — write the entry yourself.'
+      : mode.kind === 'selected'
+        ? 'Verify the metadata before it is inscribed in the ledger.'
+        : 'Search the world’s libraries. Pick one. Or write your own.';
 
   return (
-    <>
-      <button
-        onClick={() => setOpen(true)}
-        className="rounded-lg bg-neutral-900 px-4 py-2 text-sm font-medium text-white hover:bg-neutral-800"
-      >
-        Add book
-      </button>
-
-      {open ? (
-        <div
-          role="dialog"
-          aria-modal="true"
-          aria-label="Add book"
-          className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/40 p-4"
-          onClick={close}
-        >
-          <div
-            className="mt-10 w-full max-w-2xl rounded-2xl bg-white p-6 shadow-xl"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="mb-4 flex items-center justify-between">
-              <h2 className="text-lg font-semibold">
-                {showForm
-                  ? mode.kind === 'manual'
-                    ? 'Add manually'
-                    : 'Confirm details'
-                  : 'Search for a book'}
-              </h2>
-              <button
-                onClick={close}
-                aria-label="Close"
-                className="rounded-md px-2 py-1 text-neutral-500 hover:bg-neutral-100"
-              >
-                ✕
-              </button>
-            </div>
-            {mode.kind === 'search' ? (
-              <BookSearchPanel
-                onSelect={(c) => setMode({ kind: 'selected', candidate: c })}
-                onManual={() => setMode({ kind: 'manual' })}
-              />
-            ) : (
-              <AddBookForm
-                candidate={mode.kind === 'selected' ? mode.candidate : null}
-                onBack={() => setMode({ kind: 'search' })}
-                onDone={close}
-              />
-            )}
-          </div>
-        </div>
-      ) : null}
-    </>
+    <Dialog
+      open={open}
+      onOpenChange={(o) => {
+        setOpen(o);
+        if (!o) setMode({ kind: 'search' });
+      }}
+    >
+      <DialogTrigger asChild>
+        <Button variant="blood">
+          <Plus className="h-4 w-4" strokeWidth={3} />
+          New entry
+        </Button>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogDescription>Form 07 · Acquisition</DialogDescription>
+          <DialogTitle>{title}</DialogTitle>
+          <DialogDescription>{desc}</DialogDescription>
+        </DialogHeader>
+        <DialogBody>
+          {mode.kind === 'search' ? (
+            <BookSearchPanel
+              onSelect={(c) => setMode({ kind: 'selected', candidate: c })}
+              onManual={() => setMode({ kind: 'manual' })}
+            />
+          ) : (
+            <AddBookForm
+              candidate={mode.kind === 'selected' ? mode.candidate : null}
+              onBack={() => setMode({ kind: 'search' })}
+              onDone={close}
+            />
+          )}
+        </DialogBody>
+      </DialogContent>
+    </Dialog>
   );
 }

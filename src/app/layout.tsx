@@ -1,13 +1,26 @@
 import type { Metadata } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
+import { Fraunces, Bricolage_Grotesque, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 
-const geistSans = Geist({ variable: '--font-geist-sans', subsets: ['latin'] });
-const geistMono = Geist_Mono({ variable: '--font-geist-mono', subsets: ['latin'] });
+const fraunces = Fraunces({
+  variable: '--font-fraunces',
+  subsets: ['latin'],
+  weight: ['400', '600', '700', '900'],
+});
+const grotesk = Bricolage_Grotesque({
+  variable: '--font-grotesk',
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+});
+const jetbrains = JetBrains_Mono({
+  variable: '--font-jetbrains',
+  subsets: ['latin'],
+  weight: ['400', '500', '700'],
+});
 
 export const metadata: Metadata = {
-  title: 'Book Recorder',
-  description: 'Track books you have read.',
+  title: 'BOOK RECORDER — personal reading ledger',
+  description: 'A brutalist ledger for books finished.',
 };
 
 export default function RootLayout({
@@ -15,7 +28,9 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body
+        className={`${fraunces.variable} ${grotesk.variable} ${jetbrains.variable} antialiased`}
+      >
         {children}
       </body>
     </html>

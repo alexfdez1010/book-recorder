@@ -1,5 +1,9 @@
 import { redirect } from 'next/navigation';
 import { createSession } from '@/lib/auth/session';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Stamp } from '@/components/ui/stamp';
 
 async function loginAction(formData: FormData) {
   'use server';
@@ -16,32 +20,59 @@ export default async function LoginPage({
 }) {
   const { error } = await searchParams;
   return (
-    <main className="flex min-h-screen items-center justify-center bg-neutral-50 p-6">
+    <main className="relative flex min-h-screen items-center justify-center p-6">
+      <div className="absolute left-6 top-6 font-mono text-[10px] uppercase tracking-[0.3em] text-ink-mute">
+        Restricted · Members only · Ref. 000-01
+      </div>
+      <div className="absolute right-6 top-6">
+        <Stamp>private collection</Stamp>
+      </div>
+
       <form
         action={loginAction}
-        className="w-full max-w-sm space-y-4 rounded-2xl border border-neutral-200 bg-white p-8 shadow-sm"
+        className="w-full max-w-md bg-paper-soft border-[4px] border-ink brutal-shadow"
       >
-        <h1 className="text-2xl font-semibold text-neutral-900">Book Recorder</h1>
-        <p className="text-sm text-neutral-500">Enter password to continue.</p>
-        <input
-          type="password"
-          name="password"
-          autoFocus
-          required
-          aria-label="Password"
-          className="w-full rounded-lg border border-neutral-300 px-3 py-2 outline-none focus:border-neutral-900"
-        />
-        {error ? (
-          <p role="alert" className="text-sm text-red-600">
-            Invalid password.
+        <div className="border-b-[3px] border-ink bg-paper px-9 py-7">
+          <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-ink-mute">
+            Access credential required
           </p>
-        ) : null}
-        <button
-          type="submit"
-          className="w-full rounded-lg bg-neutral-900 px-4 py-2 font-medium text-white hover:bg-neutral-800"
-        >
-          Unlock
-        </button>
+          <h1 className="mt-3 font-serif text-5xl font-black leading-none tracking-tight">
+            The Stacks
+          </h1>
+          <p className="mt-3 font-mono text-[11px] uppercase tracking-[0.18em] text-ink-soft">
+            Enter the passphrase to consult the ledger.
+          </p>
+        </div>
+
+        <div className="space-y-6 px-9 py-8">
+          <div className="space-y-1.5">
+            <Label htmlFor="password">Passphrase</Label>
+            <Input
+              id="password"
+              type="password"
+              name="password"
+              autoFocus
+              required
+              aria-label="Password"
+              placeholder="••••••••"
+            />
+          </div>
+
+          {error ? (
+            <p
+              role="alert"
+              className="border-[3px] border-blood bg-paper px-3 py-2 font-mono text-xs text-blood uppercase tracking-[0.12em]"
+            >
+              ✕ Rejected. Passphrase does not match the register.
+            </p>
+          ) : null}
+
+          <Button type="submit" variant="ink" size="lg" className="w-full">
+            Unlock the ledger →
+          </Button>
+        </div>
+
+        <div className="barcode h-3 mx-9 mb-7" aria-hidden />
       </form>
     </main>
   );

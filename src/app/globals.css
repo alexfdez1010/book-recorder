@@ -1,26 +1,162 @@
-@import "tailwindcss";
+@import 'tailwindcss';
+
+/* ===========================================================================
+   BRUTALIST BOOK — design tokens
+   Aesthetic: aged paper, heavy ink, library-stamp accents, ledger grid.
+   No rounded corners. Hard drop-shadows. Typographic hierarchy does the work.
+=========================================================================== */
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --paper: #f2ead3;
+  --paper-soft: #f7f1e1;
+  --paper-edge: #e8dfc4;
+  --ink: #0b0b0b;
+  --ink-soft: #2a2a2a;
+  --ink-mute: #6e6a5d;
+  --blood: #c8201a;
+  --ochre: #d98f2b;
+  --moss: #2f5233;
+  --leather: #5b2a2a;
+  --bone: #fbf7ea;
+
+  --background: var(--paper);
+  --foreground: var(--ink);
+
+  --border: 3px;
+  --border-heavy: 4px;
+  --shadow-offset: 6px;
+  --shadow-offset-sm: 3px;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --color-paper: var(--paper);
+  --color-paper-soft: var(--paper-soft);
+  --color-paper-edge: var(--paper-edge);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-ink-mute: var(--ink-mute);
+  --color-blood: var(--blood);
+  --color-ochre: var(--ochre);
+  --color-moss: var(--moss);
+  --color-leather: var(--leather);
+  --color-bone: var(--bone);
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --font-sans: var(--font-grotesk), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-fraunces), 'Iowan Old Style', Georgia, serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, 'SFMono-Regular', monospace;
+
+  --radius: 0px;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-grotesk), ui-sans-serif, system-ui, sans-serif;
+  font-feature-settings: 'ss01', 'cv11';
+  background-image:
+    radial-gradient(circle at 20% 10%, rgba(0, 0, 0, 0.035) 0, transparent 45%),
+    radial-gradient(circle at 80% 90%, rgba(0, 0, 0, 0.04) 0, transparent 50%),
+    repeating-linear-gradient(
+      0deg,
+      transparent 0 23px,
+      rgba(11, 11, 11, 0.035) 23px 24px
+    );
+}
+
+::selection {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+/* ---- Brutalist primitives ---- */
+
+.brutal-border {
+  border: var(--border) solid var(--ink);
+}
+
+.brutal-shadow {
+  box-shadow: var(--shadow-offset) var(--shadow-offset) 0 0 var(--ink);
+}
+
+.brutal-shadow-sm {
+  box-shadow: var(--shadow-offset-sm) var(--shadow-offset-sm) 0 0 var(--ink);
+}
+
+.brutal-shadow-blood {
+  box-shadow: var(--shadow-offset) var(--shadow-offset) 0 0 var(--blood);
+}
+
+.brutal-press {
+  transition: transform 80ms ease-out, box-shadow 80ms ease-out;
+}
+.brutal-press:hover:not(:disabled) {
+  transform: translate(-2px, -2px);
+  box-shadow: calc(var(--shadow-offset) + 2px) calc(var(--shadow-offset) + 2px) 0 0 var(--ink);
+}
+.brutal-press:active:not(:disabled) {
+  transform: translate(var(--shadow-offset), var(--shadow-offset));
+  box-shadow: 0 0 0 0 var(--ink);
+}
+
+/* Library stamp — rotated, bordered badge */
+.stamp {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.25rem 0.6rem;
+  border: 2.5px solid var(--blood);
+  color: var(--blood);
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: transparent;
+  transform: rotate(-4deg);
+}
+.stamp--ink {
+  border-color: var(--ink);
+  color: var(--ink);
+}
+
+/* Ledger / graph-paper card surface */
+.ledger {
+  background-color: var(--paper-soft);
+  background-image:
+    linear-gradient(to right, rgba(11, 11, 11, 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(11, 11, 11, 0.06) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+/* Barcode-ish divider */
+.barcode {
+  background-image: repeating-linear-gradient(
+    90deg,
+    var(--ink) 0 2px,
+    transparent 2px 4px,
+    var(--ink) 4px 5px,
+    transparent 5px 9px,
+    var(--ink) 9px 11px,
+    transparent 11px 14px
+  );
+}
+
+/* Dog-ear page corner */
+.dogear {
+  position: relative;
+}
+.dogear::after {
+  content: '';
+  position: absolute;
+  top: -1px;
+  right: -1px;
+  width: 22px;
+  height: 22px;
+  background: var(--paper);
+  border-left: 3px solid var(--ink);
+  border-bottom: 3px solid var(--ink);
+  transform: rotate(0deg);
+  pointer-events: none;
 }
