@@ -1,11 +1,11 @@
 services:
   db:
-    image: ankane/pgvector
+    image: postgres:16-alpine
     restart: always
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=db
-    container_name: postgres_template_test
+      - POSTGRES_DB=book_recorder_test
+    container_name: postgres_book_recorder_test
     ports:
-      - "5432:5432"
+      - '5434:5432'

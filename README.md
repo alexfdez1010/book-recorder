@@ -1,269 +1,126 @@
-# Next.js Production-Ready Template
+# Book Recorder
 
-A **production-grade Next.js template** engineered with enterprise-level best practices, comprehensive testing infrastructure, and strict code quality standards. Built for teams that demand excellence in maintainability, scalability, and developer experience. This template is based in the practices used in [ZeroChats](https://github.com/zerochats).
+Personal web app to log books you've read. Type a partial title, pick from
+combined Open Library + Google Books results, and the rest (author, pages,
+cover, publication date, category, language) is filled in automatically. Add
+the date you finished and save.
 
-[![Next.js](https://img.shields.io/badge/Next.js-15.5.4-black)](https://nextjs.org/)
-[![React](https://img.shields.io/badge/React-19.1.0-blue)](https://react.dev/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue)](https://www.typescriptlang.org/)
-[![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4.x-38bdf8)](https://tailwindcss.com/)
-[![Prisma](https://img.shields.io/badge/Prisma-6.7.0-2D3748)](https://www.prisma.io/)
+## Stack
 
-## 🎯 Philosophy
+- Next.js 16 (App Router) + React 19 + TypeScript 5 + TailwindCSS 4
+- Prisma 6 + PostgreSQL 16
+- Recharts for graphs
+- Vitest (unit, integration) + Playwright (e2e)
 
-This template embodies **professional software engineering principles** with a focus on:
+## Features
 
-- **SOLID Principles** - Applied rigorously across all code
-- **Design Pattern Driven** - Appropriate patterns for maintainability and scalability
-- **Documentation First** - Comprehensive TSDoc/JSDoc for all functions, classes, and hooks
-- **Testing as Priority** - Unit, integration, and E2E tests with meaningful coverage
-- **Code Quality** - Strict linting, formatting, and file size limits (200 lines max)
-- **Type Safety** - Full TypeScript strict mode enforcement
+- **Password-gate** — single password, HttpOnly cookie, SHA-256 token, 1-year expiry.
+- **Two pages**: Books (list + add) and Graphs (4 charts + KPIs).
+- **Book search** queries Open Library and Google Books in parallel, merges
+  duplicates (same title+author), and fills missing fields from whichever
+  source has them. If one API fails (e.g. Google Books rate-limit / 429),
+  the other acts as a fallback automatically.
+- **Fields captured**: title, author, publication date, pages, cover URL,
+  category, language, finished-on date.
+- **Graphs**: books finished per month, cumulative pages read, category
+  distribution, language distribution. Plus total-books / total-pages /
+  mean pages per day KPIs.
 
-See [AGENTS.md](./AGENTS.md) for complete development guidelines and principles that are used to guide AI Agents.
-
-## ✨ Features
-
-### Core Stack
-
-- **[Next.js 15.5.4](https://nextjs.org/docs)** - React framework with App Router
-- **[React 19.1.0](https://react.dev/)** - Latest React with Server Components
-- **[TypeScript 5.x](https://www.typescriptlang.org/)** - Strict type safety
-- **[TailwindCSS 4.x](https://tailwindcss.com/)** - Utility-first CSS framework
-- **[Prisma 6.7.0](https://www.prisma.io/)** - Type-safe database ORM
-
-### Testing Infrastructure
-
-- **[Vitest](https://vitest.dev/)** - Fast unit and integration testing
-- **[Playwright](https://playwright.dev/)** - Reliable E2E testing across browsers
-- **Comprehensive test setup** - Separate unit, integration, and E2E test suites
-- **Docker-based test database** - Isolated test environment
-
-### Code Quality Tools
-
-- **[ESLint](https://eslint.org/)** - Next.js and TypeScript linting rules
-- **[Prettier](https://prettier.io/)** - Consistent code formatting
-- **Pre-commit hooks** - Automated testing and formatting before commits
-- **Strict TypeScript** - Maximum type safety configuration
-
-### Database & Infrastructure
-
-- **PostgreSQL** - Production-ready relational database
-- **Docker Compose** - Containerized development and test databases
-- **Prisma migrations** - Version-controlled database schema
-- **Environment management** - Secure configuration with `.env` files
-
-## 📋 Prerequisites
-
-- **Node.js** 20.x or higher
-- **npm** 10.x or higher
-- **Docker** and **Docker Compose** (for database)
-- **Git** for version control
-
-## 🚀 Getting Started
-
-### 1. Clone and Install
+## Setup
 
 ```bash
-# Clone the repository
-git clone https://github.com/alexfdez1010/next-template.git my-project
-cd my-project
-
-# Install dependencies
-npm install
-```
-
-### 2. Environment Setup
-
-```bash
-# Copy environment template
 cp .env.example .env
-
-# Edit .env with your configuration
-# DATABASE_URL="postgresql://postgres:postgres@localhost:5432/db"
-```
-
-### 3. Database Setup
-
-```bash
-# Start PostgreSQL container
-npm run database
-
-# Run migrations (in another terminal)
-npm run database:dev
-
-# Stop database when done
-npm run database:down
-```
-
-### 4. Run Development Server
-
-```bash
-# Start development server with Turbopack
+# edit PASSWORD and AUTH_SECRET
+npm install
+npm run database            # starts PostgreSQL on localhost:5434
+npm run database:dev        # applies migrations
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) to see your application.
+The app is at http://localhost:3000. PostgreSQL runs on **port 5434** to
+avoid clashing with any local DB on the default 5432.
 
-## 📜 Available Scripts
+## Env vars
 
-### Development
+| Name          | Purpose                                            |
+| ------------- | -------------------------------------------------- |
+| `DATABASE_URL`| Postgres connection string (port 5434 by default)  |
+| `PASSWORD`    | Single password used to unlock the app             |
+| `AUTH_SECRET` | Long random string used to derive the session token|
 
-- **`npm run dev`** - Start development server with database
-- **`npm run build`** - Build production bundle
-- **`npm run start`** - Start production server
-- **`npm run launch`** - Build and start with database
+## Scripts
 
-### Code Quality
+| Script                      | What it does                                 |
+| --------------------------- | -------------------------------------------- |
+| `npm run dev`               | Start DB + dev server                        |
+| `npm run build`             | Generate Prisma client, build Next.js        |
+| `npm run start`             | Start production server                      |
+| `npm run start:prod`        | Run migrations then start production server  |
+| `npm run launch`            | DB up + migrate deploy + build + start       |
+| `npm run database`          | Start Postgres container (5434)              |
+| `npm run database:dev`      | Create/apply dev migration                   |
+| `npm run database:deploy`   | Apply migrations in production               |
+| `npm run test`              | Run unit, integration, and e2e tests         |
+| `npm run test:unit`         | Unit tests only                              |
+| `npm run test:integration`  | Live API integration tests (Open Library +   |
+|                             | Google Books). Google Books gracefully skips |
+|                             | on 429.                                      |
+| `npm run test:e2e`          | Playwright end-to-end                        |
 
-- **`npm run lint`** - Run ESLint and Prisma formatting
-- **`npm run format`** - Format code with Prettier
-- **`npm run lint-format`** - Lint and format (required before commits)
-- **`npm run pre-commit`** - Run tests and code quality checks
+## Deployment (Vercel)
 
-### Testing
+1. Push the repo to GitHub and import it in Vercel.
+2. Provision a PostgreSQL database (Vercel Postgres, Neon, Supabase…).
+3. Add the following **Environment Variables** in the Vercel project:
+   - `DATABASE_URL` — the pooled connection string from the provider.
+   - `PASSWORD` — the single password used to unlock the app.
+   - `AUTH_SECRET` — a long random string (`openssl rand -hex 32`).
+4. Deploy. The build command (`npm run build`) runs `prisma generate`,
+   `prisma migrate deploy`, then `next build`, so schema migrations apply
+   automatically on every deployment.
 
-- **`npm test`** - Run all tests (unit, integration, E2E)
-- **`npm run test:unit`** - Run unit tests only
-- **`npm run test:integration`** - Run integration tests only
-- **`npm run test:e2e`** - Run E2E tests with Playwright
-- **`npm run playwright`** - Open Playwright UI for debugging
+No other configuration is required — the default Next.js framework preset
+on Vercel is enough.
 
-### Database
-
-- **`npm run database`** - Start PostgreSQL container
-- **`npm run database:down`** - Stop database container
-- **`npm run database:dev`** - Run migrations in development
-- **`npm run database:deploy`** - Deploy migrations to production
-- **`npm run database:studio`** - Open Prisma Studio
-- **`npm run database:test`** - Start test database
-
-## 🏗️ Project Structure
+## Project layout
 
 ```
-next-template/
-├── src/
-│   └── app/              # Next.js App Router pages
-│       ├── layout.tsx    # Root layout
-│       ├── page.tsx      # Home page
-│       └── globals.css   # Global styles
-├── prisma/
-│   └── schema.prisma     # Database schema
-├── tests/
-│   ├── unit/             # Unit tests
-│   ├── integration/      # Integration tests
-│   ├── e2e/              # End-to-end tests
-│   └── setup.ts          # Test configuration
-├── public/               # Static assets
-├── generated/            # Generated Prisma client
-├── .vscode/              # VS Code settings
-├── compose.yml           # Development database
-├── compose-test.yml      # Test database (ephemeral)
-├── eslint.config.mjs     # ESLint configuration
-├── playwright.config.ts  # Playwright configuration
-├── vitest.config.ts      # Vitest configuration
-├── tsconfig.json         # TypeScript configuration
-├── tailwind.config.ts    # TailwindCSS configuration
-├── .prettierrc           # Prettier configuration
-├── .env.example          # Environment template
-└── AGENTS.md             # AI Agents Development guidelines
+src/
+├── app/
+│   ├── (app)/
+│   │   ├── layout.tsx     # nav shell (Books / Graphs / Logout)
+│   │   ├── books/page.tsx # list + add-book dialog
+│   │   └── graphs/page.tsx
+│   ├── api/logout/route.ts
+│   ├── login/page.tsx
+│   ├── layout.tsx
+│   └── page.tsx           # redirects to /books
+├── components/            # client components
+├── lib/
+│   ├── auth/              # session cookie + hashing
+│   ├── books/             # Open Library + Google Books adapters,
+│   │                       search merge, repository, server actions
+│   ├── db/prisma.ts
+│   └── stats/aggregate.ts # pure stats functions (unit-tested)
+└── proxy.ts               # Next 16 proxy (was middleware)
+prisma/
+├── migrations/
+└── schema.prisma
+tests/
+├── unit/
+├── integration/           # hits real Open Library + Google Books
+└── e2e/                   # Playwright
 ```
 
-## 🧪 Testing Strategy
+## Design notes
 
-### Unit Tests
-
-Located in `tests/unit/`, these test individual functions and components in isolation.
-
-```bash
-npm run test:unit
-```
-
-### Integration Tests
-
-Located in `tests/integration/`, these test module interactions and API endpoints.
-
-```bash
-npm run test:integration
-```
-
-### End-to-End Tests
-
-Located in `tests/e2e/`, these test complete user flows across browsers.
-
-```bash
-npm run test:e2e
-```
-
-## 🗄️ Database Management
-
-### Prisma Workflow
-
-```bash
-# Create a new migration
-npm run database:dev
-
-# Deploy migrations to production
-npm run database:deploy
-
-# Check migration status
-npm run database:check
-
-# Open Prisma Studio
-npm run database:studio
-```
-
-### Schema Changes
-
-1. Edit `prisma/schema.prisma`
-2. Run `npm run database:dev` to create migration
-3. Test with `npm run database:test`
-4. Commit schema and migration files
-
-## 🚢 Deployment
-
-### Environment Variables
-
-Ensure all required environment variables are set:
-
-```bash
-DATABASE_URL="postgresql://user:password@host:5432/database"
-```
-
-### Build and Deploy
-
-```bash
-# Build production bundle
-npm run build
-
-# Run production server
-npm run start
-```
-
-## 🔧 Configuration Files
-
-- **`tsconfig.json`** - TypeScript strict mode, path aliases
-- **`eslint.config.mjs`** - Next.js and TypeScript rules
-- **`.prettierrc`** - Single quotes, trailing commas, 2-space tabs
-- **`vitest.config.ts`** - Node environment, 10s timeout
-- **`playwright.config.ts`** - Multi-browser E2E testing
-
-## 📚 Resources
-
-### Official Documentation
-
-- [Next.js Documentation](https://nextjs.org/docs)
-- [React Documentation](https://react.dev/)
-- [TypeScript Handbook](https://www.typescriptlang.org/docs/)
-- [TailwindCSS Documentation](https://tailwindcss.com/docs)
-- [Prisma Documentation](https://www.prisma.io/docs)
-- [Vitest Documentation](https://vitest.dev/)
-- [Playwright Documentation](https://playwright.dev/)
-
-## 📄 Template Usage
-
-This is a template repository. To use it:
-
-1. Click "Use this template" on GitHub
-2. Clone your new repository
-3. Remove or modify this README as needed
-4. Start building your application
+- **Search is parallel, not sequential** — `Promise.allSettled` fires Open
+  Library and Google Books concurrently. Merging prefers the first source's
+  metadata and fills gaps from the second. If either rejects, the survivor's
+  results are still returned, giving automatic fallback.
+- **Edge-safe auth** — session token is `SHA-256(password || secret)` via
+  Web Crypto, so the same hashing code runs in both the Edge proxy and
+  Node-runtime server actions.
+- **Pure stat functions** live in `lib/stats/aggregate.ts` and have no I/O,
+  so they're tested in isolation and reused on the server-rendered page.
+- **File-size discipline** — every source file under 200 lines.
