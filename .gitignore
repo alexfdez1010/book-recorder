@@ -54,3 +54,7 @@ generated
 
 # postgres dev data
 /pgdata
+
+.claude
+.agents
+skills-lock.json
