@@ -189,14 +189,14 @@ function Kpi({
           {label}
         </p>
       </div>
-      <div className="flex items-end justify-between px-6 py-7">
+      <div className="flex items-end justify-between gap-4 px-6 py-7">
         <p
           className="font-serif text-6xl font-black leading-none tracking-tight"
           style={{ color: accent }}
         >
           {value}
         </p>
-        <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-ink-mute rotate-[-90deg] origin-bottom-right translate-y-1">
+        <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-ink-mute shrink-0">
           counted
         </span>
       </div>
