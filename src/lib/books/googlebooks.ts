@@ -46,6 +46,23 @@ function toCandidate(vol: GoogleVolume): BookCandidate | null {
   };
 }
 
+/**
+ * Fallback: fetch a single volume for its full `pageCount`. Some list-view
+ * responses omit `pageCount` while the per-volume endpoint returns it.
+ */
+export async function fetchGoogleBooksPages(
+  volumeId: string,
+  fetchImpl: typeof fetch = fetch,
+): Promise<number | null> {
+  if (!volumeId) return null;
+  const url = `https://www.googleapis.com/books/v1/volumes/${encodeURIComponent(volumeId)}`;
+  const res = await fetchImpl(url, { headers: { Accept: 'application/json' } });
+  if (!res.ok) return null;
+  const data = (await res.json()) as { volumeInfo?: { pageCount?: number } };
+  const n = data.volumeInfo?.pageCount;
+  return typeof n === 'number' && n > 0 ? n : null;
+}
+
 export async function searchGoogleBooks(
   query: string,
   limit = 10,

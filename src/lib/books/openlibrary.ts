@@ -38,6 +38,47 @@ function toCandidate(doc: OpenLibraryDoc): BookCandidate | null {
   };
 }
 
+interface OpenLibraryEdition {
+  number_of_pages?: number;
+  pagination?: string;
+}
+
+interface OpenLibraryEditionsResponse {
+  entries?: OpenLibraryEdition[];
+}
+
+function parsePagination(raw: string | undefined): number | null {
+  if (!raw) return null;
+  const match = raw.match(/(\d{2,5})/);
+  if (!match) return null;
+  const n = Number(match[1]);
+  return Number.isFinite(n) && n > 0 ? n : null;
+}
+
+/**
+ * Fallback: fetch editions for a work and return the first known page count.
+ * OL search results frequently omit `number_of_pages_median`; edition records
+ * carry `number_of_pages` (or a textual `pagination` field like "384 p.").
+ */
+export async function fetchOpenLibraryPages(
+  workKey: string,
+  fetchImpl: typeof fetch = fetch,
+): Promise<number | null> {
+  if (!workKey.startsWith('/works/')) return null;
+  const url = `https://openlibrary.org${workKey}/editions.json?limit=10`;
+  const res = await fetchImpl(url, { headers: { Accept: 'application/json' } });
+  if (!res.ok) return null;
+  const data = (await res.json()) as OpenLibraryEditionsResponse;
+  for (const e of data.entries ?? []) {
+    if (typeof e.number_of_pages === 'number' && e.number_of_pages > 0) {
+      return e.number_of_pages;
+    }
+    const fromText = parsePagination(e.pagination);
+    if (fromText) return fromText;
+  }
+  return null;
+}
+
 export async function searchOpenLibrary(
   query: string,
   limit = 10,

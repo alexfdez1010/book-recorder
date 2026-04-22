@@ -1,6 +1,6 @@
 import { BookCandidate } from './types';
-import { searchOpenLibrary } from './openlibrary';
-import { searchGoogleBooks } from './googlebooks';
+import { fetchOpenLibraryPages, searchOpenLibrary } from './openlibrary';
+import { fetchGoogleBooksPages, searchGoogleBooks } from './googlebooks';
 
 function dedupeKey(c: BookCandidate): string {
   return `${c.title.toLowerCase().trim()}__${c.author.toLowerCase().trim()}`;
@@ -45,6 +45,31 @@ function mergeOne(a: BookCandidate, b: BookCandidate): BookCandidate {
   };
 }
 
+async function resolvePages(c: BookCandidate): Promise<number | null> {
+  try {
+    return c.source === 'openlibrary'
+      ? await fetchOpenLibraryPages(c.externalId)
+      : await fetchGoogleBooksPages(c.externalId);
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Fill in `pages` for candidates whose search-list response omitted it, by
+ * hitting the per-source detail endpoint in parallel. Failures are swallowed
+ * so one bad fetch can't blank the whole result set.
+ */
+export async function enrichPages(list: BookCandidate[]): Promise<BookCandidate[]> {
+  return Promise.all(
+    list.map(async (c) => {
+      if (c.pages !== null) return c;
+      const pages = await resolvePages(c);
+      return pages ? { ...c, pages } : c;
+    }),
+  );
+}
+
 export async function searchBooks(query: string, limit = 10): Promise<BookCandidate[]> {
   const trimmed = query.trim();
   if (!trimmed) return [];
@@ -54,5 +79,6 @@ export async function searchBooks(query: string, limit = 10): Promise<BookCandid
   ]);
   const primary = ol.status === 'fulfilled' ? ol.value : [];
   const secondary = gb.status === 'fulfilled' ? gb.value : [];
-  return mergeCandidates(primary, secondary).slice(0, limit);
+  const merged = mergeCandidates(primary, secondary).slice(0, limit);
+  return enrichPages(merged);
 }

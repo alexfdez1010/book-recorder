@@ -35,6 +35,24 @@ test('search, select, and add a book end-to-end', async ({ page }) => {
   await expect(page.getByRole('heading', { level: 2 }).first()).toBeVisible();
 });
 
+test('manually add a book without searching', async ({ page }) => {
+  await page.getByRole('button', { name: 'Add book' }).click();
+  await expect(page.getByRole('dialog')).toBeVisible();
+
+  await page.getByRole('button', { name: /Add manually/ }).click();
+  await expect(page.getByTestId('add-book-form')).toBeVisible();
+
+  await page.getByLabel('Title', { exact: true }).fill('My Private Journal');
+  await page.getByLabel('Author').fill('Someone Unknown');
+  await page.getByLabel('Pages').fill('123');
+  await page.getByLabel('Category').selectOption('Other');
+  await page.getByLabel('Language').selectOption('en');
+
+  await page.getByRole('button', { name: 'Save book' }).click();
+  await expect(page.getByRole('dialog')).toBeHidden();
+  await expect(page.getByText('My Private Journal')).toBeVisible();
+});
+
 test('graphs page shows dashboard after a book is added', async ({ page }) => {
   await page.getByRole('link', { name: 'Graphs' }).click();
   await expect(page).toHaveURL(/\/graphs$/);

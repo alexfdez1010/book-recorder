@@ -15,10 +15,12 @@ export function AddBookForm({
   onBack,
   onDone,
 }: {
-  candidate: BookCandidate;
+  candidate: BookCandidate | null;
   onBack: () => void;
   onDone: () => void;
 }) {
+  const source = candidate?.source ?? 'manual';
+  const externalId = candidate?.externalId ?? '';
   const [error, setError] = useState<string | null>(null);
   const [pending, start] = useTransition();
 
@@ -33,17 +35,17 @@ export function AddBookForm({
 
   return (
     <form action={submit} className="space-y-3 text-sm" data-testid="add-book-form">
-      <input type="hidden" name="externalId" value={candidate.externalId} />
-      <input type="hidden" name="source" value={candidate.source} />
+      <input type="hidden" name="externalId" value={externalId} />
+      <input type="hidden" name="source" value={source} />
 
-      <Field label="Title" name="title" defaultValue={candidate.title} required />
-      <Field label="Author" name="author" defaultValue={candidate.author} required />
+      <Field label="Title" name="title" defaultValue={candidate?.title ?? ''} required />
+      <Field label="Author" name="author" defaultValue={candidate?.author ?? ''} required />
       <div className="grid grid-cols-2 gap-3">
         <Field
           label="Publication date"
           name="publicationDate"
           type="date"
-          defaultValue={candidate.publicationDate ?? ''}
+          defaultValue={candidate?.publicationDate ?? ''}
         />
         <Field
           label="Finished on"
@@ -57,26 +59,26 @@ export function AddBookForm({
           name="pages"
           type="number"
           min={1}
-          defaultValue={candidate.pages ?? ''}
+          defaultValue={candidate?.pages ?? ''}
           required
         />
         <SelectField
           label="Language"
           name="language"
-          defaultValue={candidate.language ?? 'en'}
+          defaultValue={candidate?.language ?? 'en'}
           options={LANGUAGE_KEYS.map((k) => ({ value: k, label: LANGUAGE_NAMES[k] }))}
         />
       </div>
       <SelectField
         label="Category"
         name="category"
-        defaultValue={candidate.category}
+        defaultValue={candidate?.category ?? 'Other'}
         options={BOOK_CATEGORIES.map((c) => ({ value: c, label: c }))}
       />
       <Field
         label="Cover URL"
         name="coverUrl"
-        defaultValue={candidate.coverUrl ?? ''}
+        defaultValue={candidate?.coverUrl ?? ''}
         placeholder="https://…"
       />
 

@@ -5,14 +5,21 @@ import { BookSearchPanel } from './book-search-panel';
 import { AddBookForm } from './add-book-form';
 import type { BookCandidate } from '@/lib/books/types';
 
+type Mode =
+  | { kind: 'search' }
+  | { kind: 'selected'; candidate: BookCandidate }
+  | { kind: 'manual' };
+
 export function AddBookDialog() {
   const [open, setOpen] = useState(false);
-  const [selected, setSelected] = useState<BookCandidate | null>(null);
+  const [mode, setMode] = useState<Mode>({ kind: 'search' });
 
   function close() {
     setOpen(false);
-    setSelected(null);
+    setMode({ kind: 'search' });
   }
+
+  const showForm = mode.kind !== 'search';
 
   return (
     <>
@@ -37,7 +44,11 @@ export function AddBookDialog() {
           >
             <div className="mb-4 flex items-center justify-between">
               <h2 className="text-lg font-semibold">
-                {selected ? 'Confirm details' : 'Search for a book'}
+                {showForm
+                  ? mode.kind === 'manual'
+                    ? 'Add manually'
+                    : 'Confirm details'
+                  : 'Search for a book'}
               </h2>
               <button
                 onClick={close}
@@ -47,14 +58,17 @@ export function AddBookDialog() {
                 ✕
               </button>
             </div>
-            {selected ? (
-              <AddBookForm
-                candidate={selected}
-                onBack={() => setSelected(null)}
-                onDone={close}
+            {mode.kind === 'search' ? (
+              <BookSearchPanel
+                onSelect={(c) => setMode({ kind: 'selected', candidate: c })}
+                onManual={() => setMode({ kind: 'manual' })}
               />
             ) : (
-              <BookSearchPanel onSelect={setSelected} />
+              <AddBookForm
+                candidate={mode.kind === 'selected' ? mode.candidate : null}
+                onBack={() => setMode({ kind: 'search' })}
+                onDone={close}
+              />
             )}
           </div>
         </div>

@@ -5,7 +5,13 @@ import { searchBooksAction } from '@/lib/books/actions';
 import type { BookCandidate } from '@/lib/books/types';
 import { languageName } from '@/lib/books/language';
 
-export function BookSearchPanel({ onSelect }: { onSelect: (c: BookCandidate) => void }) {
+export function BookSearchPanel({
+  onSelect,
+  onManual,
+}: {
+  onSelect: (c: BookCandidate) => void;
+  onManual: () => void;
+}) {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<BookCandidate[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -46,6 +52,16 @@ export function BookSearchPanel({ onSelect }: { onSelect: (c: BookCandidate) => 
       </form>
 
       {error ? <p className="text-sm text-red-600">{error}</p> : null}
+
+      <div className="flex justify-end">
+        <button
+          type="button"
+          onClick={onManual}
+          className="text-xs text-neutral-600 underline hover:text-neutral-900"
+        >
+          Can&apos;t find it? Add manually
+        </button>
+      </div>
 
       <ul className="max-h-[50vh] space-y-2 overflow-y-auto" data-testid="search-results">
         {results.map((c) => (
