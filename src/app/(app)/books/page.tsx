@@ -1,9 +1,9 @@
-import Image from 'next/image';
 import { listBooks } from '@/lib/books/repository';
 import { languageName } from '@/lib/books/language';
 
 export const dynamic = 'force-dynamic';
 import { AddBookDialog } from '@/components/add-book-dialog';
+import { BookCover } from '@/components/book-cover';
 import { DeleteBookButton } from '@/components/delete-book-button';
 import { EditBookDialog } from '@/components/edit-book-dialog';
 import { Badge } from '@/components/ui/badge';
@@ -90,23 +90,11 @@ export default async function BooksPage() {
                     </div>
 
                     <div className="lib-card__body">
-                      <div className="lib-cover">
-                        {b.coverUrl ? (
-                          <Image
-                            src={b.coverUrl}
-                            alt={`${b.title} cover`}
-                            fill
-                            sizes="112px"
-                            className="object-cover"
-                            unoptimized
-                          />
-                        ) : (
-                          <div className="lib-cover__placeholder">
-                            <span>no</span>
-                            <span>cover</span>
-                          </div>
-                        )}
-                      </div>
+                      <BookCover
+                        title={b.title}
+                        author={b.author}
+                        coverUrl={b.coverUrl}
+                      />
                       <div className="lib-card__text">
                         <h3 className="lib-card__title" title={b.title}>
                           {b.title}

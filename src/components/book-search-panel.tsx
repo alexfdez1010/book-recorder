@@ -5,6 +5,7 @@ import { Search } from 'lucide-react';
 import { searchBooksAction } from '@/lib/books/actions';
 import type { BookCandidate } from '@/lib/books/types';
 import { languageName } from '@/lib/books/language';
+import { BookCover } from '@/components/book-cover';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
@@ -67,17 +68,12 @@ export function BookSearchPanel({
         {results.map((c) => (
           <li key={`${c.source}-${c.externalId}`}>
             <button onClick={() => onSelect(c)} className="lib-result">
-              <div className="lib-cover lib-cover--sm">
-                {c.coverUrl ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={c.coverUrl}
-                    alt=""
-                    className="h-full w-full object-cover"
-                    loading="lazy"
-                  />
-                ) : null}
-              </div>
+              <BookCover
+                title={c.title}
+                author={c.author}
+                coverUrl={c.coverUrl}
+                size="sm"
+              />
               <div className="flex min-w-0 flex-1 flex-col gap-1">
                 <p className="lib-result__title">{c.title}</p>
                 <p className="lib-result__author">by {c.author}</p>
