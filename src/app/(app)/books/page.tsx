@@ -13,11 +13,6 @@ function formatDate(d: Date | null): string {
   return d ? new Date(d).toISOString().slice(0, 10) : '—';
 }
 
-function callNumber(id: string, i: number): string {
-  const slug = id.replace(/[^a-z0-9]/gi, '').slice(-4).toUpperCase();
-  return `BR-${String(i + 1).padStart(3, '0')}·${slug}`;
-}
-
 const MONTH_FORMAT = new Intl.DateTimeFormat('en-US', {
   month: 'long',
   year: 'numeric',
