@@ -17,12 +17,14 @@ import {
 } from 'recharts';
 import type { CountEntry, TimeseriesPoint } from '@/lib/stats/aggregate';
 
-const INK = '#0b0b0b';
-const BLOOD = '#c8201a';
-const OCHRE = '#d98f2b';
-const MOSS = '#2f5233';
-const LEATHER = '#5b2a2a';
-const PALETTE = [INK, BLOOD, OCHRE, MOSS, LEATHER, '#1B3A5C', '#7a6a2a'];
+const INK = '#231608';
+const BLOOD = '#8a2318';
+const OCHRE = '#b8832a';
+const MOSS = '#3d4a1f';
+const LEATHER = '#5a2a17';
+const WALNUT = '#6b4423';
+const CHESTNUT = '#8a5a2b';
+const PALETTE = [LEATHER, OCHRE, WALNUT, BLOOD, CHESTNUT, MOSS, INK];
 
 interface Props {
   data: {
@@ -37,8 +39,8 @@ interface Props {
 }
 
 const tooltipStyle = {
-  backgroundColor: '#f2ead3',
-  border: '3px solid #0b0b0b',
+  backgroundColor: '#ecdfbe',
+  border: '3px solid #231608',
   borderRadius: 0,
   fontFamily: 'var(--font-jetbrains)',
   fontSize: 11,
@@ -73,11 +75,11 @@ export function GraphsDashboard({ data }: Props) {
             <BarChart
               data={data.booksPerMonth.map((e) => ({ name: e.label, value: e.value }))}
             >
-              <CartesianGrid strokeDasharray="2 4" stroke="#0b0b0b" strokeOpacity={0.18} />
+              <CartesianGrid strokeDasharray="2 4" stroke="#231608" strokeOpacity={0.18} />
               <XAxis dataKey="name" fontSize={10} stroke={INK} tickLine={false} />
               <YAxis allowDecimals={false} fontSize={10} stroke={INK} tickLine={false} />
-              <Tooltip contentStyle={tooltipStyle} cursor={{ fill: '#0b0b0b10' }} />
-              <Bar dataKey="value" fill={INK} />
+              <Tooltip contentStyle={tooltipStyle} cursor={{ fill: '#23160810' }} />
+              <Bar dataKey="value" fill={LEATHER} />
             </BarChart>
           </ResponsiveContainer>
         </Panel>
@@ -85,7 +87,7 @@ export function GraphsDashboard({ data }: Props) {
         <Panel title="Cumulative pages" kicker="Fig. 2" accent={BLOOD}>
           <ResponsiveContainer width="100%" height={240}>
             <LineChart data={data.cumulativePages}>
-              <CartesianGrid strokeDasharray="2 4" stroke="#0b0b0b" strokeOpacity={0.18} />
+              <CartesianGrid strokeDasharray="2 4" stroke="#231608" strokeOpacity={0.18} />
               <XAxis dataKey="date" fontSize={10} stroke={INK} tickLine={false} />
               <YAxis fontSize={10} stroke={INK} tickLine={false} />
               <Tooltip contentStyle={tooltipStyle} />
