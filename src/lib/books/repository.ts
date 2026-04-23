@@ -26,3 +26,9 @@ export async function listBooks(): Promise<Book[]> {
 export async function deleteBook(id: string): Promise<void> {
   await prisma.book.delete({ where: { id } });
 }
+
+export type UpdateBookInput = Omit<NewBookInput, 'externalId' | 'source'>;
+
+export async function updateBook(id: string, input: UpdateBookInput): Promise<Book> {
+  return prisma.book.update({ where: { id }, data: input });
+}

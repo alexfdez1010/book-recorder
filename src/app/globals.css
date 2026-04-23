@@ -485,17 +485,19 @@ body {
     font-size: 0.78rem;
     letter-spacing: 0;
     text-transform: none;
+    min-width: 0;
+    overflow-wrap: anywhere;
   }
   .lib-card__dates {
-    display: inline-flex;
+    display: flex;
     flex-wrap: wrap;
     align-items: baseline;
     justify-content: flex-end;
     gap: 0.35rem 0.5rem;
     font-size: 0.7rem;
     line-height: 1.15;
-    white-space: nowrap;
   }
+  .lib-card__dates > span { white-space: nowrap; }
   .lib-card__dates-tag {
     font-family: var(--font-mono);
     font-size: 0.6rem;
@@ -859,6 +861,24 @@ body {
   }
   .lib-strike:hover:not(:disabled) { color: var(--ink); border-color: var(--ink); }
   .lib-strike:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .lib-amend {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding-block-end: 2px;
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--ink);
+    border-block-end: 2px solid var(--ink);
+    background: transparent;
+    cursor: pointer;
+  }
+  .lib-amend:hover:not(:disabled) { color: var(--leather); border-color: var(--leather); }
+  .lib-amend:disabled { opacity: 0.5; cursor: not-allowed; }
 
   /* ---- Utility ----------------------------------------------------- */
 

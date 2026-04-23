@@ -5,6 +5,7 @@ import { languageName } from '@/lib/books/language';
 export const dynamic = 'force-dynamic';
 import { AddBookDialog } from '@/components/add-book-dialog';
 import { DeleteBookButton } from '@/components/delete-book-button';
+import { EditBookDialog } from '@/components/edit-book-dialog';
 import { Badge } from '@/components/ui/badge';
 import { Stamp } from '@/components/ui/stamp';
 
@@ -89,7 +90,7 @@ export default async function BooksPage() {
                 {group.items.map(({ book: b, index: i }) => (
                   <li key={b.id} className="lib-card">
                     <div className="lib-card__head">
-                      <span className="lib-card__call">{callNumber(b.id, i)}</span>
+                      <span className="lib-card__call">{formatDate(b.finishedOn)}</span>
                       <Badge variant="accent">{b.category}</Badge>
                     </div>
 
@@ -123,20 +124,6 @@ export default async function BooksPage() {
                           <dd>{b.pages.toLocaleString()}</dd>
                           <dt>Tongue</dt>
                           <dd>{languageName(b.language)}</dd>
-                          <dt>Dates</dt>
-                          <dd className="lib-card__dates">
-                            <span>
-                              <span className="lib-card__dates-tag">Pub.</span>{' '}
-                              {formatDate(b.publicationDate)}
-                            </span>
-                            <span aria-hidden className="lib-card__dates-sep">
-                              ·
-                            </span>
-                            <span>
-                              <span className="lib-card__dates-tag">Fin.</span>{' '}
-                              {formatDate(b.finishedOn)}
-                            </span>
-                          </dd>
                         </dl>
                       </div>
                     </div>
@@ -145,7 +132,10 @@ export default async function BooksPage() {
                       <span className="lib-meta">
                         Vol. No. {String(i + 1).padStart(3, '0')}
                       </span>
-                      <DeleteBookButton id={b.id} title={b.title} />
+                      <div className="flex items-center gap-4">
+                        <EditBookDialog book={b} />
+                        <DeleteBookButton id={b.id} title={b.title} />
+                      </div>
                     </div>
                   </li>
                 ))}
