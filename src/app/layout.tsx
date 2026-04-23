@@ -20,7 +20,7 @@ const jetbrains = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: 'BOOK RECORDER — personal reading ledger',
-  description: 'A brutalist ledger for books finished.',
+  description: 'A library ledger of volumes finished.',
 };
 
 export default function RootLayout({

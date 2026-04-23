@@ -32,18 +32,12 @@ export default async function GraphsPage() {
     totalPages: books.reduce((s, b) => s + b.pages, 0),
   };
   return (
-    <section className="space-y-14">
-      <div className="flex flex-wrap items-end justify-between gap-8 border-b-[3px] border-ink pb-8">
-        <div className="space-y-3">
-          <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-ink-mute">
-            Section II · The record
-          </p>
-          <h1 className="font-serif text-5xl sm:text-6xl font-black leading-[0.9] tracking-tight">
-            Reading metrics
-          </h1>
-          <p className="pt-1 font-mono text-xs uppercase tracking-[0.18em] text-ink-soft">
-            Quantities, cadences, proclivities.
-          </p>
+    <section className="flex flex-col gap-14">
+      <div className="lib-section-head">
+        <div className="flex flex-col gap-3">
+          <p className="lib-kicker">Section II · The record</p>
+          <h1 className="lib-title lib-title--xl">Reading metrics</h1>
+          <p className="lib-subtitle pt-1">Quantities, cadences, proclivities.</p>
         </div>
         <Stamp variant="ink">Measured</Stamp>
       </div>

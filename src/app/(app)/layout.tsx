@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { NavLink } from '@/components/nav-link';
 import { LogoutButton } from '@/components/logout-button';
+import { Rule } from '@/components/ui/stamp';
 
 function today(): string {
   return new Date().toLocaleDateString('en-US', {
@@ -13,39 +14,37 @@ function today(): string {
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen text-ink">
-      <header className="border-b-[4px] border-ink bg-paper">
-        <div className="mx-auto max-w-6xl px-8">
-          <div className="flex items-end justify-between gap-6 py-10">
+    <div className="lib-shell">
+      <header className="lib-header">
+        <div className="lib-header__inner">
+          <div className="lib-header__row">
             <div className="flex flex-col gap-2">
-              <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-ink-mute">
+              <p className="lib-header__meta">
                 Vol. I · No. {new Date().getFullYear()} · Est. 2026
               </p>
               <Link
                 href="/books"
-                className="font-serif text-5xl sm:text-6xl font-black leading-[0.85] tracking-tight"
-                style={{ fontVariationSettings: "'opsz' 144, 'SOFT' 0" }}
+                className="lib-wordmark lib-header__title"
               >
-                BOOK<span className="text-blood">·</span>RECORDER
+                BOOK<span className="lib-wordmark__dot">·</span>RECORDER
               </Link>
-              <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-ink-mute">
+              <p className="lib-header__subtitle">
                 A personal ledger of volumes finished — {today()}
               </p>
             </div>
             <LogoutButton />
           </div>
-          <div className="barcode h-3 -mx-8" aria-hidden />
-          <nav className="mt-8 flex items-stretch gap-0 -mb-[4px]" aria-label="Main">
+          <nav className="lib-nav" aria-label="Main">
             <NavLink href="/books">§ Ledger</NavLink>
             <NavLink href="/graphs">§ Metrics</NavLink>
           </nav>
         </div>
       </header>
-      <main className="mx-auto max-w-6xl px-8 py-16 sm:py-20">{children}</main>
-      <footer className="mx-auto max-w-6xl px-8 pb-16">
-        <div className="barcode h-3 mb-5" aria-hidden />
-        <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-ink-mute">
-          {'//'} catalogued by hand {'//'} no algorithm reads these pages {'//'}
+      <main className="lib-main">{children}</main>
+      <footer className="lib-footer">
+        <Rule ornament="❦" />
+        <p className="lib-meta mt-5">
+          Catalogued by hand · No algorithm reads these pages
         </p>
       </footer>
     </div>

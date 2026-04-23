@@ -17,14 +17,18 @@ import {
 } from 'recharts';
 import type { CountEntry, TimeseriesPoint } from '@/lib/stats/aggregate';
 
-const INK = '#231608';
-const BLOOD = '#8a2318';
-const OCHRE = '#b8832a';
-const MOSS = '#3d4a1f';
-const LEATHER = '#5a2a17';
-const WALNUT = '#6b4423';
-const CHESTNUT = '#8a5a2b';
-const PALETTE = [LEATHER, OCHRE, WALNUT, BLOOD, CHESTNUT, MOSS, INK];
+/* All colors resolve to CSS custom properties declared in globals.css.
+   Reskinning the palette only requires editing that file — charts included. */
+const INK = 'var(--ink)';
+const OXBLOOD = 'var(--oxblood)';
+const BRASS = 'var(--brass)';
+const MOSS = 'var(--moss)';
+const LEATHER = 'var(--leather)';
+const WALNUT = 'var(--walnut)';
+const CHESTNUT = 'var(--chestnut)';
+const PAPER_SOFT = 'var(--paper-soft)';
+
+const PALETTE = [LEATHER, BRASS, WALNUT, OXBLOOD, CHESTNUT, MOSS, INK];
 
 interface Props {
   data: {
@@ -39,8 +43,8 @@ interface Props {
 }
 
 const tooltipStyle = {
-  backgroundColor: '#ecdfbe',
-  border: '3px solid #231608',
+  backgroundColor: PAPER_SOFT,
+  border: '1px solid var(--ink)',
   borderRadius: 0,
   fontFamily: 'var(--font-jetbrains)',
   fontSize: 11,
@@ -52,9 +56,9 @@ const tooltipStyle = {
 export function GraphsDashboard({ data }: Props) {
   if (data.totalBooks === 0) {
     return (
-      <div className="ledger border-[3px] border-ink p-12 text-center">
-        <p className="font-serif text-3xl font-black">No record yet.</p>
-        <p className="mt-2 font-mono text-xs uppercase tracking-[0.2em] text-ink-mute">
+      <div className="lib-empty">
+        <p className="lib-empty__title">No record yet.</p>
+        <p className="lib-meta mt-3">
           Catalogue volumes on the ledger page to populate these metrics.
         </p>
       </div>
@@ -62,51 +66,51 @@ export function GraphsDashboard({ data }: Props) {
   }
 
   return (
-    <div className="space-y-12">
-      <div className="grid grid-cols-1 gap-8 sm:grid-cols-3">
-        <Kpi label="Volumes" value={data.totalBooks} accent={INK} />
-        <Kpi label="Pages turned" value={data.totalPages.toLocaleString()} accent={BLOOD} />
-        <Kpi label="Mean pp / day" value={data.meanPagesPerDay} accent={MOSS} />
+    <div className="flex flex-col gap-12">
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
+        <Kpi label="Volumes" value={data.totalBooks} />
+        <Kpi label="Pages turned" value={data.totalPages.toLocaleString()} />
+        <Kpi label="Mean pp / day" value={data.meanPagesPerDay} />
       </div>
 
       <div className="grid grid-cols-1 gap-8 lg:gap-10 lg:grid-cols-2">
-        <Panel title="Volumes by month" kicker="Fig. 1" accent={INK}>
+        <Panel title="Volumes by month" kicker="Fig. 1">
           <ResponsiveContainer width="100%" height={240}>
             <BarChart
               data={data.booksPerMonth.map((e) => ({ name: e.label, value: e.value }))}
             >
-              <CartesianGrid strokeDasharray="2 4" stroke="#231608" strokeOpacity={0.18} />
+              <CartesianGrid strokeDasharray="2 4" stroke={INK} strokeOpacity={0.2} />
               <XAxis dataKey="name" fontSize={10} stroke={INK} tickLine={false} />
               <YAxis allowDecimals={false} fontSize={10} stroke={INK} tickLine={false} />
-              <Tooltip contentStyle={tooltipStyle} cursor={{ fill: '#23160810' }} />
+              <Tooltip contentStyle={tooltipStyle} cursor={{ fill: 'var(--ink)', fillOpacity: 0.06 }} />
               <Bar dataKey="value" fill={LEATHER} />
             </BarChart>
           </ResponsiveContainer>
         </Panel>
 
-        <Panel title="Cumulative pages" kicker="Fig. 2" accent={BLOOD}>
+        <Panel title="Cumulative pages" kicker="Fig. 2">
           <ResponsiveContainer width="100%" height={240}>
             <LineChart data={data.cumulativePages}>
-              <CartesianGrid strokeDasharray="2 4" stroke="#231608" strokeOpacity={0.18} />
+              <CartesianGrid strokeDasharray="2 4" stroke={INK} strokeOpacity={0.2} />
               <XAxis dataKey="date" fontSize={10} stroke={INK} tickLine={false} />
               <YAxis fontSize={10} stroke={INK} tickLine={false} />
               <Tooltip contentStyle={tooltipStyle} />
               <Line
                 type="stepAfter"
                 dataKey="pages"
-                stroke={BLOOD}
-                strokeWidth={3}
+                stroke={OXBLOOD}
+                strokeWidth={2.5}
                 dot={{ fill: INK, r: 3 }}
               />
             </LineChart>
           </ResponsiveContainer>
         </Panel>
 
-        <Panel title="Shelves" kicker="Fig. 3" accent={OCHRE}>
+        <Panel title="Shelves" kicker="Fig. 3">
           <DistributionPie entries={data.categories} />
         </Panel>
 
-        <Panel title="Tongues" kicker="Fig. 4" accent={MOSS}>
+        <Panel title="Tongues" kicker="Fig. 4">
           <DistributionPie entries={data.languages} />
         </Panel>
       </div>
@@ -124,8 +128,8 @@ function DistributionPie({ entries }: { entries: CountEntry[] }) {
           nameKey="name"
           outerRadius={80}
           stroke={INK}
-          strokeWidth={3}
-          label={{ fontFamily: 'var(--font-jetbrains)', fontSize: 10 }}
+          strokeWidth={2}
+          label={{ fontFamily: 'var(--font-jetbrains)', fontSize: 10, fill: INK }}
         >
           {entries.map((_, i) => (
             <Cell key={i} fill={PALETTE[i % PALETTE.length]} />
@@ -148,59 +152,32 @@ function DistributionPie({ entries }: { entries: CountEntry[] }) {
 function Panel({
   title,
   kicker,
-  accent,
   children,
 }: {
   title: string;
   kicker: string;
-  accent: string;
   children: React.ReactNode;
 }) {
   return (
-    <div className="border-[3px] border-ink bg-paper-soft brutal-shadow-sm">
-      <div
-        className="flex items-center justify-between border-b-[3px] border-ink px-5 py-3 bg-paper"
-        style={{ boxShadow: `inset 0 -6px 0 ${accent}22` }}
-      >
-        <h3 className="font-serif text-xl font-black leading-none tracking-tight">{title}</h3>
-        <span
-          className="font-mono text-[10px] uppercase tracking-[0.2em] font-bold"
-          style={{ color: accent }}
-        >
-          {kicker}
-        </span>
+    <div className="lib-panel">
+      <div className="lib-panel__head">
+        <h3 className="lib-panel__title">{title}</h3>
+        <span className="lib-panel__eyebrow">{kicker}</span>
       </div>
-      <div className="ledger p-5">{children}</div>
+      <div className="lib-panel__body">{children}</div>
     </div>
   );
 }
 
-function Kpi({
-  label,
-  value,
-  accent,
-}: {
-  label: string;
-  value: number | string;
-  accent: string;
-}) {
+function Kpi({ label, value }: { label: string; value: number | string }) {
   return (
-    <div className="relative border-[3px] border-ink bg-paper-soft brutal-shadow">
-      <div className="border-b-[3px] border-ink bg-paper px-5 py-3">
-        <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-ink-mute">
-          {label}
-        </p>
+    <div className="lib-plate">
+      <div className="lib-plate__head">
+        <p className="lib-plate__label">{label}</p>
       </div>
-      <div className="flex items-end justify-between gap-4 px-6 py-7">
-        <p
-          className="font-serif text-6xl font-black leading-none tracking-tight"
-          style={{ color: accent }}
-        >
-          {value}
-        </p>
-        <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-ink-mute shrink-0">
-          counted
-        </span>
+      <div className="lib-plate__body">
+        <p className="lib-plate__value">{value}</p>
+        <span className="lib-plate__note">counted</span>
       </div>
     </div>
   );

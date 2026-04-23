@@ -3,7 +3,7 @@ import { createSession } from '@/lib/auth/session';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Stamp } from '@/components/ui/stamp';
+import { Rule, Stamp } from '@/components/ui/stamp';
 
 async function loginAction(formData: FormData) {
   'use server';
@@ -21,31 +21,24 @@ export default async function LoginPage({
   const { error } = await searchParams;
   return (
     <main className="relative flex min-h-screen items-center justify-center p-6">
-      <div className="absolute left-6 top-6 font-mono text-[10px] uppercase tracking-[0.3em] text-ink-mute">
+      <p className="absolute left-6 top-6 lib-meta">
         Restricted · Members only · Ref. 000-01
-      </div>
+      </p>
       <div className="absolute right-6 top-6">
         <Stamp>private collection</Stamp>
       </div>
 
-      <form
-        action={loginAction}
-        className="w-full max-w-md bg-paper-soft border-[4px] border-ink brutal-shadow"
-      >
-        <div className="border-b-[3px] border-ink bg-paper px-9 py-7">
-          <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-ink-mute">
-            Access credential required
-          </p>
-          <h1 className="mt-3 font-serif text-5xl font-black leading-none tracking-tight">
-            The Stacks
-          </h1>
-          <p className="mt-3 font-mono text-[11px] uppercase tracking-[0.18em] text-ink-soft">
+      <form action={loginAction} className="lib-ticket">
+        <div className="lib-ticket__head">
+          <p className="lib-kicker">Access credential required</p>
+          <h1 className="lib-title mt-3">The Stacks</h1>
+          <p className="lib-subtitle mt-3">
             Enter the passphrase to consult the ledger.
           </p>
         </div>
 
-        <div className="space-y-6 px-9 py-8">
-          <div className="space-y-1.5">
+        <div className="lib-ticket__body">
+          <div className="lib-field">
             <Label htmlFor="password">Passphrase</Label>
             <Input
               id="password"
@@ -59,20 +52,17 @@ export default async function LoginPage({
           </div>
 
           {error ? (
-            <p
-              role="alert"
-              className="border-[3px] border-blood bg-paper px-3 py-2 font-mono text-xs text-blood uppercase tracking-[0.12em]"
-            >
+            <p role="alert" className="lib-field-error">
               ✕ Rejected. Passphrase does not match the register.
             </p>
           ) : null}
 
-          <Button type="submit" variant="ink" size="lg" className="w-full">
+          <Button type="submit" variant="primary" size="lg" className="lib-btn--block">
             Unlock the ledger →
           </Button>
-        </div>
 
-        <div className="barcode h-3 mx-9 mb-7" aria-hidden />
+          <Rule ornament="❦" />
+        </div>
       </form>
     </main>
   );

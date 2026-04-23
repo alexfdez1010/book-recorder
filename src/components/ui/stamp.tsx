@@ -3,36 +3,27 @@ import { cn } from '@/lib/utils';
 
 export function Stamp({
   className,
-  children,
-  variant = 'blood',
+  variant = 'accent',
   ...props
-}: React.HTMLAttributes<HTMLSpanElement> & { variant?: 'blood' | 'ink' }) {
+}: React.HTMLAttributes<HTMLSpanElement> & { variant?: 'accent' | 'ink' }) {
   return (
     <span
-      className={cn('stamp', variant === 'ink' && 'stamp--ink', className)}
+      className={cn('lib-stamp', variant === 'ink' && 'lib-stamp--ink', className)}
       {...props}
-    >
-      {children}
-    </span>
+    />
   );
 }
 
-export function Spine({
-  label,
+export function Rule({
+  ornament = '❦',
   className,
 }: {
-  label: string;
+  ornament?: string;
   className?: string;
 }) {
   return (
-    <div
-      className={cn(
-        'inline-flex items-center gap-2 border-[3px] border-ink bg-ink text-paper px-2 py-1 font-mono text-[10px] uppercase tracking-[0.2em]',
-        className,
-      )}
-    >
-      <span className="inline-block w-2 h-2 bg-blood" aria-hidden />
-      {label}
+    <div className={cn('lib-rule', className)} role="separator" aria-hidden>
+      <span className="lib-rule__ornament">{ornament}</span>
     </div>
   );
 }

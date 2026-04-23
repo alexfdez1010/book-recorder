@@ -36,7 +36,7 @@ export function BookSearchPanel({
   }
 
   return (
-    <div className="space-y-6">
+    <div className="flex flex-col gap-6">
       <form onSubmit={onSearch} className="flex gap-3">
         <Input
           autoFocus
@@ -46,42 +46,28 @@ export function BookSearchPanel({
           aria-label="Book title"
           className="flex-1"
         />
-        <Button type="submit" disabled={pending || !query.trim()}>
-          <Search className="h-4 w-4" strokeWidth={3} />
+        <Button type="submit" variant="primary" disabled={pending || !query.trim()}>
+          <Search className="h-4 w-4" strokeWidth={2.5} />
           {pending ? 'Hunting…' : 'Hunt'}
         </Button>
       </form>
 
-      {error ? (
-        <p className="border-[3px] border-blood bg-paper px-3 py-2 font-mono text-xs text-blood uppercase tracking-[0.12em]">
-          ✕ {error}
-        </p>
-      ) : null}
+      {error ? <p className="lib-field-error">✕ {error}</p> : null}
 
-      <div className="flex items-center justify-between border-b-2 border-dashed border-ink/40 pb-3 pt-1">
-        <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-ink-mute">
+      <div className="lib-stacks-head">
+        <span className="lib-meta">
           {results.length > 0 ? `${results.length} candidates` : 'Awaiting query'}
         </span>
-        <button
-          type="button"
-          onClick={onManual}
-          className="font-mono text-[10px] uppercase tracking-[0.2em] font-bold text-ink underline decoration-2 underline-offset-4 hover:text-blood"
-        >
+        <button type="button" onClick={onManual} className="lib-linkish">
           Can&apos;t find it? Write it yourself →
         </button>
       </div>
 
-      <ul
-        className="max-h-[46vh] space-y-4 overflow-y-auto pr-2 pb-1"
-        data-testid="search-results"
-      >
+      <ul className="lib-stacks" data-testid="search-results">
         {results.map((c) => (
           <li key={`${c.source}-${c.externalId}`}>
-            <button
-              onClick={() => onSelect(c)}
-              className="flex w-full gap-4 border-[3px] border-ink bg-bone p-4 text-left brutal-press brutal-shadow-sm"
-            >
-              <div className="h-20 w-14 shrink-0 overflow-hidden border-[2px] border-ink bg-ink">
+            <button onClick={() => onSelect(c)} className="lib-result">
+              <div className="lib-cover lib-cover--sm">
                 {c.coverUrl ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
@@ -92,18 +78,14 @@ export function BookSearchPanel({
                   />
                 ) : null}
               </div>
-              <div className="min-w-0 flex-1">
-                <p className="truncate font-serif text-base font-bold leading-tight">
-                  {c.title}
-                </p>
-                <p className="truncate font-mono text-[11px] uppercase tracking-[0.12em] text-ink-soft">
-                  by {c.author}
-                </p>
+              <div className="flex min-w-0 flex-1 flex-col gap-1">
+                <p className="lib-result__title">{c.title}</p>
+                <p className="lib-result__author">by {c.author}</p>
                 <div className="mt-2 flex flex-wrap items-center gap-1.5">
-                  <Badge variant="ink">{c.publicationDate?.slice(0, 4) ?? '—'}</Badge>
-                  <Badge variant="ochre">{c.pages ?? '?'} pp</Badge>
+                  <Badge>{c.publicationDate?.slice(0, 4) ?? '—'}</Badge>
+                  <Badge variant="gilt">{c.pages ?? '?'} pp</Badge>
                   <Badge variant="moss">{languageName(c.language)}</Badge>
-                  <Badge variant={c.source === 'openlibrary' ? 'solid' : 'blood'}>
+                  <Badge variant={c.source === 'openlibrary' ? 'solid' : 'accent'}>
                     {c.source === 'openlibrary' ? 'OL' : 'GB'}
                   </Badge>
                 </div>

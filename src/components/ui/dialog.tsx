@@ -16,10 +16,7 @@ const DialogOverlay = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Overlay
     ref={ref}
-    className={cn(
-      'fixed inset-0 z-50 bg-ink/70 backdrop-blur-[2px]',
-      className,
-    )}
+    className={cn('lib-dialog-overlay', className)}
     {...props}
   />
 ));
@@ -31,22 +28,10 @@ const DialogContent = React.forwardRef<
 >(({ className, children, ...props }, ref) => (
   <DialogPortal>
     <DialogOverlay />
-    <DialogPrimitive.Content
-      ref={ref}
-      className={cn(
-        'fixed left-1/2 top-[8vh] z-50 w-[min(44rem,calc(100%-2rem))] -translate-x-1/2',
-        'bg-paper border-[4px] border-ink brutal-shadow',
-        'max-h-[84vh] overflow-y-auto',
-        className,
-      )}
-      {...props}
-    >
+    <DialogPrimitive.Content ref={ref} className={cn('lib-dialog', className)} {...props}>
       {children}
-      <DialogPrimitive.Close
-        aria-label="Close"
-        className="absolute right-3 top-3 h-9 w-9 grid place-items-center border-[3px] border-ink bg-paper-soft text-ink hover:bg-blood hover:text-paper transition-colors"
-      >
-        <X className="h-4 w-4" strokeWidth={3} />
+      <DialogPrimitive.Close aria-label="Close" className="lib-dialog__close">
+        <X className="h-4 w-4" strokeWidth={2.5} />
       </DialogPrimitive.Close>
     </DialogPrimitive.Content>
   </DialogPortal>
@@ -57,13 +42,7 @@ const DialogHeader = ({
   className,
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div
-    className={cn(
-      'flex flex-col gap-2 border-b-[3px] border-ink bg-paper-soft px-8 py-6',
-      className,
-    )}
-    {...props}
-  />
+  <div className={cn('lib-dialog__head', className)} {...props} />
 );
 DialogHeader.displayName = 'DialogHeader';
 
@@ -73,10 +52,7 @@ const DialogTitle = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Title
     ref={ref}
-    className={cn(
-      'font-serif text-2xl font-black leading-none tracking-tight',
-      className,
-    )}
+    className={cn('lib-dialog__title', className)}
     {...props}
   />
 ));
@@ -88,10 +64,7 @@ const DialogDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Description
     ref={ref}
-    className={cn(
-      'font-mono text-[11px] uppercase tracking-[0.18em] text-ink-mute',
-      className,
-    )}
+    className={cn('lib-dialog__desc', className)}
     {...props}
   />
 ));
@@ -101,7 +74,7 @@ const DialogBody = ({
   className,
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div className={cn('px-8 py-8', className)} {...props} />
+  <div className={cn('lib-dialog__body', className)} {...props} />
 );
 
 export {

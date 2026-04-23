@@ -37,14 +37,14 @@ export function AddBookForm({
   }
 
   return (
-    <form action={submit} className="space-y-6" data-testid="add-book-form">
+    <form action={submit} className="flex flex-col gap-5" data-testid="add-book-form">
       <input type="hidden" name="externalId" value={externalId} />
       <input type="hidden" name="source" value={source} />
 
       <Field label="Title" name="title" defaultValue={candidate?.title ?? ''} required />
       <Field label="Author" name="author" defaultValue={candidate?.author ?? ''} required />
 
-      <div className="grid grid-cols-2 gap-5">
+      <div className="lib-form-grid">
         <Field
           label="Publication date"
           name="publicationDate"
@@ -88,19 +88,16 @@ export function AddBookForm({
       />
 
       {error ? (
-        <p
-          role="alert"
-          className="border-[3px] border-blood bg-paper px-3 py-2 font-mono text-xs text-blood uppercase tracking-[0.12em]"
-        >
+        <p role="alert" className="lib-field-error">
           ✕ {error}
         </p>
       ) : null}
 
-      <div className="flex items-center justify-between pt-6 mt-2 border-t-[3px] border-ink">
-        <Button type="button" variant="paper" size="sm" onClick={onBack}>
+      <div className="lib-form-actions">
+        <Button type="button" variant="default" size="sm" onClick={onBack}>
           ← Back
         </Button>
-        <Button type="submit" variant="ink" disabled={pending}>
+        <Button type="submit" variant="primary" disabled={pending}>
           {pending ? 'Inscribing…' : 'Inscribe entry ✎'}
         </Button>
       </div>
@@ -126,7 +123,7 @@ function Field({
   min?: number;
 }) {
   return (
-    <div className="flex flex-col gap-1.5">
+    <div className="lib-field">
       <Label htmlFor={name}>{label}</Label>
       <Input
         id={name}
@@ -153,7 +150,7 @@ function SelectField({
   options: ReadonlyArray<{ value: string; label: string }>;
 }) {
   return (
-    <div className="flex flex-col gap-1.5">
+    <div className="lib-field">
       <Label htmlFor={name}>{label}</Label>
       <Select id={name} name={name} defaultValue={defaultValue} required>
         {options.map((o) => (

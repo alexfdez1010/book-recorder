@@ -52,8 +52,8 @@ export function AddBookDialog() {
       }}
     >
       <DialogTrigger asChild>
-        <Button variant="blood">
-          <Plus className="h-4 w-4" strokeWidth={3} />
+        <Button variant="accent">
+          <Plus className="h-4 w-4" strokeWidth={2.5} />
           New entry
         </Button>
       </DialogTrigger>
