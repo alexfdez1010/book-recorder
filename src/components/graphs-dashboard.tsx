@@ -75,6 +75,7 @@ export function GraphsDashboard({ data }: Props) {
           label="Favourite author"
           value={data.favoriteAuthor?.author ?? '—'}
           note={data.favoriteAuthor ? `${data.favoriteAuthor.count} vol.` : 'none'}
+          compact
         />
         <Kpi
           label="Longest tome"

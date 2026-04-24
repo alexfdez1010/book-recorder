@@ -49,10 +49,12 @@ export function Kpi({
   label,
   value,
   note = 'counted',
+  compact = false,
 }: {
   label: string;
   value: number | string;
   note?: string;
+  compact?: boolean;
 }) {
   return (
     <div className="lib-plate">
@@ -60,7 +62,9 @@ export function Kpi({
         <p className="lib-plate__label">{label}</p>
       </div>
       <div className="lib-plate__body">
-        <p className="lib-plate__value">{value}</p>
+        <p className={`lib-plate__value${compact ? ' lib-plate__value--compact' : ''}`}>
+          {value}
+        </p>
         <span className="lib-plate__note">{note}</span>
       </div>
     </div>

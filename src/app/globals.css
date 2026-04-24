@@ -391,6 +391,12 @@ body {
     color: var(--binding);
     font-variation-settings: 'opsz' 144;
   }
+  .lib-plate__value--compact {
+    font-size: clamp(1.1rem, 1.8vw, 1.5rem);
+    line-height: 1.15;
+    letter-spacing: 0;
+    word-break: break-word;
+  }
   .lib-plate__note {
     font-family: var(--font-mono);
     font-size: 0.62rem;
