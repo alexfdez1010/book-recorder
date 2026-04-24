@@ -3,6 +3,9 @@ export interface BookLike {
   category: string;
   language: string;
   finishedOn: Date | string;
+  author?: string;
+  publicationDate?: Date | string | null;
+  title?: string;
 }
 
 export interface CountEntry {
@@ -15,15 +18,15 @@ export interface TimeseriesPoint {
   pages: number;
 }
 
-function toDate(v: Date | string): Date {
+export function toDate(v: Date | string): Date {
   return v instanceof Date ? v : new Date(v);
 }
 
-function ymd(d: Date): string {
+export function ymd(d: Date): string {
   return d.toISOString().slice(0, 10);
 }
 
-function yearMonth(d: Date): string {
+export function yearMonth(d: Date): string {
   return d.toISOString().slice(0, 7);
 }
 

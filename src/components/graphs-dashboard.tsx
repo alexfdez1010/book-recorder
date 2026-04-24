@@ -4,54 +4,52 @@ import {
   Bar,
   BarChart,
   CartesianGrid,
-  Cell,
-  Legend,
   Line,
   LineChart,
-  Pie,
-  PieChart,
   ResponsiveContainer,
   Tooltip,
   XAxis,
   YAxis,
 } from 'recharts';
 import type { CountEntry, TimeseriesPoint } from '@/lib/stats/aggregate';
-
-/* All colors resolve to CSS custom properties declared in globals.css.
-   Reskinning the palette only requires editing that file — charts included. */
-const INK = 'var(--ink)';
-const OXBLOOD = 'var(--oxblood)';
-const BRASS = 'var(--brass)';
-const MOSS = 'var(--moss)';
-const LEATHER = 'var(--leather)';
-const WALNUT = 'var(--walnut)';
-const CHESTNUT = 'var(--chestnut)';
-const PAPER_SOFT = 'var(--paper-soft)';
-
-const PALETTE = [LEATHER, BRASS, WALNUT, OXBLOOD, CHESTNUT, MOSS, INK];
+import {
+  DistributionPie,
+  INK,
+  Kpi,
+  LEATHER,
+  MOSS,
+  OXBLOOD,
+  Panel,
+  WALNUT,
+  tooltipStyle,
+} from './graphs/primitives';
 
 interface Props {
   data: {
     booksPerMonth: CountEntry[];
+    booksPerYear: CountEntry[];
+    pagesPerMonth: CountEntry[];
     categories: CountEntry[];
     languages: CountEntry[];
     cumulativePages: TimeseriesPoint[];
+    rolling30Day: TimeseriesPoint[];
+    weekday: CountEntry[];
+    pageLength: CountEntry[];
+    pagesByCategory: CountEntry[];
+    topAuthors: CountEntry[];
+    ageWhenRead: CountEntry[];
     meanPagesPerDay: number;
+    avgPagesPerBook: number;
+    avgDaysBetween: number;
+    longestBook: { title: string; pages: number } | null;
+    favoriteAuthor: { author: string; count: number } | null;
     totalBooks: number;
     totalPages: number;
   };
 }
 
-const tooltipStyle = {
-  backgroundColor: PAPER_SOFT,
-  border: '1px solid var(--ink)',
-  borderRadius: 0,
-  fontFamily: 'var(--font-jetbrains)',
-  fontSize: 11,
-  textTransform: 'uppercase' as const,
-  letterSpacing: '0.08em',
-  padding: '6px 10px',
-};
+const grid = <CartesianGrid strokeDasharray="2 4" stroke={INK} strokeOpacity={0.2} />;
+const axisProps = { fontSize: 10, stroke: INK, tickLine: false } as const;
 
 export function GraphsDashboard({ data }: Props) {
   if (data.totalBooks === 0) {
@@ -67,118 +65,132 @@ export function GraphsDashboard({ data }: Props) {
 
   return (
     <div className="flex flex-col gap-12">
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
         <Kpi label="Volumes" value={data.totalBooks} />
         <Kpi label="Pages turned" value={data.totalPages.toLocaleString()} />
-        <Kpi label="Mean pp / day" value={data.meanPagesPerDay} />
+        <Kpi label="Mean pp / day" value={data.meanPagesPerDay} note="across span" />
+        <Kpi label="Avg pp / book" value={data.avgPagesPerBook} note="per volume" />
+        <Kpi label="Days between" value={data.avgDaysBetween} note="avg finish gap" />
+        <Kpi
+          label="Favourite author"
+          value={data.favoriteAuthor?.author ?? '—'}
+          note={data.favoriteAuthor ? `${data.favoriteAuthor.count} vol.` : 'none'}
+        />
+        <Kpi
+          label="Longest tome"
+          value={data.longestBook?.pages.toLocaleString() ?? '—'}
+          note={data.longestBook?.title ?? 'none'}
+        />
+        <Kpi
+          label="Shelves"
+          value={data.categories.length}
+          note="distinct categories"
+        />
       </div>
 
       <div className="grid grid-cols-1 gap-8 lg:gap-10 lg:grid-cols-2">
         <Panel title="Volumes by month" kicker="Fig. 1">
-          <ResponsiveContainer width="100%" height={240}>
-            <BarChart
-              data={data.booksPerMonth.map((e) => ({ name: e.label, value: e.value }))}
-            >
-              <CartesianGrid strokeDasharray="2 4" stroke={INK} strokeOpacity={0.2} />
-              <XAxis dataKey="name" fontSize={10} stroke={INK} tickLine={false} />
-              <YAxis allowDecimals={false} fontSize={10} stroke={INK} tickLine={false} />
-              <Tooltip contentStyle={tooltipStyle} cursor={{ fill: 'var(--ink)', fillOpacity: 0.06 }} />
-              <Bar dataKey="value" fill={LEATHER} />
-            </BarChart>
-          </ResponsiveContainer>
+          <BarPanel data={data.booksPerMonth} fill={LEATHER} />
         </Panel>
 
-        <Panel title="Cumulative pages" kicker="Fig. 2">
-          <ResponsiveContainer width="100%" height={240}>
-            <LineChart data={data.cumulativePages}>
-              <CartesianGrid strokeDasharray="2 4" stroke={INK} strokeOpacity={0.2} />
-              <XAxis dataKey="date" fontSize={10} stroke={INK} tickLine={false} />
-              <YAxis fontSize={10} stroke={INK} tickLine={false} />
-              <Tooltip contentStyle={tooltipStyle} />
-              <Line
-                type="stepAfter"
-                dataKey="pages"
-                stroke={OXBLOOD}
-                strokeWidth={2.5}
-                dot={{ fill: INK, r: 3 }}
-              />
-            </LineChart>
-          </ResponsiveContainer>
+        <Panel title="Pages by month" kicker="Fig. 2">
+          <BarPanel data={data.pagesPerMonth} fill={WALNUT} />
         </Panel>
 
-        <Panel title="Shelves" kicker="Fig. 3">
+        <Panel title="Cumulative pages" kicker="Fig. 3">
+          <LinePanel data={data.cumulativePages} stroke={OXBLOOD} type="stepAfter" />
+        </Panel>
+
+        <Panel title="Rolling 30-day pages" kicker="Fig. 4">
+          <LinePanel data={data.rolling30Day} stroke={MOSS} type="monotone" />
+        </Panel>
+
+        <Panel title="Shelves" kicker="Fig. 5">
           <DistributionPie entries={data.categories} />
         </Panel>
 
-        <Panel title="Tongues" kicker="Fig. 4">
+        <Panel title="Tongues" kicker="Fig. 6">
           <DistributionPie entries={data.languages} />
+        </Panel>
+
+        <Panel title="Finishes by weekday" kicker="Fig. 7">
+          <BarPanel data={data.weekday} fill={OXBLOOD} />
+        </Panel>
+
+        <Panel title="Tome length" kicker="Fig. 8">
+          <BarPanel data={data.pageLength} fill={WALNUT} />
+        </Panel>
+
+        <Panel title="Pages by shelf" kicker="Fig. 9">
+          <HorizontalBarPanel data={data.pagesByCategory} fill={LEATHER} />
+        </Panel>
+
+        <Panel title="Top scribes" kicker="Fig. 10">
+          <HorizontalBarPanel data={data.topAuthors} fill={MOSS} />
+        </Panel>
+
+        <Panel title="Book age at reading" kicker="Fig. 11">
+          <BarPanel data={data.ageWhenRead} fill={OXBLOOD} />
+        </Panel>
+
+        <Panel title="Volumes by year" kicker="Fig. 12">
+          <BarPanel data={data.booksPerYear} fill={LEATHER} />
         </Panel>
       </div>
     </div>
   );
 }
 
-function DistributionPie({ entries }: { entries: CountEntry[] }) {
+function LinePanel({
+  data,
+  stroke,
+  type,
+}: {
+  data: TimeseriesPoint[];
+  stroke: string;
+  type: 'stepAfter' | 'monotone';
+}) {
   return (
     <ResponsiveContainer width="100%" height={240}>
-      <PieChart>
-        <Pie
-          data={entries.map((e) => ({ name: e.label, value: e.value }))}
-          dataKey="value"
-          nameKey="name"
-          outerRadius={80}
-          stroke={INK}
-          strokeWidth={2}
-          label={{ fontFamily: 'var(--font-jetbrains)', fontSize: 10, fill: INK }}
-        >
-          {entries.map((_, i) => (
-            <Cell key={i} fill={PALETTE[i % PALETTE.length]} />
-          ))}
-        </Pie>
+      <LineChart data={data}>
+        {grid}
+        <XAxis dataKey="date" {...axisProps} />
+        <YAxis {...axisProps} />
         <Tooltip contentStyle={tooltipStyle} />
-        <Legend
-          wrapperStyle={{
-            fontFamily: 'var(--font-jetbrains)',
-            fontSize: 10,
-            textTransform: 'uppercase',
-            letterSpacing: '0.1em',
-          }}
-        />
-      </PieChart>
+        <Line type={type} dataKey="pages" stroke={stroke} strokeWidth={2.5} dot={{ fill: INK, r: 2 }} />
+      </LineChart>
     </ResponsiveContainer>
   );
 }
 
-function Panel({
-  title,
-  kicker,
-  children,
-}: {
-  title: string;
-  kicker: string;
-  children: React.ReactNode;
-}) {
+function BarPanel({ data, fill }: { data: CountEntry[]; fill: string }) {
   return (
-    <div className="lib-panel">
-      <div className="lib-panel__head">
-        <h3 className="lib-panel__title">{title}</h3>
-        <span className="lib-panel__eyebrow">{kicker}</span>
-      </div>
-      <div className="lib-panel__body">{children}</div>
-    </div>
+    <ResponsiveContainer width="100%" height={240}>
+      <BarChart data={data.map((e) => ({ name: e.label, value: e.value }))}>
+        {grid}
+        <XAxis dataKey="name" {...axisProps} />
+        <YAxis allowDecimals={false} {...axisProps} />
+        <Tooltip contentStyle={tooltipStyle} cursor={{ fill: INK, fillOpacity: 0.06 }} />
+        <Bar dataKey="value" fill={fill} />
+      </BarChart>
+    </ResponsiveContainer>
   );
 }
 
-function Kpi({ label, value }: { label: string; value: number | string }) {
+function HorizontalBarPanel({ data, fill }: { data: CountEntry[]; fill: string }) {
   return (
-    <div className="lib-plate">
-      <div className="lib-plate__head">
-        <p className="lib-plate__label">{label}</p>
-      </div>
-      <div className="lib-plate__body">
-        <p className="lib-plate__value">{value}</p>
-        <span className="lib-plate__note">counted</span>
-      </div>
-    </div>
+    <ResponsiveContainer width="100%" height={Math.max(240, data.length * 28)}>
+      <BarChart
+        layout="vertical"
+        data={data.map((e) => ({ name: e.label, value: e.value }))}
+        margin={{ left: 12, right: 12 }}
+      >
+        {grid}
+        <XAxis type="number" allowDecimals={false} {...axisProps} />
+        <YAxis type="category" dataKey="name" width={120} {...axisProps} />
+        <Tooltip contentStyle={tooltipStyle} cursor={{ fill: INK, fillOpacity: 0.06 }} />
+        <Bar dataKey="value" fill={fill} />
+      </BarChart>
+    </ResponsiveContainer>
   );
 }
