@@ -32,6 +32,7 @@ export async function addBookAction(formData: FormData): Promise<{ error?: strin
     source: d.source ?? 'manual',
   });
   revalidatePath('/books');
+  revalidatePath('/authors');
   revalidatePath('/graphs');
   return {};
 }
@@ -58,6 +59,7 @@ export async function updateBookAction(
     finishedOn: new Date(d.finishedOn),
   });
   revalidatePath('/books');
+  revalidatePath('/authors');
   revalidatePath('/graphs');
   return {};
 }
@@ -66,6 +68,7 @@ export async function deleteBookAction(id: string): Promise<void> {
   await ensureAuth();
   await deleteBook(id);
   revalidatePath('/books');
+  revalidatePath('/authors');
   revalidatePath('/graphs');
 }
 

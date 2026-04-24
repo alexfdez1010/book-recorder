@@ -23,6 +23,15 @@ export async function listBooks(): Promise<Book[]> {
   return prisma.book.findMany({ orderBy: { finishedOn: 'desc' } });
 }
 
+export async function listAuthors(): Promise<string[]> {
+  const rows = await prisma.book.findMany({
+    distinct: ['author'],
+    select: { author: true },
+    orderBy: { author: 'asc' },
+  });
+  return rows.map((r) => r.author);
+}
+
 export async function deleteBook(id: string): Promise<void> {
   await prisma.book.delete({ where: { id } });
 }

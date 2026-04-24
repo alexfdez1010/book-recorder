@@ -1068,4 +1068,73 @@ body {
     margin-block-start: 0.5rem;
     border-block-start: 1px solid var(--ink);
   }
+
+  /* Combobox */
+  .lib-combobox-trigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    cursor: pointer;
+    text-align: start;
+  }
+  .lib-combobox-trigger.is-empty { color: var(--ink-mute); font-style: italic; }
+  .lib-combobox-trigger[data-state='open'] {
+    background: var(--paper);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--brass) 55%, transparent);
+  }
+  .lib-combobox-pop {
+    width: var(--radix-popover-trigger-width);
+    padding: 0;
+    background: var(--bone);
+    border: var(--rule) solid var(--ink);
+    box-shadow: var(--offset) var(--offset) 0 0 var(--ink);
+    z-index: 60;
+  }
+  .lib-cmd { display: flex; flex-direction: column; width: 100%; color: var(--ink); }
+  .lib-cmd__input-wrap {
+    display: flex;
+    align-items: center;
+    border-block-end: 1px solid var(--ink);
+    padding: 0.4rem 0.65rem;
+  }
+  .lib-cmd__input {
+    width: 100%;
+    background: transparent;
+    border: 0;
+    outline: 0;
+    font-family: var(--font-serif);
+    font-size: 0.95rem;
+    color: var(--ink);
+  }
+  .lib-cmd__input::placeholder { color: var(--ink-mute); font-style: italic; }
+  .lib-cmd__list { max-height: 16rem; overflow-y: auto; padding: 0.35rem 0; }
+  .lib-cmd__empty {
+    padding: 0.75rem 0.85rem;
+    color: var(--ink-mute);
+    font-style: italic;
+    font-size: 0.9rem;
+  }
+  .lib-cmd__group { padding: 0.15rem 0.25rem; }
+  .lib-cmd__group [cmdk-group-heading] {
+    padding: 0.35rem 0.6rem 0.2rem;
+    font-size: 0.68rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+  }
+  .lib-cmd__item {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.5rem 0.65rem;
+    cursor: pointer;
+    font-size: 0.95rem;
+    border: 1px solid transparent;
+  }
+  .lib-cmd__item[data-selected='true'] {
+    background: color-mix(in srgb, var(--brass) 22%, var(--bone));
+    border-color: var(--ink);
+  }
+  .lib-cmd__item[data-disabled='true'] { opacity: 0.5; pointer-events: none; }
 }

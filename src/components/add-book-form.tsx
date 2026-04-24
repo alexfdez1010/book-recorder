@@ -5,6 +5,7 @@ import { addBookAction } from '@/lib/books/actions';
 import type { BookCandidate } from '@/lib/books/types';
 import { BOOK_CATEGORIES } from '@/lib/books/categories';
 import { LANGUAGE_KEYS, LANGUAGE_NAMES } from '@/lib/books/language';
+import { AuthorCombobox } from '@/components/author-combobox';
 import { Button } from '@/components/ui/button';
 import { Input, Select } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -15,10 +16,12 @@ function today(): string {
 
 export function AddBookForm({
   candidate,
+  authors,
   onBack,
   onDone,
 }: {
   candidate: BookCandidate | null;
+  authors: string[];
   onBack: () => void;
   onDone: () => void;
 }) {
@@ -42,7 +45,16 @@ export function AddBookForm({
       <input type="hidden" name="source" value={source} />
 
       <Field label="Title" name="title" defaultValue={candidate?.title ?? ''} required />
-      <Field label="Author" name="author" defaultValue={candidate?.author ?? ''} required />
+      <div className="lib-field">
+        <Label htmlFor="author">Author</Label>
+        <AuthorCombobox
+          id="author"
+          name="author"
+          authors={authors}
+          defaultValue={candidate?.author ?? ''}
+          required
+        />
+      </div>
 
       <div className="lib-form-grid">
         <Field

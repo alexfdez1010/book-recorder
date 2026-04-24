@@ -21,7 +21,7 @@ type Mode =
   | { kind: 'selected'; candidate: BookCandidate }
   | { kind: 'manual' };
 
-export function AddBookDialog() {
+export function AddBookDialog({ authors }: { authors: string[] }) {
   const [open, setOpen] = useState(false);
   const [mode, setMode] = useState<Mode>({ kind: 'search' });
 
@@ -72,6 +72,7 @@ export function AddBookDialog() {
           ) : (
             <AddBookForm
               candidate={mode.kind === 'selected' ? mode.candidate : null}
+              authors={authors}
               onBack={() => setMode({ kind: 'search' })}
               onDone={close}
             />

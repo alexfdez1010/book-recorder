@@ -36,6 +36,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           </div>
           <nav className="lib-nav" aria-label="Main">
             <NavLink href="/books">§ Ledger</NavLink>
+            <NavLink href="/authors">§ Authors</NavLink>
             <NavLink href="/graphs">§ Metrics</NavLink>
           </nav>
         </div>

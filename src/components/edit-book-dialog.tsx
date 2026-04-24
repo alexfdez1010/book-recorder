@@ -5,6 +5,7 @@ import { Pencil } from 'lucide-react';
 import { updateBookAction } from '@/lib/books/actions';
 import { BOOK_CATEGORIES } from '@/lib/books/categories';
 import { LANGUAGE_KEYS, LANGUAGE_NAMES } from '@/lib/books/language';
+import { AuthorCombobox } from '@/components/author-combobox';
 import { Button } from '@/components/ui/button';
 import { Input, Select } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -34,7 +35,7 @@ function dateInput(d: Date | null): string {
   return d ? new Date(d).toISOString().slice(0, 10) : '';
 }
 
-export function EditBookDialog({ book }: { book: BookLike }) {
+export function EditBookDialog({ book, authors }: { book: BookLike; authors: string[] }) {
   const [open, setOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [pending, start] = useTransition();
@@ -65,7 +66,16 @@ export function EditBookDialog({ book }: { book: BookLike }) {
         <DialogBody>
           <form action={submit} className="flex flex-col gap-5">
             <Field label="Title" name="title" defaultValue={book.title} required />
-            <Field label="Author" name="author" defaultValue={book.author} required />
+            <div className="lib-field">
+              <Label htmlFor={`author-${book.id}`}>Author</Label>
+              <AuthorCombobox
+                id={`author-${book.id}`}
+                name="author"
+                authors={authors}
+                defaultValue={book.author}
+                required
+              />
+            </div>
             <div className="lib-form-grid">
               <Field
                 label="Publication date"
