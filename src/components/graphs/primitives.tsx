@@ -48,7 +48,7 @@ export function Panel({
 export function Kpi({
   label,
   value,
-  note = 'counted',
+  note = '',
   compact = false,
 }: {
   label: string;
