@@ -31,15 +31,14 @@ export function DeleteBookButton({ id, title }: { id: string; title: string }) {
       <DialogTrigger asChild>
         <button className="lib-strike" type="button" disabled={pending}>
           <Trash2 className="h-3 w-3" strokeWidth={2.5} />
-          {pending ? 'Removing…' : 'Strike'}
+          {pending ? '…' : 'Delete'}
         </button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogDescription>Form 09 · Withdrawal</DialogDescription>
-          <DialogTitle>Strike from the ledger?</DialogTitle>
+          <DialogTitle>Delete book?</DialogTitle>
           <DialogDescription>
-            “{title}” will be removed permanently. This cannot be undone.
+            “{title}” will be removed.
           </DialogDescription>
         </DialogHeader>
         <DialogBody>
@@ -56,7 +55,7 @@ export function DeleteBookButton({ id, title }: { id: string; title: string }) {
               disabled={pending}
             >
               <Trash2 className="h-4 w-4" strokeWidth={2.5} />
-              {pending ? 'Removing…' : 'Strike entry'}
+              {pending ? '…' : 'Delete'}
             </Button>
           </div>
         </DialogBody>

@@ -15,7 +15,6 @@ import {
   DialogHeader,
   DialogBody,
   DialogTitle,
-  DialogDescription,
   DialogTrigger,
 } from '@/components/ui/dialog';
 
@@ -54,14 +53,12 @@ export function EditBookDialog({ book, authors }: { book: BookLike; authors: str
       <DialogTrigger asChild>
         <button className="lib-amend" type="button">
           <Pencil className="h-3 w-3" strokeWidth={2.5} />
-          Amend
+          Edit
         </button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogDescription>Form 08 · Emendation</DialogDescription>
-          <DialogTitle>Amend entry</DialogTitle>
-          <DialogDescription>Revise the particulars of this volume.</DialogDescription>
+          <DialogTitle>Edit book</DialogTitle>
         </DialogHeader>
         <DialogBody>
           <form action={submit} className="flex flex-col gap-5">
@@ -99,14 +96,14 @@ export function EditBookDialog({ book, authors }: { book: BookLike; authors: str
                 required
               />
               <SelectField
-                label="Tongue"
+                label="Language"
                 name="language"
                 defaultValue={book.language}
                 options={LANGUAGE_KEYS.map((k) => ({ value: k, label: LANGUAGE_NAMES[k] }))}
               />
             </div>
             <SelectField
-              label="Shelf / category"
+              label="Category"
               name="category"
               defaultValue={book.category}
               options={BOOK_CATEGORIES.map((c) => ({ value: c, label: c }))}
@@ -125,7 +122,7 @@ export function EditBookDialog({ book, authors }: { book: BookLike; authors: str
             <div className="lib-form-actions">
               <Button
                 type="button"
-                variant="ghost"
+                variant="destructive"
                 size="sm"
                 onClick={() => setOpen(false)}
                 disabled={pending}
@@ -133,7 +130,7 @@ export function EditBookDialog({ book, authors }: { book: BookLike; authors: str
                 Cancel
               </Button>
               <Button type="submit" variant="primary" disabled={pending}>
-                {pending ? 'Amending…' : 'Save changes ✎'}
+                {pending ? 'Saving…' : 'Save'}
               </Button>
             </div>
           </form>

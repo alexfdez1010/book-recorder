@@ -55,86 +55,68 @@ export function GraphsDashboard({ data }: Props) {
   if (data.totalBooks === 0) {
     return (
       <div className="lib-empty">
-        <p className="lib-empty__title">No record yet.</p>
-        <p className="lib-meta mt-3">
-          Catalogue volumes on the ledger page to populate these metrics.
-        </p>
+        <p className="lib-empty__title">No data yet.</p>
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col gap-12">
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        <Kpi label="Volumes" value={data.totalBooks} />
-        <Kpi label="Pages turned" value={data.totalPages.toLocaleString()} />
-        <Kpi label="Mean pp / day" value={data.meanPagesPerDay} note="across span" />
-        <Kpi label="Avg pp / book" value={data.avgPagesPerBook} note="per volume" />
-        <Kpi label="Days between" value={data.avgDaysBetween} note="avg finish gap" />
+    <div className="flex flex-col gap-10">
+      <div className="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
+        <Kpi label="Books" value={data.totalBooks} />
+        <Kpi label="Pages" value={data.totalPages.toLocaleString()} />
+        <Kpi label="Pages / day" value={data.meanPagesPerDay} />
+        <Kpi label="Pages / book" value={data.avgPagesPerBook} />
+        <Kpi label="Days between" value={data.avgDaysBetween} />
         <Kpi
-          label="Favourite author"
+          label="Top author"
           value={data.favoriteAuthor?.author ?? '—'}
-          note={data.favoriteAuthor ? `${data.favoriteAuthor.count} vol.` : 'none'}
+          note={data.favoriteAuthor ? `${data.favoriteAuthor.count} books` : ''}
           compact
         />
         <Kpi
-          label="Longest tome"
+          label="Longest"
           value={data.longestBook?.pages.toLocaleString() ?? '—'}
-          note={data.longestBook?.title ?? 'none'}
+          note={data.longestBook?.title ?? ''}
         />
-        <Kpi
-          label="Shelves"
-          value={data.categories.length}
-          note="distinct categories"
-        />
+        <Kpi label="Categories" value={data.categories.length} />
       </div>
 
-      <div className="grid grid-cols-1 gap-8 lg:gap-10 lg:grid-cols-2">
-        <Panel title="Volumes by month" kicker="Fig. 1">
+      <div className="grid grid-cols-1 gap-6 lg:gap-8 lg:grid-cols-2">
+        <Panel title="Books / month">
           <BarPanel data={data.booksPerMonth} fill={LEATHER} />
         </Panel>
-
-        <Panel title="Pages by month" kicker="Fig. 2">
+        <Panel title="Pages / month">
           <BarPanel data={data.pagesPerMonth} fill={WALNUT} />
         </Panel>
-
-        <Panel title="Cumulative pages" kicker="Fig. 3">
+        <Panel title="Cumulative pages">
           <LinePanel data={data.cumulativePages} stroke={OXBLOOD} type="stepAfter" />
         </Panel>
-
-        <Panel title="Rolling 30-day pages" kicker="Fig. 4">
+        <Panel title="Rolling 30-day pages">
           <LinePanel data={data.rolling30Day} stroke={MOSS} type="monotone" />
         </Panel>
-
-        <Panel title="Shelves" kicker="Fig. 5">
+        <Panel title="Categories">
           <DistributionPie entries={data.categories} />
         </Panel>
-
-        <Panel title="Tongues" kicker="Fig. 6">
+        <Panel title="Languages">
           <DistributionPie entries={data.languages} />
         </Panel>
-
-        <Panel title="Finishes by weekday" kicker="Fig. 7">
+        <Panel title="Weekday">
           <BarPanel data={data.weekday} fill={OXBLOOD} />
         </Panel>
-
-        <Panel title="Tome length" kicker="Fig. 8">
+        <Panel title="Length">
           <BarPanel data={data.pageLength} fill={WALNUT} />
         </Panel>
-
-        <Panel title="Pages by shelf" kicker="Fig. 9">
+        <Panel title="Pages / category">
           <HorizontalBarPanel data={data.pagesByCategory} fill={LEATHER} />
         </Panel>
-
-        <Panel title="Top scribes" kicker="Fig. 10">
+        <Panel title="Top authors">
           <HorizontalBarPanel data={data.topAuthors} fill={MOSS} />
         </Panel>
-
-        <Panel title="Book age at reading" kicker="Fig. 11">
+        <Panel title="Book age at reading">
           <BarPanel data={data.ageWhenRead} fill={OXBLOOD} />
         </Panel>
-
-        <Panel title="Volumes by year" kicker="Fig. 12">
+        <Panel title="Books / year">
           <BarPanel data={data.booksPerYear} fill={LEATHER} />
         </Panel>
       </div>

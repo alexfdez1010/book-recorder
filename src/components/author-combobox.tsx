@@ -76,7 +76,7 @@ export function AuthorCombobox({
               onValueChange={setQuery}
             />
             <CommandList>
-              <CommandEmpty>No author in the ledger.</CommandEmpty>
+              <CommandEmpty>No author found.</CommandEmpty>
               {allowCreate ? (
                 <CommandGroup heading="Add new">
                   <CommandItem

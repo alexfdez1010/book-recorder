@@ -27,18 +27,15 @@ export const tooltipStyle = {
 
 export function Panel({
   title,
-  kicker,
   children,
 }: {
   title: string;
-  kicker: string;
   children: React.ReactNode;
 }) {
   return (
     <div className="lib-panel">
       <div className="lib-panel__head">
         <h3 className="lib-panel__title">{title}</h3>
-        <span className="lib-panel__eyebrow">{kicker}</span>
       </div>
       <div className="lib-panel__body">{children}</div>
     </div>

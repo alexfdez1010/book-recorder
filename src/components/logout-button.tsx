@@ -9,9 +9,8 @@ export function LogoutButton() {
     window.location.href = '/login';
   }
   return (
-    <Button onClick={handle} variant="ghost" size="sm">
+    <Button onClick={handle} variant="destructive" size="sm" aria-label="Sign out">
       <LogOut className="h-3.5 w-3.5" strokeWidth={2.5} />
-      Sign off
     </Button>
   );
 }

@@ -9,7 +9,9 @@ const buttonVariants = cva('lib-btn', {
       default: '',
       primary: 'lib-btn--primary',
       accent: 'lib-btn--accent',
+      destructive: 'lib-btn--destructive',
       ghost: 'lib-btn--ghost',
+      'ghost-light': 'lib-btn--ghost-light',
       link: 'lib-btn--link',
     },
     size: {

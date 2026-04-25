@@ -17,12 +17,12 @@ function today(): string {
 export function AddBookForm({
   candidate,
   authors,
-  onBack,
+  onCancel,
   onDone,
 }: {
   candidate: BookCandidate | null;
   authors: string[];
-  onBack: () => void;
+  onCancel: () => void;
   onDone: () => void;
 }) {
   const source = candidate?.source ?? 'manual';
@@ -79,7 +79,7 @@ export function AddBookForm({
           required
         />
         <SelectField
-          label="Tongue"
+          label="Language"
           name="language"
           defaultValue={candidate?.language ?? 'en'}
           options={LANGUAGE_KEYS.map((k) => ({ value: k, label: LANGUAGE_NAMES[k] }))}
@@ -87,7 +87,7 @@ export function AddBookForm({
       </div>
 
       <SelectField
-        label="Shelf / category"
+        label="Category"
         name="category"
         defaultValue={candidate?.category ?? 'Other'}
         options={BOOK_CATEGORIES.map((c) => ({ value: c, label: c }))}
@@ -106,11 +106,19 @@ export function AddBookForm({
       ) : null}
 
       <div className="lib-form-actions">
-        <Button type="button" variant="default" size="sm" onClick={onBack}>
-          ← Back
-        </Button>
+        <div className="flex items-center gap-3">
+          <Button
+            type="button"
+            variant="destructive"
+            size="sm"
+            onClick={onCancel}
+            disabled={pending}
+          >
+            Cancel
+          </Button>
+        </div>
         <Button type="submit" variant="primary" disabled={pending}>
-          {pending ? 'Inscribing…' : 'Inscribe entry ✎'}
+          {pending ? 'Saving…' : 'Save book'}
         </Button>
       </div>
     </form>

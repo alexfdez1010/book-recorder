@@ -29,9 +29,9 @@ export function BookSearchPanel({
       try {
         const list = await searchBooksAction(query);
         setResults(list);
-        if (list.length === 0) setError('No match found in the stacks.');
+        if (list.length === 0) setError('No matches.');
       } catch {
-        setError('The wires failed us. Check your connection.');
+        setError('Network error.');
       }
     });
   }
@@ -43,13 +43,13 @@ export function BookSearchPanel({
           autoFocus
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Title — partial is fine…"
+          placeholder="Search title…"
           aria-label="Book title"
           className="flex-1"
         />
         <Button type="submit" variant="primary" disabled={pending || !query.trim()}>
           <Search className="h-4 w-4" strokeWidth={2.5} />
-          {pending ? 'Hunting…' : 'Hunt'}
+          {pending ? '…' : 'Search'}
         </Button>
       </form>
 
@@ -57,10 +57,10 @@ export function BookSearchPanel({
 
       <div className="lib-stacks-head">
         <span className="lib-meta">
-          {results.length > 0 ? `${results.length} candidates` : 'Awaiting query'}
+          {results.length > 0 ? `${results.length} results` : ''}
         </span>
         <button type="button" onClick={onManual} className="lib-linkish">
-          Can&apos;t find it? Write it yourself →
+          Add manually →
         </button>
       </div>
 

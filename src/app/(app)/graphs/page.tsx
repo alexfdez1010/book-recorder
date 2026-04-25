@@ -23,7 +23,6 @@ import {
   weekdayFinishes,
 } from '@/lib/stats/advanced';
 import { GraphsDashboard } from '@/components/graphs-dashboard';
-import { Stamp } from '@/components/ui/stamp';
 
 export default async function GraphsPage() {
   const books = await listBooks();
@@ -61,14 +60,9 @@ export default async function GraphsPage() {
     totalPages: books.reduce((s, b) => s + b.pages, 0),
   };
   return (
-    <section className="flex flex-col gap-14">
+    <section className="flex flex-col gap-10">
       <div className="lib-section-head">
-        <div className="flex flex-col gap-3">
-          <p className="lib-kicker">Section II · The record</p>
-          <h1 className="lib-title lib-title--xl">Reading metrics</h1>
-          <p className="lib-subtitle pt-1">Quantities, cadences, proclivities.</p>
-        </div>
-        <Stamp variant="ink">Measured</Stamp>
+        <h1 className="lib-title">Graphs</h1>
       </div>
       <GraphsDashboard data={data} />
     </section>

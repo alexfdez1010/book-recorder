@@ -7,11 +7,6 @@ import { BookCover } from '@/components/book-cover';
 import { DeleteBookButton } from '@/components/delete-book-button';
 import { EditBookDialog } from '@/components/edit-book-dialog';
 import { Badge } from '@/components/ui/badge';
-import { Stamp } from '@/components/ui/stamp';
-
-function formatDate(d: Date | null): string {
-  return d ? new Date(d).toISOString().slice(0, 10) : '—';
-}
 
 const MONTH_FORMAT = new Intl.DateTimeFormat('en-US', {
   month: 'long',
@@ -30,43 +25,32 @@ export default async function BooksPage() {
   const [books, authors] = await Promise.all([listBooks(), listAuthors()]);
   const totalPages = books.reduce((s, b) => s + b.pages, 0);
 
-  const groups = new Map<
-    string,
-    { date: Date; items: { book: (typeof books)[number]; index: number }[] }
-  >();
-  books.forEach((book, index) => {
+  const groups = new Map<string, { date: Date; items: (typeof books)[number][] }>();
+  books.forEach((book) => {
     const key = monthKey(book.finishedOn);
     const bucket = groups.get(key);
-    if (bucket) bucket.items.push({ book, index });
-    else groups.set(key, { date: new Date(book.finishedOn), items: [{ book, index }] });
+    if (bucket) bucket.items.push(book);
+    else groups.set(key, { date: new Date(book.finishedOn), items: [book] });
   });
   const orderedGroups = [...groups.entries()].sort((a, b) =>
     b[0].localeCompare(a[0]),
   );
 
   return (
-    <section className="flex flex-col gap-14">
+    <section className="flex flex-col gap-10">
       <div className="lib-section-head">
-        <div className="flex flex-col gap-3">
-          <p className="lib-kicker">Section I · The catalogue</p>
-          <h1 className="lib-title lib-title--xl">Ledger of volumes</h1>
-          <p className="lib-subtitle pt-1">
-            {books.length.toString().padStart(3, '0')} entries ·{' '}
-            {totalPages.toLocaleString()} pages read
+        <div className="flex flex-col gap-2">
+          <h1 className="lib-title">Books</h1>
+          <p className="lib-subtitle">
+            {books.length} books · {totalPages.toLocaleString()} pages
           </p>
         </div>
-        <div className="flex items-center gap-5">
-          <Stamp>Catalogued</Stamp>
-          <AddBookDialog authors={authors} />
-        </div>
+        <AddBookDialog authors={authors} />
       </div>
 
       {books.length === 0 ? (
         <div className="lib-empty">
-          <p className="lib-empty__title">The shelves are empty.</p>
-          <p className="lib-meta mt-4">
-            Catalogue your first volume to begin the record.
-          </p>
+          <p className="lib-empty__title">No books yet.</p>
         </div>
       ) : (
         <div className="flex flex-col gap-14">
@@ -76,19 +60,11 @@ export default async function BooksPage() {
                 <h2 className="lib-month-head__title">
                   {MONTH_FORMAT.format(group.date)}
                 </h2>
-                <span className="lib-meta">
-                  {group.items.length.toString().padStart(2, '0')}{' '}
-                  {group.items.length === 1 ? 'entry' : 'entries'}
-                </span>
+                <span className="lib-meta">{group.items.length}</span>
               </header>
-              <ul className="grid grid-cols-1 gap-10 md:gap-12 md:grid-cols-2 xl:grid-cols-3">
-                {group.items.map(({ book: b, index: i }) => (
+              <ul className="grid grid-cols-1 gap-6 md:gap-8 md:grid-cols-2 xl:grid-cols-3">
+                {group.items.map((b) => (
                   <li key={b.id} className="lib-card">
-                    <div className="lib-card__head">
-                      <span className="lib-card__call">{formatDate(b.finishedOn)}</span>
-                      <Badge variant="accent">{b.category}</Badge>
-                    </div>
-
                     <div className="lib-card__body">
                       <BookCover
                         title={b.title}
@@ -100,25 +76,23 @@ export default async function BooksPage() {
                           {b.title}
                         </h3>
                         <p className="lib-card__author" title={b.author}>
-                          by {b.author}
+                          {b.author}
                         </p>
                         <dl className="lib-card__grid">
                           <dt>Pages</dt>
                           <dd>{b.pages.toLocaleString()}</dd>
-                          <dt>Tongue</dt>
+                          <dt>Lang</dt>
                           <dd>{languageName(b.language)}</dd>
                         </dl>
+                        <div className="mt-3">
+                          <Badge variant="accent">{b.category}</Badge>
+                        </div>
                       </div>
                     </div>
 
                     <div className="lib-card__foot">
-                      <span className="lib-meta">
-                        Vol. No. {String(i + 1).padStart(3, '0')}
-                      </span>
-                      <div className="flex items-center gap-4">
-                        <EditBookDialog book={b} authors={authors} />
-                        <DeleteBookButton id={b.id} title={b.title} />
-                      </div>
+                      <EditBookDialog book={b} authors={authors} />
+                      <DeleteBookButton id={b.id} title={b.title} />
                     </div>
                   </li>
                 ))}

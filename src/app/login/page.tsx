@@ -3,7 +3,6 @@ import { createSession } from '@/lib/auth/session';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Rule, Stamp } from '@/components/ui/stamp';
 
 async function loginAction(formData: FormData) {
   'use server';
@@ -20,26 +19,15 @@ export default async function LoginPage({
 }) {
   const { error } = await searchParams;
   return (
-    <main className="relative flex min-h-screen items-center justify-center p-6">
-      <p className="absolute left-6 top-6 lib-meta">
-        Restricted · Members only · Ref. 000-01
-      </p>
-      <div className="absolute right-6 top-6">
-        <Stamp>private collection</Stamp>
-      </div>
-
+    <main className="flex min-h-screen items-center justify-center p-4">
       <form action={loginAction} className="lib-ticket">
         <div className="lib-ticket__head">
-          <p className="lib-kicker">Access credential required</p>
-          <h1 className="lib-title mt-3">The Stacks</h1>
-          <p className="lib-subtitle mt-3">
-            Enter the passphrase to consult the ledger.
-          </p>
+          <h1 className="lib-title">Book Recorder</h1>
         </div>
 
         <div className="lib-ticket__body">
           <div className="lib-field">
-            <Label htmlFor="password">Passphrase</Label>
+            <Label htmlFor="password">Password</Label>
             <Input
               id="password"
               type="password"
@@ -53,15 +41,13 @@ export default async function LoginPage({
 
           {error ? (
             <p role="alert" className="lib-field-error">
-              ✕ Rejected. Passphrase does not match the register.
+              ✕ Invalid password.
             </p>
           ) : null}
 
           <Button type="submit" variant="primary" size="lg" className="lib-btn--block">
-            Unlock the ledger →
+            Unlock
           </Button>
-
-          <Rule ornament="❦" />
         </div>
       </form>
     </main>

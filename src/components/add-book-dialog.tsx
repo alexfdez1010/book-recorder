@@ -12,7 +12,6 @@ import {
   DialogHeader,
   DialogBody,
   DialogTitle,
-  DialogDescription,
   DialogTrigger,
 } from '@/components/ui/dialog';
 
@@ -32,16 +31,10 @@ export function AddBookDialog({ authors }: { authors: string[] }) {
 
   const title =
     mode.kind === 'manual'
-      ? 'Add by hand'
+      ? 'Add manually'
       : mode.kind === 'selected'
         ? 'Confirm details'
-        : 'Catalogue a volume';
-  const desc =
-    mode.kind === 'manual'
-      ? 'No match in the stacks — write the entry yourself.'
-      : mode.kind === 'selected'
-        ? 'Verify the metadata before it is inscribed in the ledger.'
-        : 'Search the world’s libraries. Pick one. Or write your own.';
+        : 'Add book';
 
   return (
     <Dialog
@@ -54,14 +47,12 @@ export function AddBookDialog({ authors }: { authors: string[] }) {
       <DialogTrigger asChild>
         <Button variant="accent">
           <Plus className="h-4 w-4" strokeWidth={2.5} />
-          New entry
+          Add book
         </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogDescription>Form 07 · Acquisition</DialogDescription>
           <DialogTitle>{title}</DialogTitle>
-          <DialogDescription>{desc}</DialogDescription>
         </DialogHeader>
         <DialogBody>
           {mode.kind === 'search' ? (
@@ -73,7 +64,7 @@ export function AddBookDialog({ authors }: { authors: string[] }) {
             <AddBookForm
               candidate={mode.kind === 'selected' ? mode.candidate : null}
               authors={authors}
-              onBack={() => setMode({ kind: 'search' })}
+              onCancel={close}
               onDone={close}
             />
           )}
