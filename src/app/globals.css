@@ -400,6 +400,7 @@ body {
   }
   .lib-card__body {
     display: flex;
+    flex: 1;
     gap: 1rem;
     padding: 1rem;
   }
@@ -417,6 +418,7 @@ body {
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    min-height: calc(1.1rem * 1.15 * 3);
   }
   .lib-card__author {
     margin-block-start: 0.4rem;
