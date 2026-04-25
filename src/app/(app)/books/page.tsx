@@ -54,7 +54,7 @@ export default async function BooksPage() {
         </div>
       ) : (
         <div className="flex flex-col gap-14">
-          {orderedGroups.map(([key, group]) => (
+          {orderedGroups.map(([key, group], gIdx) => (
             <section key={key} className="flex flex-col gap-6">
               <header className="lib-month-head">
                 <h2 className="lib-month-head__title">
@@ -63,13 +63,14 @@ export default async function BooksPage() {
                 <span className="lib-meta">{group.items.length}</span>
               </header>
               <ul className="grid grid-cols-1 gap-6 md:gap-8 md:grid-cols-2 xl:grid-cols-3">
-                {group.items.map((b) => (
+                {group.items.map((b, idx) => (
                   <li key={b.id} className="lib-card">
                     <div className="lib-card__body">
                       <BookCover
                         title={b.title}
                         author={b.author}
                         coverUrl={b.coverUrl}
+                        priority={gIdx === 0 && idx < 6}
                       />
                       <div className="lib-card__text">
                         <h3 className="lib-card__title" title={b.title}>

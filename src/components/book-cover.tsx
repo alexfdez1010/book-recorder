@@ -9,7 +9,18 @@ type BookCoverProps = {
   coverUrl?: string | null;
   size?: Size;
   className?: string;
+  priority?: boolean;
 };
+
+const COVER_SIZES = {
+  sm: '56px',
+  md: '(min-width: 640px) 112px, 88px',
+} as const;
+
+function blurDataURL(a: string, b: string, angle: number): string {
+  const svg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 12'><defs><linearGradient id='g' gradientTransform='rotate(${angle})'><stop offset='0%' stop-color='${a}'/><stop offset='100%' stop-color='${b}'/></linearGradient></defs><rect width='8' height='12' fill='url(%23g)'/></svg>`;
+  return `data:image/svg+xml;utf8,${svg.replace(/#/g, '%23').replace(/"/g, "'")}`;
+}
 
 function hashString(input: string): number {
   let h = 5381;
@@ -48,8 +59,10 @@ export function BookCover({
   coverUrl,
   size = 'md',
   className,
+  priority = false,
 }: BookCoverProps) {
   const frame = cn('lib-cover', size === 'sm' && 'lib-cover--sm', className);
+  const { a, b, accent, angle } = paletteFor(title, author);
 
   if (coverUrl) {
     return (
@@ -58,15 +71,17 @@ export function BookCover({
           src={coverUrl}
           alt={`${title} cover`}
           fill
-          sizes={size === 'sm' ? '56px' : '112px'}
+          sizes={COVER_SIZES[size]}
           className="object-cover"
-          unoptimized
+          priority={priority}
+          loading={priority ? undefined : 'lazy'}
+          placeholder="blur"
+          blurDataURL={blurDataURL(a, b, angle)}
         />
       </div>
     );
   }
 
-  const { a, b, accent, angle } = paletteFor(title, author);
   const isSmall = size === 'sm';
 
   return (
