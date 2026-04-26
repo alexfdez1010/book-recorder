@@ -17,6 +17,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             <NavLink href="/books">Books</NavLink>
             <NavLink href="/authors">Authors</NavLink>
             <NavLink href="/graphs">Graphs</NavLink>
+            <NavLink href="/skill">Skill</NavLink>
           </nav>
         </div>
       </header>
