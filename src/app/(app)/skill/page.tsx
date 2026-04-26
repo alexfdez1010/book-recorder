@@ -89,11 +89,6 @@ export default async function SkillPage() {
 
           <div className="flex flex-col gap-2">
             <span className="lib-plate__label">Bearer token</span>
-            <p className="text-xs text-[color:var(--ink-mute)]">
-              Derived from your password and <code>AUTH_SECRET</code> — no extra storage.
-              Treat it like the password. Export it as <code>${TOKEN_ENV_VAR}</code> in
-              your shell so the MCP client can read it from the environment.
-            </p>
             <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
               <code className="break-all text-sm">{token}</code>
               <CopyButton value={token} label="Copy token" />
