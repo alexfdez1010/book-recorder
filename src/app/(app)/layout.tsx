@@ -15,6 +15,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           </div>
           <nav className="lib-nav" aria-label="Main">
             <NavLink href="/books">Books</NavLink>
+            <NavLink href="/to-read">To read</NavLink>
             <NavLink href="/authors">Authors</NavLink>
             <NavLink href="/graphs">Graphs</NavLink>
             <NavLink href="/skill">Skill</NavLink>

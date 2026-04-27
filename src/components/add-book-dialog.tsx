@@ -5,6 +5,7 @@ import { Plus } from 'lucide-react';
 import { BookSearchPanel } from './book-search-panel';
 import { AddBookForm } from './add-book-form';
 import type { BookCandidate } from '@/lib/books/types';
+import type { BookStatus } from '@/lib/books/status';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -20,7 +21,13 @@ type Mode =
   | { kind: 'selected'; candidate: BookCandidate }
   | { kind: 'manual' };
 
-export function AddBookDialog({ authors }: { authors: string[] }) {
+export function AddBookDialog({
+  authors,
+  status = 'finished',
+}: {
+  authors: string[];
+  status?: BookStatus;
+}) {
   const [open, setOpen] = useState(false);
   const [mode, setMode] = useState<Mode>({ kind: 'search' });
 
@@ -29,12 +36,14 @@ export function AddBookDialog({ authors }: { authors: string[] }) {
     setMode({ kind: 'search' });
   }
 
+  const isToRead = status === 'to-read';
+  const triggerLabel = isToRead ? 'Add to read' : 'Add book';
   const title =
     mode.kind === 'manual'
       ? 'Add manually'
       : mode.kind === 'selected'
         ? 'Confirm details'
-        : 'Add book';
+        : triggerLabel;
 
   return (
     <Dialog
@@ -47,7 +56,7 @@ export function AddBookDialog({ authors }: { authors: string[] }) {
       <DialogTrigger asChild>
         <Button variant="accent">
           <Plus className="h-4 w-4" strokeWidth={2.5} />
-          Add book
+          {triggerLabel}
         </Button>
       </DialogTrigger>
       <DialogContent>
@@ -64,6 +73,7 @@ export function AddBookDialog({ authors }: { authors: string[] }) {
             <AddBookForm
               candidate={mode.kind === 'selected' ? mode.candidate : null}
               authors={authors}
+              status={status}
               onCancel={close}
               onDone={close}
             />

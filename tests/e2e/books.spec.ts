@@ -43,14 +43,19 @@ test('manually add a book without searching', async ({ page }) => {
   await expect(page.getByTestId('add-book-form')).toBeVisible();
 
   await page.getByLabel('Title', { exact: true }).fill('My Private Journal');
-  await page.getByLabel('Author').fill('Someone Unknown');
+  await page.getByTestId('author-combobox').click();
+  const authorSearch = page.getByPlaceholder('Search authors…');
+  await authorSearch.fill('Someone Unknown');
+  await authorSearch.press('Enter');
   await page.getByLabel('Pages').fill('123');
   await page.getByLabel('Category').selectOption('Other');
   await page.getByLabel('Language').selectOption('en');
 
   await page.getByRole('button', { name: 'Save book' }).click();
   await expect(page.getByRole('dialog')).toBeHidden();
-  await expect(page.getByText('My Private Journal')).toBeVisible();
+  await expect(
+    page.getByRole('heading', { name: 'My Private Journal' }).first(),
+  ).toBeVisible();
 });
 
 test('graphs page shows dashboard after a book is added', async ({ page }) => {

@@ -22,9 +22,9 @@
     "database:deploy": "prisma migrate deploy",
     "database:check": "prisma migrate diff --to-schema-datamodel prisma/ --from-schema-datasource prisma/ --exit-code",
     "database": "docker compose up -d",
-    "database:test": "docker compose -f compose-test.yml up -d && npm run database:create",
-    "database:down": "docker compose down",
-    "database:create": "prisma generate && prisma db push",
+    "database:test": "docker compose -f compose-test.yml down -v && docker compose -f compose-test.yml up -d && npm run database:create",
+    "database:down": "docker compose -f compose-test.yml down -v",
+    "database:create": "prisma generate && prisma migrate deploy",
     "database:studio": "npm run database && npx prisma studio",
     "database:format": "prisma format",
     "playwright": "npx playwright test --ui"

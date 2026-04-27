@@ -18,12 +18,15 @@ The server exposes the following tools — discover their exact input schemas vi
 | Tool | Purpose |
 |------|---------|
 | \`search_books\` | Search Open Library + Google Books for candidates. |
-| \`add_book\` | Record a finished book. \`finishedOn\` is \`YYYY-MM-DD\`. |
-| \`list_books\` | All books, optional \`author\` substring + \`limit\`. |
+| \`add_book\` | Record a book. Default \`status\` is \`finished\` (needs \`finishedOn\`); pass \`status: "to-read"\` to queue it. |
+| \`add_to_read_book\` | Convenience wrapper to queue a book on the to-read shelf. |
+| \`list_books\` | Books on the library, default \`status: "finished"\`; pass \`status: "to-read"\` for the queue. Optional \`author\` + \`limit\`. |
+| \`list_to_read_books\` | Books queued to read, newest first. |
 | \`list_books_by_author\` | All books for one author. |
 | \`list_authors\` | Distinct authors with book counts. |
 | \`get_book\` | One book by id. |
 | \`update_book\` | Replace metadata for an id. |
+| \`mark_as_finished\` | Promote a to-read book to finished by setting \`finishedOn\`. |
 | \`delete_book\` | Remove a book by id. |
 | \`get_stats\` | Totals, averages, distributions, time series. |
 

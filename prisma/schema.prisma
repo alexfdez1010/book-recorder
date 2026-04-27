@@ -17,7 +17,8 @@ model Book {
   coverUrl        String?
   category        String
   language        String
-  finishedOn      DateTime
+  status          String    @default("finished")
+  finishedOn      DateTime?
   externalId      String?
   source          String?
   createdAt       DateTime  @default(now())
@@ -25,4 +26,5 @@ model Book {
 
   @@index([finishedOn])
   @@index([category])
+  @@index([status])
 }

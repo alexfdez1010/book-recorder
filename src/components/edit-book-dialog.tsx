@@ -27,7 +27,8 @@ type BookLike = {
   coverUrl: string | null;
   category: string;
   language: string;
-  finishedOn: Date;
+  status: string;
+  finishedOn: Date | null;
 };
 
 function dateInput(d: Date | null): string {
@@ -38,6 +39,7 @@ export function EditBookDialog({ book, authors }: { book: BookLike; authors: str
   const [open, setOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [pending, start] = useTransition();
+  const isFinished = book.status === 'finished';
 
   function submit(formData: FormData) {
     setError(null);
@@ -62,6 +64,7 @@ export function EditBookDialog({ book, authors }: { book: BookLike; authors: str
         </DialogHeader>
         <DialogBody>
           <form action={submit} className="flex flex-col gap-5">
+            <input type="hidden" name="status" value={book.status} />
             <Field label="Title" name="title" defaultValue={book.title} required />
             <div className="lib-field">
               <Label htmlFor={`author-${book.id}`}>Author</Label>
@@ -80,13 +83,15 @@ export function EditBookDialog({ book, authors }: { book: BookLike; authors: str
                 type="date"
                 defaultValue={dateInput(book.publicationDate)}
               />
-              <Field
-                label="Finished on"
-                name="finishedOn"
-                type="date"
-                defaultValue={dateInput(book.finishedOn)}
-                required
-              />
+              {isFinished ? (
+                <Field
+                  label="Finished on"
+                  name="finishedOn"
+                  type="date"
+                  defaultValue={dateInput(book.finishedOn)}
+                  required
+                />
+              ) : null}
               <Field
                 label="Pages"
                 name="pages"

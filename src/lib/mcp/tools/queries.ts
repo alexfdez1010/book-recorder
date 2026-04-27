@@ -2,8 +2,9 @@ import 'server-only';
 import { z } from 'zod';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { prisma } from '@/lib/db/prisma';
-import { listBooks } from '@/lib/books/repository';
+import { listBooks, listToReadBooks } from '@/lib/books/repository';
 import { searchBooks } from '@/lib/books/search';
+import { BOOK_STATUSES } from '@/lib/books/status';
 import {
   booksPerMonth,
   cumulativePages,
@@ -37,24 +38,44 @@ export function registerQueryTools(server: McpServer): void {
   server.registerTool(
     'list_books',
     {
-      title: 'List finished books',
+      title: 'List books',
       description:
-        'List books recorded in the library, optionally filtered by author (case-insensitive substring) and limited.',
+        'List books recorded in the library. Defaults to `status: "finished"`; pass `status: "to-read"` to read the queue. Optional author substring + limit.',
       inputSchema: {
         author: z.string().optional(),
+        status: z.enum(BOOK_STATUSES).optional(),
         limit: z.number().int().min(1).max(500).optional(),
       },
     },
-    async ({ author, limit }) =>
-      ok(
+    async ({ author, status, limit }) => {
+      const effectiveStatus = status ?? 'finished';
+      return ok(
         await prisma.book.findMany({
-          where: author
-            ? { author: { contains: author, mode: 'insensitive' } }
-            : undefined,
-          orderBy: { finishedOn: 'desc' },
+          where: {
+            status: effectiveStatus,
+            ...(author ? { author: { contains: author, mode: 'insensitive' } } : {}),
+          },
+          orderBy:
+            effectiveStatus === 'finished'
+              ? { finishedOn: 'desc' }
+              : { createdAt: 'desc' },
           take: limit,
         }),
-      ),
+      );
+    },
+  );
+
+  server.registerTool(
+    'list_to_read_books',
+    {
+      title: 'List to-read books',
+      description: 'List books queued on the to-read shelf, newest entries first.',
+      inputSchema: { limit: z.number().int().min(1).max(500).optional() },
+    },
+    async ({ limit }) => {
+      const books = await listToReadBooks();
+      return ok(typeof limit === 'number' ? books.slice(0, limit) : books);
+    },
   );
 
   server.registerTool(

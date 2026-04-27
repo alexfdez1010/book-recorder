@@ -16,11 +16,14 @@ const TOKEN = createHash('sha256').update(`${PASSWORD}::${SECRET}`).digest('hex'
 const TOOL_NAMES = [
   'search_books',
   'list_books',
+  'list_to_read_books',
   'list_authors',
   'list_books_by_author',
   'get_book',
   'add_book',
+  'add_to_read_book',
   'update_book',
+  'mark_as_finished',
   'delete_book',
   'get_stats',
 ];

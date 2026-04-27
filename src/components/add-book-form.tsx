@@ -5,6 +5,7 @@ import { addBookAction } from '@/lib/books/actions';
 import type { BookCandidate } from '@/lib/books/types';
 import { BOOK_CATEGORIES } from '@/lib/books/categories';
 import { LANGUAGE_KEYS, LANGUAGE_NAMES } from '@/lib/books/language';
+import type { BookStatus } from '@/lib/books/status';
 import { AuthorCombobox } from '@/components/author-combobox';
 import { Button } from '@/components/ui/button';
 import { Input, Select } from '@/components/ui/input';
@@ -17,16 +18,19 @@ function today(): string {
 export function AddBookForm({
   candidate,
   authors,
+  status = 'finished',
   onCancel,
   onDone,
 }: {
   candidate: BookCandidate | null;
   authors: string[];
+  status?: BookStatus;
   onCancel: () => void;
   onDone: () => void;
 }) {
   const source = candidate?.source ?? 'manual';
   const externalId = candidate?.externalId ?? '';
+  const isFinished = status === 'finished';
   const [error, setError] = useState<string | null>(null);
   const [pending, start] = useTransition();
 
@@ -43,6 +47,7 @@ export function AddBookForm({
     <form action={submit} className="flex flex-col gap-5" data-testid="add-book-form">
       <input type="hidden" name="externalId" value={externalId} />
       <input type="hidden" name="source" value={source} />
+      <input type="hidden" name="status" value={status} />
 
       <Field label="Title" name="title" defaultValue={candidate?.title ?? ''} required />
       <div className="lib-field">
@@ -63,13 +68,15 @@ export function AddBookForm({
           type="date"
           defaultValue={candidate?.publicationDate ?? ''}
         />
-        <Field
-          label="Finished on"
-          name="finishedOn"
-          type="date"
-          defaultValue={today()}
-          required
-        />
+        {isFinished ? (
+          <Field
+            label="Finished on"
+            name="finishedOn"
+            type="date"
+            defaultValue={today()}
+            required
+          />
+        ) : null}
         <Field
           label="Pages"
           name="pages"
@@ -118,7 +125,7 @@ export function AddBookForm({
           </Button>
         </div>
         <Button type="submit" variant="primary" disabled={pending}>
-          {pending ? 'Saving…' : 'Save book'}
+          {pending ? 'Saving…' : isFinished ? 'Save book' : 'Save to read'}
         </Button>
       </div>
     </form>
