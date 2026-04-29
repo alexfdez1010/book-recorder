@@ -44,19 +44,84 @@ The app exposes its library through an **MCP server**, so any AI agent (Claude C
 
 One password unlocks the whole app. Sessions last a year, cookie-only, no accounts to manage.
 
-## 🚀 Quick start
+## 🚀 Getting started
 
-You'll need **Bun** and **Docker** (for the local Postgres).
+### 1. Prerequisites
+
+- [**Bun**](https://bun.com) ≥ 1.3 — package manager and runtime
+- [**Docker**](https://www.docker.com/) — runs the local Postgres on port **5434**
+- A terminal you're comfortable in
+
+Verify they're installed:
 
 ```bash
-cp .env.example .env          # set PASSWORD and AUTH_SECRET
-bun install
-bun run database              # starts Postgres
-bun run database:dev          # applies migrations
+bun --version
+docker --version
+```
+
+### 2. Clone and install
+
+```bash
+git clone https://github.com/alexfdez1010/book-recorder.git
+cd book-recorder
+bun install                   # also runs `prisma generate` post-install
+```
+
+### 3. Configure environment
+
+Copy the example file and fill in your own values:
+
+```bash
+cp .env.example .env
+```
+
+Then open `.env` and set:
+
+| Variable       | What to put                                                  |
+| -------------- | ------------------------------------------------------------ |
+| `DATABASE_URL` | Leave the default for local dev (`postgresql://postgres:postgres@localhost:5434/book_recorder`) |
+| `PASSWORD`     | Pick the single password you'll use to log in                |
+| `AUTH_SECRET`  | A long random string — generate one with the command below   |
+
+Generate a strong `AUTH_SECRET`:
+
+```bash
+openssl rand -hex 32
+```
+
+> 💡 Keep `.env` out of git. It's already in `.gitignore`.
+
+### 4. Start the database
+
+```bash
+bun run database              # docker compose up -d (Postgres on :5434)
+bun run database:dev          # creates and applies migrations
+```
+
+If port 5434 is taken, stop whatever's holding it (or change the port in `compose.yml` and `.env` together).
+
+### 5. Run the app
+
+```bash
 bun run dev                   # http://localhost:3000
 ```
 
-Generate a secret with `openssl rand -hex 32`.
+Open [http://localhost:3000](http://localhost:3000), log in with the `PASSWORD` you set, and start adding books.
+
+### 6. (Optional) Useful follow-ups
+
+```bash
+bun run database:studio       # browse the DB visually with Prisma Studio
+bun run test                  # run unit + integration + E2E suites
+bun run lint-format           # ESLint + Prettier (run before committing)
+```
+
+### 🆘 Troubleshooting
+
+- **`Can't reach database server at localhost:5434`** — Docker isn't running or the container didn't start. Run `docker ps` and `bun run database` again.
+- **`Environment variable not found: DATABASE_URL`** — your `.env` is missing or in the wrong directory. It must sit at the project root.
+- **Login screen rejects your password** — double-check `PASSWORD` in `.env` and restart `bun run dev` so it picks up the new value.
+- **`prisma generate` failed during install** — re-run `bun install` after fixing `DATABASE_URL`; the postinstall hook needs a valid schema.
 
 ## 🚢 Deploy to Vercel
 
