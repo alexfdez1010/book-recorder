@@ -1,7 +1,7 @@
 'use client';
 
 import { useId, useState } from 'react';
-import { Star, X } from 'lucide-react';
+import { Star } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const STARS = [1, 2, 3, 4, 5] as const;
@@ -80,16 +80,6 @@ export function StarRating({
           </button>
         );
       })}
-      {!readOnly && current !== null ? (
-        <button
-          type="button"
-          aria-label="Clear rating"
-          className="lib-rating__clear"
-          onClick={() => set(null)}
-        >
-          <X className="h-3.5 w-3.5" strokeWidth={2.5} />
-        </button>
-      ) : null}
     </div>
   );
 }

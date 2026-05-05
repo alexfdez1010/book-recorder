@@ -89,8 +89,13 @@ export default async function BooksPage() {
                           <dt>Lang</dt>
                           <dd>{languageName(b.language)}</dd>
                         </dl>
-                        <div className="mt-3 flex items-center justify-between gap-3">
-                          <Badge variant="accent">{b.category}</Badge>
+                        <div className="mt-3 flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
+                          <Badge
+                            variant="accent"
+                            className="min-w-0 max-w-full truncate"
+                          >
+                            {b.category}
+                          </Badge>
                           <InlineRating id={b.id} rating={b.rating} />
                         </div>
                       </div>
