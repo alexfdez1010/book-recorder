@@ -5,6 +5,7 @@ import {
   createBook,
   deleteBook,
   markBookAsFinished,
+  setBookRating,
   updateBook,
 } from '@/lib/books/repository';
 import { newBookSchema } from '@/lib/books/validation';
@@ -25,15 +26,19 @@ export function registerMutationTools(server: McpServer): void {
       const created = await createBook({
         title: parsed.title,
         author: parsed.author,
-        publicationDate: parsed.publicationDate ? new Date(parsed.publicationDate) : null,
+        publicationDate: parsed.publicationDate
+          ? new Date(parsed.publicationDate)
+          : null,
         pages: parsed.pages,
         coverUrl: parsed.coverUrl ? parsed.coverUrl : null,
         category: parsed.category,
         language: parsed.language,
         status: parsed.status,
-        finishedOn: isFinished && parsed.finishedOn ? new Date(parsed.finishedOn) : null,
+        finishedOn:
+          isFinished && parsed.finishedOn ? new Date(parsed.finishedOn) : null,
         externalId: parsed.externalId ? parsed.externalId : null,
         source: parsed.source ?? 'manual',
+        rating: parsed.rating ?? null,
       });
       return ok(created);
     },
@@ -52,7 +57,9 @@ export function registerMutationTools(server: McpServer): void {
       const created = await createBook({
         title: parsed.title,
         author: parsed.author,
-        publicationDate: parsed.publicationDate ? new Date(parsed.publicationDate) : null,
+        publicationDate: parsed.publicationDate
+          ? new Date(parsed.publicationDate)
+          : null,
         pages: parsed.pages,
         coverUrl: parsed.coverUrl ? parsed.coverUrl : null,
         category: parsed.category,
@@ -61,6 +68,7 @@ export function registerMutationTools(server: McpServer): void {
         finishedOn: null,
         externalId: parsed.externalId ? parsed.externalId : null,
         source: parsed.source ?? 'manual',
+        rating: parsed.rating ?? null,
       });
       return ok(created);
     },
@@ -70,7 +78,8 @@ export function registerMutationTools(server: McpServer): void {
     'update_book',
     {
       title: 'Update a recorded book',
-      description: 'Update an existing book record by id. All metadata fields are required.',
+      description:
+        'Update an existing book record by id. All metadata fields are required.',
       inputSchema: { id: z.string().min(1), ...bookFields },
     },
     async ({ id, ...rest }) => {
@@ -79,13 +88,17 @@ export function registerMutationTools(server: McpServer): void {
       const updated = await updateBook(id, {
         title: parsed.title,
         author: parsed.author,
-        publicationDate: parsed.publicationDate ? new Date(parsed.publicationDate) : null,
+        publicationDate: parsed.publicationDate
+          ? new Date(parsed.publicationDate)
+          : null,
         pages: parsed.pages,
         coverUrl: parsed.coverUrl ? parsed.coverUrl : null,
         category: parsed.category,
         language: parsed.language,
         status: parsed.status,
-        finishedOn: isFinished && parsed.finishedOn ? new Date(parsed.finishedOn) : null,
+        finishedOn:
+          isFinished && parsed.finishedOn ? new Date(parsed.finishedOn) : null,
+        rating: parsed.rating ?? null,
       });
       return ok(updated);
     },
@@ -96,14 +109,36 @@ export function registerMutationTools(server: McpServer): void {
     {
       title: 'Move a to-read book to finished',
       description:
-        'Promote a to-read book to the finished shelf by setting `finishedOn` (YYYY-MM-DD).',
+        'Promote a to-read book to the finished shelf by setting `finishedOn` (YYYY-MM-DD). Optionally include a 1–5 `rating`.',
       inputSchema: {
         id: z.string().min(1),
         finishedOn: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'YYYY-MM-DD'),
+        rating: z.number().int().min(1).max(5).optional(),
       },
     },
-    async ({ id, finishedOn }) => {
-      const updated = await markBookAsFinished(id, new Date(finishedOn));
+    async ({ id, finishedOn, rating }) => {
+      const updated = await markBookAsFinished(
+        id,
+        new Date(finishedOn),
+        rating ?? null,
+      );
+      return ok(updated);
+    },
+  );
+
+  server.registerTool(
+    'set_rating',
+    {
+      title: 'Set or clear a book rating',
+      description:
+        'Set the 1–5 star rating for a book by id. Pass `rating: null` to clear it.',
+      inputSchema: {
+        id: z.string().min(1),
+        rating: z.union([z.number().int().min(1).max(5), z.null()]),
+      },
+    },
+    async ({ id, rating }) => {
+      const updated = await setBookRating(id, rating);
       return ok(updated);
     },
   );

@@ -6,6 +6,7 @@ import { AddBookDialog } from '@/components/add-book-dialog';
 import { BookCover } from '@/components/book-cover';
 import { DeleteBookButton } from '@/components/delete-book-button';
 import { EditBookDialog } from '@/components/edit-book-dialog';
+import { InlineRating } from '@/components/inline-rating';
 import { Badge } from '@/components/ui/badge';
 
 const MONTH_FORMAT = new Intl.DateTimeFormat('en-US', {
@@ -25,7 +26,10 @@ export default async function BooksPage() {
   const [books, authors] = await Promise.all([listBooks(), listAuthors()]);
   const totalPages = books.reduce((s, b) => s + b.pages, 0);
 
-  const groups = new Map<string, { date: Date; items: (typeof books)[number][] }>();
+  const groups = new Map<
+    string,
+    { date: Date; items: (typeof books)[number][] }
+  >();
   books.forEach((book) => {
     const key = monthKey(book.finishedOn);
     const bucket = groups.get(key);
@@ -85,8 +89,9 @@ export default async function BooksPage() {
                           <dt>Lang</dt>
                           <dd>{languageName(b.language)}</dd>
                         </dl>
-                        <div className="mt-3">
+                        <div className="mt-3 flex items-center justify-between gap-3">
                           <Badge variant="accent">{b.category}</Badge>
+                          <InlineRating id={b.id} rating={b.rating} />
                         </div>
                       </div>
                     </div>

@@ -48,7 +48,9 @@ describe('newBookSchema status handling', () => {
     const parsed = newBookSchema.safeParse({ ...finished, finishedOn: '' });
     expect(parsed.success).toBe(false);
     if (!parsed.success) {
-      expect(parsed.error.issues.some((i) => i.path.includes('finishedOn'))).toBe(true);
+      expect(
+        parsed.error.issues.some((i) => i.path.includes('finishedOn')),
+      ).toBe(true);
     }
   });
 
@@ -69,11 +71,53 @@ describe('newBookSchema status handling', () => {
 
 describe('markFinishedSchema', () => {
   it('accepts a YYYY-MM-DD date', () => {
-    expect(markFinishedSchema.safeParse({ finishedOn: '2026-04-27' }).success).toBe(true);
+    expect(
+      markFinishedSchema.safeParse({ finishedOn: '2026-04-27' }).success,
+    ).toBe(true);
   });
 
   it('rejects malformed dates', () => {
-    expect(markFinishedSchema.safeParse({ finishedOn: '27/04/2026' }).success).toBe(false);
-    expect(markFinishedSchema.safeParse({ finishedOn: '' }).success).toBe(false);
+    expect(
+      markFinishedSchema.safeParse({ finishedOn: '27/04/2026' }).success,
+    ).toBe(false);
+    expect(markFinishedSchema.safeParse({ finishedOn: '' }).success).toBe(
+      false,
+    );
+  });
+
+  it('accepts an optional rating between 1 and 5', () => {
+    const ok = markFinishedSchema.safeParse({
+      finishedOn: '2026-04-27',
+      rating: 4,
+    });
+    expect(ok.success && ok.data.rating).toBe(4);
+    const empty = markFinishedSchema.safeParse({
+      finishedOn: '2026-04-27',
+      rating: '',
+    });
+    expect(empty.success && empty.data.rating).toBeUndefined();
+  });
+
+  it('rejects ratings outside 1..5', () => {
+    expect(
+      markFinishedSchema.safeParse({ finishedOn: '2026-04-27', rating: 0 })
+        .success,
+    ).toBe(false);
+    expect(
+      markFinishedSchema.safeParse({ finishedOn: '2026-04-27', rating: 6 })
+        .success,
+    ).toBe(false);
+  });
+});
+
+describe('newBookSchema rating handling', () => {
+  it('accepts rating "4" string from FormData and coerces to int', () => {
+    const parsed = newBookSchema.safeParse({ ...finished, rating: '4' });
+    expect(parsed.success && parsed.data.rating).toBe(4);
+  });
+
+  it('treats empty rating as undefined', () => {
+    const parsed = newBookSchema.safeParse({ ...finished, rating: '' });
+    expect(parsed.success && parsed.data.rating).toBeUndefined();
   });
 });

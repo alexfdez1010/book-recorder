@@ -3,6 +3,7 @@
 import { useState, useTransition } from 'react';
 import { BookCheck } from 'lucide-react';
 import { markBookAsFinishedAction } from '@/lib/books/actions';
+import { StarRating } from '@/components/star-rating';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -21,20 +22,28 @@ function today(): string {
   return new Date().toISOString().slice(0, 10);
 }
 
-export function MarkAsFinishedButton({ id, title }: { id: string; title: string }) {
+export function MarkAsFinishedButton({
+  id,
+  title,
+}: {
+  id: string;
+  title: string;
+}) {
   const [open, setOpen] = useState(false);
   const [date, setDate] = useState(today);
+  const [rating, setRating] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [pending, start] = useTransition();
 
   function confirm() {
     setError(null);
     start(async () => {
-      const result = await markBookAsFinishedAction(id, date);
+      const result = await markBookAsFinishedAction(id, date, rating);
       if (result.error) setError(result.error);
       else {
         setOpen(false);
         setDate(today());
+        setRating(null);
       }
     });
   }
@@ -72,6 +81,10 @@ export function MarkAsFinishedButton({ id, title }: { id: string; title: string 
                 onChange={(e) => setDate(e.target.value)}
                 required
               />
+            </div>
+            <div className="lib-field">
+              <Label>Rating</Label>
+              <StarRating value={rating} onChange={setRating} />
             </div>
             {error ? (
               <p role="alert" className="lib-field-error">

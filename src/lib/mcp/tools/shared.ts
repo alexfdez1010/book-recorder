@@ -21,6 +21,13 @@ export const bookFields = {
   coverUrl: z.string().url().optional(),
   externalId: z.string().optional(),
   source: z.enum(['openlibrary', 'googlebooks', 'manual']).optional(),
+  rating: z
+    .number()
+    .int()
+    .min(1)
+    .max(5)
+    .optional()
+    .describe('Optional 1–5 rating'),
 };
 
 export function ok(value: unknown) {

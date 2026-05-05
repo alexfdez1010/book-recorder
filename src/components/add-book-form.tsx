@@ -7,8 +7,9 @@ import { BOOK_CATEGORIES } from '@/lib/books/categories';
 import { LANGUAGE_KEYS, LANGUAGE_NAMES } from '@/lib/books/language';
 import type { BookStatus } from '@/lib/books/status';
 import { AuthorCombobox } from '@/components/author-combobox';
+import { Field, SelectField } from '@/components/form-fields';
+import { StarRating } from '@/components/star-rating';
 import { Button } from '@/components/ui/button';
-import { Input, Select } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
 function today(): string {
@@ -44,12 +45,21 @@ export function AddBookForm({
   }
 
   return (
-    <form action={submit} className="flex flex-col gap-5" data-testid="add-book-form">
+    <form
+      action={submit}
+      className="flex flex-col gap-5"
+      data-testid="add-book-form"
+    >
       <input type="hidden" name="externalId" value={externalId} />
       <input type="hidden" name="source" value={source} />
       <input type="hidden" name="status" value={status} />
 
-      <Field label="Title" name="title" defaultValue={candidate?.title ?? ''} required />
+      <Field
+        label="Title"
+        name="title"
+        defaultValue={candidate?.title ?? ''}
+        required
+      />
       <div className="lib-field">
         <Label htmlFor="author">Author</Label>
         <AuthorCombobox
@@ -89,7 +99,10 @@ export function AddBookForm({
           label="Language"
           name="language"
           defaultValue={candidate?.language ?? 'en'}
-          options={LANGUAGE_KEYS.map((k) => ({ value: k, label: LANGUAGE_NAMES[k] }))}
+          options={LANGUAGE_KEYS.map((k) => ({
+            value: k,
+            label: LANGUAGE_NAMES[k],
+          }))}
         />
       </div>
 
@@ -105,6 +118,13 @@ export function AddBookForm({
         defaultValue={candidate?.coverUrl ?? ''}
         placeholder="https://…"
       />
+
+      {isFinished ? (
+        <div className="lib-field">
+          <Label htmlFor="rating">Rating</Label>
+          <StarRating name="rating" defaultValue={null} />
+        </div>
+      ) : null}
 
       {error ? (
         <p role="alert" className="lib-field-error">
@@ -129,63 +149,5 @@ export function AddBookForm({
         </Button>
       </div>
     </form>
-  );
-}
-
-function Field({
-  label,
-  name,
-  defaultValue,
-  type = 'text',
-  required,
-  placeholder,
-  min,
-}: {
-  label: string;
-  name: string;
-  defaultValue?: string | number;
-  type?: string;
-  required?: boolean;
-  placeholder?: string;
-  min?: number;
-}) {
-  return (
-    <div className="lib-field">
-      <Label htmlFor={name}>{label}</Label>
-      <Input
-        id={name}
-        name={name}
-        type={type}
-        defaultValue={defaultValue}
-        required={required}
-        placeholder={placeholder}
-        min={min}
-      />
-    </div>
-  );
-}
-
-function SelectField({
-  label,
-  name,
-  defaultValue,
-  options,
-}: {
-  label: string;
-  name: string;
-  defaultValue: string;
-  options: ReadonlyArray<{ value: string; label: string }>;
-}) {
-  return (
-    <div className="lib-field">
-      <Label htmlFor={name}>{label}</Label>
-      <Select id={name} name={name} defaultValue={defaultValue} required>
-        {options.map((o) => (
-          <option key={o.value} value={o.value}>
-            {o.label}
-          </option>
-        ))}
-      </Select>
-    </div>
   );
 }

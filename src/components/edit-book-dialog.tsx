@@ -6,8 +6,9 @@ import { updateBookAction } from '@/lib/books/actions';
 import { BOOK_CATEGORIES } from '@/lib/books/categories';
 import { LANGUAGE_KEYS, LANGUAGE_NAMES } from '@/lib/books/language';
 import { AuthorCombobox } from '@/components/author-combobox';
+import { Field, SelectField } from '@/components/form-fields';
+import { StarRating } from '@/components/star-rating';
 import { Button } from '@/components/ui/button';
-import { Input, Select } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import {
   Dialog,
@@ -29,13 +30,20 @@ type BookLike = {
   language: string;
   status: string;
   finishedOn: Date | null;
+  rating: number | null;
 };
 
 function dateInput(d: Date | null): string {
   return d ? new Date(d).toISOString().slice(0, 10) : '';
 }
 
-export function EditBookDialog({ book, authors }: { book: BookLike; authors: string[] }) {
+export function EditBookDialog({
+  book,
+  authors,
+}: {
+  book: BookLike;
+  authors: string[];
+}) {
   const [open, setOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [pending, start] = useTransition();
@@ -65,7 +73,12 @@ export function EditBookDialog({ book, authors }: { book: BookLike; authors: str
         <DialogBody>
           <form action={submit} className="flex flex-col gap-5">
             <input type="hidden" name="status" value={book.status} />
-            <Field label="Title" name="title" defaultValue={book.title} required />
+            <Field
+              label="Title"
+              name="title"
+              defaultValue={book.title}
+              required
+            />
             <div className="lib-field">
               <Label htmlFor={`author-${book.id}`}>Author</Label>
               <AuthorCombobox
@@ -104,7 +117,10 @@ export function EditBookDialog({ book, authors }: { book: BookLike; authors: str
                 label="Language"
                 name="language"
                 defaultValue={book.language}
-                options={LANGUAGE_KEYS.map((k) => ({ value: k, label: LANGUAGE_NAMES[k] }))}
+                options={LANGUAGE_KEYS.map((k) => ({
+                  value: k,
+                  label: LANGUAGE_NAMES[k],
+                }))}
               />
             </div>
             <SelectField
@@ -119,6 +135,12 @@ export function EditBookDialog({ book, authors }: { book: BookLike; authors: str
               defaultValue={book.coverUrl ?? ''}
               placeholder="https://…"
             />
+            {isFinished ? (
+              <div className="lib-field">
+                <Label htmlFor={`rating-${book.id}`}>Rating</Label>
+                <StarRating name="rating" defaultValue={book.rating ?? null} />
+              </div>
+            ) : null}
             {error ? (
               <p role="alert" className="lib-field-error">
                 ✕ {error}
@@ -142,63 +164,5 @@ export function EditBookDialog({ book, authors }: { book: BookLike; authors: str
         </DialogBody>
       </DialogContent>
     </Dialog>
-  );
-}
-
-function Field({
-  label,
-  name,
-  defaultValue,
-  type = 'text',
-  required,
-  placeholder,
-  min,
-}: {
-  label: string;
-  name: string;
-  defaultValue?: string | number;
-  type?: string;
-  required?: boolean;
-  placeholder?: string;
-  min?: number;
-}) {
-  return (
-    <div className="lib-field">
-      <Label htmlFor={name}>{label}</Label>
-      <Input
-        id={name}
-        name={name}
-        type={type}
-        defaultValue={defaultValue}
-        required={required}
-        placeholder={placeholder}
-        min={min}
-      />
-    </div>
-  );
-}
-
-function SelectField({
-  label,
-  name,
-  defaultValue,
-  options,
-}: {
-  label: string;
-  name: string;
-  defaultValue: string;
-  options: ReadonlyArray<{ value: string; label: string }>;
-}) {
-  return (
-    <div className="lib-field">
-      <Label htmlFor={name}>{label}</Label>
-      <Select id={name} name={name} defaultValue={defaultValue} required>
-        {options.map((o) => (
-          <option key={o.value} value={o.value}>
-            {o.label}
-          </option>
-        ))}
-      </Select>
-    </div>
   );
 }

@@ -15,6 +15,7 @@ export interface NewBookInput {
   finishedOn: Date | null;
   externalId: string | null;
   source: string | null;
+  rating: number | null;
 }
 
 export async function createBook(input: NewBookInput): Promise<Book> {
@@ -56,13 +57,31 @@ export async function deleteBook(id: string): Promise<void> {
 
 export type UpdateBookInput = Omit<NewBookInput, 'externalId' | 'source'>;
 
-export async function updateBook(id: string, input: UpdateBookInput): Promise<Book> {
+export async function updateBook(
+  id: string,
+  input: UpdateBookInput,
+): Promise<Book> {
   return prisma.book.update({ where: { id }, data: input });
 }
 
-export async function markBookAsFinished(id: string, finishedOn: Date): Promise<Book> {
+export async function markBookAsFinished(
+  id: string,
+  finishedOn: Date,
+  rating: number | null = null,
+): Promise<Book> {
   return prisma.book.update({
     where: { id },
-    data: { status: 'finished', finishedOn },
+    data: {
+      status: 'finished',
+      finishedOn,
+      ...(rating !== null ? { rating } : {}),
+    },
   });
+}
+
+export async function setBookRating(
+  id: string,
+  rating: number | null,
+): Promise<Book> {
+  return prisma.book.update({ where: { id }, data: { rating } });
 }

@@ -5,9 +5,14 @@ import {
   createBook,
   deleteBook,
   markBookAsFinished,
+  setBookRating,
   updateBook,
 } from './repository';
-import { markFinishedSchema, newBookSchema } from './validation';
+import {
+  markFinishedSchema,
+  newBookSchema,
+  ratingValueSchema,
+} from './validation';
 import { searchBooks } from './search';
 import { isAuthenticated } from '@/lib/auth/session';
 import type { BookCandidate } from './types';
@@ -23,7 +28,9 @@ function revalidateBookPaths() {
   revalidatePath('/graphs');
 }
 
-export async function addBookAction(formData: FormData): Promise<{ error?: string }> {
+export async function addBookAction(
+  formData: FormData,
+): Promise<{ error?: string }> {
   await ensureAuth();
   const raw = Object.fromEntries(formData.entries());
   const parsed = newBookSchema.safeParse(raw);
@@ -44,6 +51,7 @@ export async function addBookAction(formData: FormData): Promise<{ error?: strin
     finishedOn: isFinished && d.finishedOn ? new Date(d.finishedOn) : null,
     externalId: d.externalId ? d.externalId : null,
     source: d.source ?? 'manual',
+    rating: d.rating ?? null,
   });
   revalidateBookPaths();
   return {};
@@ -71,6 +79,7 @@ export async function updateBookAction(
     language: d.language,
     status: d.status,
     finishedOn: isFinished && d.finishedOn ? new Date(d.finishedOn) : null,
+    rating: d.rating ?? null,
   });
   revalidateBookPaths();
   return {};
@@ -85,18 +94,42 @@ export async function deleteBookAction(id: string): Promise<void> {
 export async function markBookAsFinishedAction(
   id: string,
   finishedOn: string,
+  rating?: number | null,
 ): Promise<{ error?: string }> {
   await ensureAuth();
-  const parsed = markFinishedSchema.safeParse({ finishedOn });
+  const parsed = markFinishedSchema.safeParse({
+    finishedOn,
+    rating: rating ?? undefined,
+  });
   if (!parsed.success) {
     return { error: parsed.error.issues.map((i) => i.message).join('; ') };
   }
-  await markBookAsFinished(id, new Date(parsed.data.finishedOn));
+  await markBookAsFinished(
+    id,
+    new Date(parsed.data.finishedOn),
+    parsed.data.rating ?? null,
+  );
   revalidateBookPaths();
   return {};
 }
 
-export async function searchBooksAction(query: string): Promise<BookCandidate[]> {
+export async function setBookRatingAction(
+  id: string,
+  rating: number | null,
+): Promise<{ error?: string }> {
+  await ensureAuth();
+  const parsed = ratingValueSchema.safeParse(rating);
+  if (!parsed.success) {
+    return { error: parsed.error.issues.map((i) => i.message).join('; ') };
+  }
+  await setBookRating(id, parsed.data);
+  revalidateBookPaths();
+  return {};
+}
+
+export async function searchBooksAction(
+  query: string,
+): Promise<BookCandidate[]> {
   await ensureAuth();
   return searchBooks(query, 10);
 }

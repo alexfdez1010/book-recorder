@@ -5,6 +5,11 @@ import { BOOK_STATUSES } from './status';
 
 const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
 
+const ratingSchema = z.preprocess(
+  (v) => (v === '' || v === null || v === undefined ? undefined : v),
+  z.coerce.number().int().min(1, 'Rating 1–5').max(5, 'Rating 1–5').optional(),
+);
+
 export const newBookSchema = z
   .object({
     title: z.string().min(1, 'Title is required'),
@@ -26,14 +31,24 @@ export const newBookSchema = z
       .or(z.literal('')),
     externalId: z.string().optional().or(z.literal('')),
     source: z.enum(['openlibrary', 'googlebooks', 'manual']).optional(),
+    rating: ratingSchema,
   })
-  .refine((d) => d.status !== 'finished' || (d.finishedOn && d.finishedOn !== ''), {
-    message: 'Finished-on is required for finished books',
-    path: ['finishedOn'],
-  });
+  .refine(
+    (d) => d.status !== 'finished' || (d.finishedOn && d.finishedOn !== ''),
+    {
+      message: 'Finished-on is required for finished books',
+      path: ['finishedOn'],
+    },
+  );
 
 export type NewBookForm = z.infer<typeof newBookSchema>;
 
 export const markFinishedSchema = z.object({
   finishedOn: z.string().regex(dateRegex, 'Finished-on must be YYYY-MM-DD'),
+  rating: ratingSchema,
 });
+
+export const ratingValueSchema = z.preprocess(
+  (v) => (v === '' || v === null ? null : v),
+  z.union([z.coerce.number().int().min(1).max(5), z.null()]),
+);
