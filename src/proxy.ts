@@ -5,7 +5,9 @@ import { hashToken, timingSafeEqual } from '@/lib/auth/token';
 const PUBLIC_PATHS = ['/login', '/api/login', '/api/mcp'];
 
 function isPublic(pathname: string): boolean {
-  return PUBLIC_PATHS.some((p) => pathname === p || pathname.startsWith(`${p}/`));
+  return PUBLIC_PATHS.some(
+    (p) => pathname === p || pathname.startsWith(`${p}/`),
+  );
 }
 
 export async function proxy(request: NextRequest) {

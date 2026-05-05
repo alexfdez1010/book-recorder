@@ -8,7 +8,11 @@ export function Stamp({
 }: React.HTMLAttributes<HTMLSpanElement> & { variant?: 'accent' | 'ink' }) {
   return (
     <span
-      className={cn('lib-stamp', variant === 'ink' && 'lib-stamp--ink', className)}
+      className={cn(
+        'lib-stamp',
+        variant === 'ink' && 'lib-stamp--ink',
+        className,
+      )}
       {...props}
     />
   );

@@ -42,7 +42,10 @@ export function booksPerMonth(books: BookLike[]): CountEntry[] {
     .map(([label, value]) => ({ label, value }));
 }
 
-export function distribution(books: BookLike[], key: 'category' | 'language'): CountEntry[] {
+export function distribution(
+  books: BookLike[],
+  key: 'category' | 'language',
+): CountEntry[] {
   const counts = new Map<string, number>();
   for (const b of books) {
     const k = b[key] || 'Unknown';

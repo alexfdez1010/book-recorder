@@ -15,7 +15,10 @@ describe('searchOpenLibrary (live)', () => {
   }, 15000);
 
   it('returns empty array for gibberish input', async () => {
-    const results = await searchOpenLibrary('zzzzzqqqqxxxzzzzz1234567890notarealbook', 5);
+    const results = await searchOpenLibrary(
+      'zzzzzqqqqxxxzzzzz1234567890notarealbook',
+      5,
+    );
     expect(Array.isArray(results)).toBe(true);
   }, 15000);
 });

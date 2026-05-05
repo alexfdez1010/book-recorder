@@ -9,12 +9,17 @@ export const dynamic = 'force-dynamic';
 async function buildServerUrl(): Promise<string> {
   const h = await headers();
   const host = h.get('x-forwarded-host') ?? h.get('host') ?? 'localhost:3000';
-  const proto = h.get('x-forwarded-proto') ?? (host.startsWith('localhost') ? 'http' : 'https');
+  const proto =
+    h.get('x-forwarded-proto') ??
+    (host.startsWith('localhost') ? 'http' : 'https');
   return `${proto}://${host}/api/mcp/mcp`;
 }
 
 export default async function SkillPage() {
-  const [serverUrl, token] = await Promise.all([buildServerUrl(), expectedMcpToken()]);
+  const [serverUrl, token] = await Promise.all([
+    buildServerUrl(),
+    expectedMcpToken(),
+  ]);
   const mcpJson = buildMcpJson(serverUrl);
   const exportLine = `export ${TOKEN_ENV_VAR}='${token}'`;
 
@@ -24,8 +29,9 @@ export default async function SkillPage() {
         <div className="flex flex-col gap-2">
           <h1 className="lib-title">Skill</h1>
           <p className="lib-subtitle">
-            Plug the book-recorder MCP server into any MCP-aware agent. The skill file
-            tells the agent which tools exist; the agent decides when to call them.
+            Plug the book-recorder MCP server into any MCP-aware agent. The
+            skill file tells the agent which tools exist; the agent decides when
+            to call them.
           </p>
         </div>
       </div>
@@ -38,9 +44,9 @@ export default async function SkillPage() {
           </header>
           <div className="lib-panel__body flex flex-col gap-4">
             <p className="text-sm">
-              Drop <code>SKILL.md</code> into your agent&apos;s skills directory. The
-              file declares the server&apos;s tools and a few conventions; the agent
-              figures the rest out.
+              Drop <code>SKILL.md</code> into your agent&apos;s skills
+              directory. The file declares the server&apos;s tools and a few
+              conventions; the agent figures the rest out.
             </p>
             <Button asChild variant="primary" size="md">
               <a href="/api/skill?kind=skill" download>
@@ -58,8 +64,8 @@ export default async function SkillPage() {
           <div className="lib-panel__body flex flex-col gap-4">
             <p className="text-sm">
               Add the snippet to your MCP config. The bearer token is read from{' '}
-              <code>${TOKEN_ENV_VAR}</code> at runtime — never hard-code it in the file
-              you commit.
+              <code>${TOKEN_ENV_VAR}</code> at runtime — never hard-code it in
+              the file you commit.
             </p>
             <div className="flex flex-wrap gap-2">
               <Button asChild variant="primary" size="md">

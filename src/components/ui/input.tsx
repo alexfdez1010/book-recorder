@@ -5,7 +5,12 @@ export const Input = React.forwardRef<
   HTMLInputElement,
   React.InputHTMLAttributes<HTMLInputElement>
 >(({ className, type = 'text', ...props }, ref) => (
-  <input ref={ref} type={type} className={cn('lib-input', className)} {...props} />
+  <input
+    ref={ref}
+    type={type}
+    className={cn('lib-input', className)}
+    {...props}
+  />
 ));
 Input.displayName = 'Input';
 

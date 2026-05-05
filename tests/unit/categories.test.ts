@@ -24,8 +24,12 @@ describe('normalizeCategory', () => {
   });
 
   it('recognises Google Books compound labels', () => {
-    expect(normalizeCategory('Juvenile Fiction / Fantasy & Magic')).toBe('Fantasy');
-    expect(normalizeCategory('Business & Economics / Leadership')).toBe('Business');
+    expect(normalizeCategory('Juvenile Fiction / Fantasy & Magic')).toBe(
+      'Fantasy',
+    );
+    expect(normalizeCategory('Business & Economics / Leadership')).toBe(
+      'Business',
+    );
   });
 
   it('maps common Open Library subjects', () => {

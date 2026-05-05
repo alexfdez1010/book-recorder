@@ -9,5 +9,7 @@ export type BookStatus = (typeof BOOK_STATUSES)[number];
 export const DEFAULT_BOOK_STATUS: BookStatus = 'finished';
 
 export function isBookStatus(v: unknown): v is BookStatus {
-  return typeof v === 'string' && (BOOK_STATUSES as readonly string[]).includes(v);
+  return (
+    typeof v === 'string' && (BOOK_STATUSES as readonly string[]).includes(v)
+  );
 }

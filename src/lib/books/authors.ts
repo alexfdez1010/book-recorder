@@ -13,7 +13,9 @@ export interface AuthorGroup<T extends AuthorBook> {
  * alphabetically (locale-aware). Books within each group sorted by finishedOn
  * descending.
  */
-export function groupByAuthor<T extends AuthorBook>(books: T[]): AuthorGroup<T>[] {
+export function groupByAuthor<T extends AuthorBook>(
+  books: T[],
+): AuthorGroup<T>[] {
   const map = new Map<string, T[]>();
   for (const b of books) {
     const list = map.get(b.author);
@@ -27,7 +29,8 @@ export function groupByAuthor<T extends AuthorBook>(books: T[]): AuthorGroup<T>[
       .sort((a, b) => b.finishedOn.getTime() - a.finishedOn.getTime()),
   }));
   groups.sort((a, b) => {
-    if (b.books.length !== a.books.length) return b.books.length - a.books.length;
+    if (b.books.length !== a.books.length)
+      return b.books.length - a.books.length;
     return a.author.localeCompare(b.author);
   });
   return groups;

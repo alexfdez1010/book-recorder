@@ -32,14 +32,18 @@ function normalizePublishedDate(raw: string | undefined): string | null {
 function toCandidate(vol: GoogleVolume): BookCandidate | null {
   const info = vol.volumeInfo;
   if (!vol.id || !info?.title || !info.authors?.length) return null;
-  const cover = info.imageLinks?.thumbnail ?? info.imageLinks?.smallThumbnail ?? null;
+  const cover =
+    info.imageLinks?.thumbnail ?? info.imageLinks?.smallThumbnail ?? null;
   return {
     source: 'googlebooks',
     externalId: vol.id,
     title: info.title,
     author: info.authors[0],
     publicationDate: normalizePublishedDate(info.publishedDate),
-    pages: typeof info.pageCount === 'number' && info.pageCount > 0 ? info.pageCount : null,
+    pages:
+      typeof info.pageCount === 'number' && info.pageCount > 0
+        ? info.pageCount
+        : null,
     coverUrl: cover ? cover.replace(/^http:\/\//, 'https://') : null,
     category: normalizeCategory(info.categories?.[0]),
     language: normalizeLanguage(info.language),
@@ -76,5 +80,7 @@ export async function searchGoogleBooks(
   });
   if (!res.ok) throw new Error(`GoogleBooks error ${res.status}`);
   const data = (await res.json()) as GoogleResponse;
-  return (data.items ?? []).map(toCandidate).filter((c): c is BookCandidate => c !== null);
+  return (data.items ?? [])
+    .map(toCandidate)
+    .filter((c): c is BookCandidate => c !== null);
 }

@@ -86,7 +86,9 @@ function isKnownCode(code: string): code is LanguageCode {
  * Google Books (ISO 639-1, 2-letter) to a known 2-letter code. Returns null
  * when the code cannot be mapped into our supported set.
  */
-export function normalizeLanguage(code: string | null | undefined): LanguageCode | null {
+export function normalizeLanguage(
+  code: string | null | undefined,
+): LanguageCode | null {
   if (!code) return null;
   const lower = code.toLowerCase().trim();
   if (lower.length === 2) return isKnownCode(lower) ? lower : null;

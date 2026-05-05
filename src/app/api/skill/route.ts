@@ -12,7 +12,9 @@ export const runtime = 'nodejs';
 
 function mcpUrl(req: NextRequest): string {
   const host = req.headers.get('x-forwarded-host') ?? req.headers.get('host');
-  const proto = req.headers.get('x-forwarded-proto') ?? req.nextUrl.protocol.replace(':', '');
+  const proto =
+    req.headers.get('x-forwarded-proto') ??
+    req.nextUrl.protocol.replace(':', '');
   return `${proto}://${host}/api/mcp/mcp`;
 }
 

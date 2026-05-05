@@ -32,7 +32,10 @@ const RULES: Array<[RegExp, BookCategory]> = [
   [/histor/i, 'History'],
   [/philosoph|ethic|metaphysic/i, 'Philosophy'],
   [/self[- ]?help|personal development|productivity/i, 'Self-Help'],
-  [/business|economic|finance|management|marketing|entrepreneur|leadership/i, 'Business'],
+  [
+    /business|economic|finance|management|marketing|entrepreneur|leadership/i,
+    'Business',
+  ],
   [/poetry|poem|verse/i, 'Poetry'],
   [/computer|programming|software|technology|engineering/i, 'Technology'],
   [/science|physics|math|biology|chemistry|astronomy|nature/i, 'Science'],
@@ -43,7 +46,9 @@ const RULES: Array<[RegExp, BookCategory]> = [
  * Map an arbitrary category string (Open Library subject or Google Books
  * category) to one of our enum values. Returns 'Other' when nothing matches.
  */
-export function normalizeCategory(raw: string | null | undefined): BookCategory {
+export function normalizeCategory(
+  raw: string | null | undefined,
+): BookCategory {
   if (!raw) return 'Other';
   for (const [re, cat] of RULES) {
     if (re.test(raw)) return cat;

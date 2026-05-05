@@ -1,6 +1,13 @@
 'use client';
 
-import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip, Legend } from 'recharts';
+import {
+  Cell,
+  Pie,
+  PieChart,
+  ResponsiveContainer,
+  Tooltip,
+  Legend,
+} from 'recharts';
 import type { CountEntry } from '@/lib/stats/aggregate';
 
 export const INK = 'var(--ink)';
@@ -59,7 +66,9 @@ export function Kpi({
         <p className="lib-plate__label">{label}</p>
       </div>
       <div className="lib-plate__body">
-        <p className={`lib-plate__value${compact ? ' lib-plate__value--compact' : ''}`}>
+        <p
+          className={`lib-plate__value${compact ? ' lib-plate__value--compact' : ''}`}
+        >
           {value}
         </p>
         <span className="lib-plate__note">{note}</span>
@@ -79,7 +88,11 @@ export function DistributionPie({ entries }: { entries: CountEntry[] }) {
           outerRadius={80}
           stroke={INK}
           strokeWidth={2}
-          label={{ fontFamily: 'var(--font-jetbrains)', fontSize: 10, fill: INK }}
+          label={{
+            fontFamily: 'var(--font-jetbrains)',
+            fontSize: 10,
+            fill: INK,
+          }}
         >
           {entries.map((_, i) => (
             <Cell key={i} fill={PALETTE[i % PALETTE.length]} />

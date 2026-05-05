@@ -1,4 +1,10 @@
-import { toDate, yearMonth, type BookLike, type CountEntry, type TimeseriesPoint } from './aggregate';
+import {
+  toDate,
+  yearMonth,
+  type BookLike,
+  type CountEntry,
+  type TimeseriesPoint,
+} from './aggregate';
 
 const DAY_MS = 86_400_000;
 const YEAR_MS = 365.25 * DAY_MS;
@@ -41,7 +47,8 @@ export function pageLengthHistogram(books: BookLike[]): CountEntry[] {
   const labels = ['<200', '200-400', '400-600', '600-800', '800+'];
   return labels.map((label, i) => ({
     label,
-    value: books.filter((b) => b.pages >= edges[i] && b.pages < edges[i + 1]).length,
+    value: books.filter((b) => b.pages >= edges[i] && b.pages < edges[i + 1])
+      .length,
   }));
 }
 
@@ -62,7 +69,10 @@ export function rolling30DayPages(books: BookLike[]): TimeseriesPoint[] {
       const t = toDate(sorted[j].finishedOn).getTime();
       if (t >= start && t <= end) sum += sorted[j].pages;
     }
-    return { date: toDate(sorted[i].finishedOn).toISOString().slice(0, 10), pages: sum };
+    return {
+      date: toDate(sorted[i].finishedOn).toISOString().slice(0, 10),
+      pages: sum,
+    };
   });
 }
 
@@ -98,7 +108,10 @@ export function ageWhenReadHistogram(books: BookLike[]): CountEntry[] {
   const aged = books
     .filter((b) => b.publicationDate)
     .map((b) => ({
-      age: (toDate(b.finishedOn).getTime() - toDate(b.publicationDate!).getTime()) / YEAR_MS,
+      age:
+        (toDate(b.finishedOn).getTime() -
+          toDate(b.publicationDate!).getTime()) /
+        YEAR_MS,
     }))
     .filter((e) => e.age >= 0);
   return labels.map((label, i) => ({
@@ -125,14 +138,18 @@ export function averageDaysBetweenFinishes(books: BookLike[]): number {
 }
 
 /** Longest book in the corpus (by pages). Null when empty. */
-export function longestBook(books: BookLike[]): { title: string; pages: number } | null {
+export function longestBook(
+  books: BookLike[],
+): { title: string; pages: number } | null {
   if (books.length === 0) return null;
   const winner = books.reduce((a, b) => (b.pages > a.pages ? b : a));
   return { title: winner.title ?? 'Untitled', pages: winner.pages };
 }
 
 /** Most-read author (by count). Null when empty. */
-export function favoriteAuthor(books: BookLike[]): { author: string; count: number } | null {
+export function favoriteAuthor(
+  books: BookLike[],
+): { author: string; count: number } | null {
   const ranked = topAuthors(books, 1);
   if (ranked.length === 0) return null;
   return { author: ranked[0].label, count: ranked[0].value };

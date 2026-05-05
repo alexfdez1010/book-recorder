@@ -24,7 +24,12 @@ describe('mergeCandidates', () => {
   });
 
   it('dedupes on normalized title+author and fills missing fields', () => {
-    const primary = make({ source: 'openlibrary', externalId: 'ol1', pages: null, coverUrl: null });
+    const primary = make({
+      source: 'openlibrary',
+      externalId: 'ol1',
+      pages: null,
+      coverUrl: null,
+    });
     const secondary = make({
       source: 'googlebooks',
       externalId: 'gb1',
@@ -43,7 +48,12 @@ describe('mergeCandidates', () => {
 
   it('preserves disjoint entries in order (primary first)', () => {
     const a = make({ externalId: 'a', title: 'A', author: 'AA' });
-    const b = make({ source: 'googlebooks', externalId: 'b', title: 'B', author: 'BB' });
+    const b = make({
+      source: 'googlebooks',
+      externalId: 'b',
+      title: 'B',
+      author: 'BB',
+    });
     expect(mergeCandidates([a], [b]).map((c) => c.title)).toEqual(['A', 'B']);
   });
 });

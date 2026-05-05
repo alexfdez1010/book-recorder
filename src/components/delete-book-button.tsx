@@ -37,9 +37,7 @@ export function DeleteBookButton({ id, title }: { id: string; title: string }) {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Delete book?</DialogTitle>
-          <DialogDescription>
-            “{title}” will be removed.
-          </DialogDescription>
+          <DialogDescription>“{title}” will be removed.</DialogDescription>
         </DialogHeader>
         <DialogBody>
           <div className="flex justify-end gap-3">

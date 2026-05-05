@@ -34,7 +34,11 @@ describe('groupByAuthor', () => {
       book('c', 'Asimov', '2026-01-01'),
     ];
     const groups = groupByAuthor(books);
-    expect(groups.map((g) => g.author)).toEqual(['Asimov', 'Borges', 'Calvino']);
+    expect(groups.map((g) => g.author)).toEqual([
+      'Asimov',
+      'Borges',
+      'Calvino',
+    ]);
   });
 
   it('sorts books inside a group by finishedOn descending', () => {

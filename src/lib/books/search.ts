@@ -60,7 +60,9 @@ async function resolvePages(c: BookCandidate): Promise<number | null> {
  * hitting the per-source detail endpoint in parallel. Failures are swallowed
  * so one bad fetch can't blank the whole result set.
  */
-export async function enrichPages(list: BookCandidate[]): Promise<BookCandidate[]> {
+export async function enrichPages(
+  list: BookCandidate[],
+): Promise<BookCandidate[]> {
   return Promise.all(
     list.map(async (c) => {
       if (c.pages !== null) return c;
@@ -70,7 +72,10 @@ export async function enrichPages(list: BookCandidate[]): Promise<BookCandidate[
   );
 }
 
-export async function searchBooks(query: string, limit = 10): Promise<BookCandidate[]> {
+export async function searchBooks(
+  query: string,
+  limit = 10,
+): Promise<BookCandidate[]> {
   const trimmed = query.trim();
   if (!trimmed) return [];
   const [ol, gb] = await Promise.allSettled([

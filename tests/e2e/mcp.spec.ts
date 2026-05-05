@@ -11,7 +11,9 @@ const SECRET = process.env.AUTH_SECRET ?? 'dev-secret';
 
 const MCP_URL = 'http://localhost:3000/api/mcp/mcp';
 
-const TOKEN = createHash('sha256').update(`${PASSWORD}::${SECRET}`).digest('hex');
+const TOKEN = createHash('sha256')
+  .update(`${PASSWORD}::${SECRET}`)
+  .digest('hex');
 
 const TOOL_NAMES = [
   'search_books',
@@ -37,7 +39,9 @@ async function connect(token = TOKEN) {
   return { client, transport };
 }
 
-function parseToolJson<T>(result: { content: Array<{ type: string; text?: string }> }): T {
+function parseToolJson<T>(result: {
+  content: Array<{ type: string; text?: string }>;
+}): T {
   const text = result.content.find((c) => c.type === 'text')?.text;
   expect(text, 'tool returned no text content').toBeTruthy();
   return JSON.parse(text!) as T;
@@ -116,7 +120,9 @@ test('add_book → list_books_by_author → delete_book happy path', async () =>
       }),
     );
     expect(byAuthor.count).toBeGreaterThanOrEqual(1);
-    expect(byAuthor.books.some((b) => b.id === added.id && b.title === title)).toBe(true);
+    expect(
+      byAuthor.books.some((b) => b.id === added.id && b.title === title),
+    ).toBe(true);
 
     const deleted = parseToolJson<{ deleted: string }>(
       await client.callTool({
@@ -143,14 +149,16 @@ test('get_stats returns the documented shape', async () => {
   try {
     const stats = parseToolJson<{
       totals: { books: number; pages: number; authors: number };
-      averages: { pagesPerBook: number; pagesPerDay: number; daysBetweenFinishes: number };
+      averages: {
+        pagesPerBook: number;
+        pagesPerDay: number;
+        daysBetweenFinishes: number;
+      };
       categories: Array<{ label: string; value: number }>;
       languages: Array<{ label: string; value: number }>;
       booksPerMonth: Array<{ label: string; value: number }>;
       cumulativePages: Array<{ date: string; pages: number }>;
-    }>(
-      await client.callTool({ name: 'get_stats', arguments: {} }),
-    );
+    }>(await client.callTool({ name: 'get_stats', arguments: {} }));
     expect(stats.totals).toBeDefined();
     expect(typeof stats.totals.books).toBe('number');
     expect(stats.averages).toBeDefined();

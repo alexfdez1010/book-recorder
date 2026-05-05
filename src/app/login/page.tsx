@@ -45,7 +45,12 @@ export default async function LoginPage({
             </p>
           ) : null}
 
-          <Button type="submit" variant="primary" size="lg" className="lib-btn--block">
+          <Button
+            type="submit"
+            variant="primary"
+            size="lg"
+            className="lib-btn--block"
+          >
             Unlock
           </Button>
         </div>

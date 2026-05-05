@@ -10,7 +10,10 @@ import { MarkAsFinishedButton } from '@/components/mark-as-finished-button';
 import { Badge } from '@/components/ui/badge';
 
 export default async function ToReadPage() {
-  const [books, authors] = await Promise.all([listToReadBooks(), listAuthors()]);
+  const [books, authors] = await Promise.all([
+    listToReadBooks(),
+    listAuthors(),
+  ]);
   const totalPages = books.reduce((s, b) => s + b.pages, 0);
 
   return (

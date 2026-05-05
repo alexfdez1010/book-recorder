@@ -77,11 +77,11 @@ cp .env.example .env
 
 Then open `.env` and set:
 
-| Variable       | What to put                                                  |
-| -------------- | ------------------------------------------------------------ |
+| Variable       | What to put                                                                                     |
+| -------------- | ----------------------------------------------------------------------------------------------- |
 | `DATABASE_URL` | Leave the default for local dev (`postgresql://postgres:postgres@localhost:5434/book_recorder`) |
-| `PASSWORD`     | Pick the single password you'll use to log in                |
-| `AUTH_SECRET`  | A long random string — generate one with the command below   |
+| `PASSWORD`     | Pick the single password you'll use to log in                                                   |
+| `AUTH_SECRET`  | A long random string — generate one with the command below                                      |
 
 Generate a strong `AUTH_SECRET`:
 

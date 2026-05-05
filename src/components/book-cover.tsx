@@ -31,7 +31,9 @@ function hashString(input: string): number {
 }
 
 function paletteFor(title: string, author: string) {
-  const seed = hashString(`${title.trim().toLowerCase()}::${author.trim().toLowerCase()}`);
+  const seed = hashString(
+    `${title.trim().toLowerCase()}::${author.trim().toLowerCase()}`,
+  );
   const hue = seed % 360;
   const sat = 38 + ((seed >>> 9) % 18);
   const light = 22 + ((seed >>> 17) % 11);
@@ -108,7 +110,10 @@ export function BookCover({
           <span className="lib-cover__gen-title" title={title}>
             {title}
           </span>
-          <span className="lib-cover__gen-rule lib-cover__gen-rule--thin" aria-hidden />
+          <span
+            className="lib-cover__gen-rule lib-cover__gen-rule--thin"
+            aria-hidden
+          />
           <span className="lib-cover__gen-author" title={author}>
             {author}
           </span>

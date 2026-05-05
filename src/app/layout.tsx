@@ -1,5 +1,9 @@
 import type { Metadata } from 'next';
-import { Fraunces, Bricolage_Grotesque, JetBrains_Mono } from 'next/font/google';
+import {
+  Fraunces,
+  Bricolage_Grotesque,
+  JetBrains_Mono,
+} from 'next/font/google';
 import './globals.css';
 
 const fraunces = Fraunces({

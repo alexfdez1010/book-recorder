@@ -1,5 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { TOKEN_ENV_VAR, buildMcpJson, buildSkillMarkdown } from '@/lib/mcp/skill';
+import {
+  TOKEN_ENV_VAR,
+  buildMcpJson,
+  buildSkillMarkdown,
+} from '@/lib/mcp/skill';
 
 const URL = 'https://example.test/api/mcp/mcp';
 

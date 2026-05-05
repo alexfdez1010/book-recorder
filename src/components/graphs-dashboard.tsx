@@ -48,7 +48,9 @@ interface Props {
   };
 }
 
-const grid = <CartesianGrid strokeDasharray="2 4" stroke={INK} strokeOpacity={0.2} />;
+const grid = (
+  <CartesianGrid strokeDasharray="2 4" stroke={INK} strokeOpacity={0.2} />
+);
 const axisProps = { fontSize: 10, stroke: INK, tickLine: false } as const;
 
 export function GraphsDashboard({ data }: Props) {
@@ -90,7 +92,11 @@ export function GraphsDashboard({ data }: Props) {
           <BarPanel data={data.pagesPerMonth} fill={WALNUT} />
         </Panel>
         <Panel title="Cumulative pages">
-          <LinePanel data={data.cumulativePages} stroke={OXBLOOD} type="stepAfter" />
+          <LinePanel
+            data={data.cumulativePages}
+            stroke={OXBLOOD}
+            type="stepAfter"
+          />
         </Panel>
         <Panel title="Rolling 30-day pages">
           <LinePanel data={data.rolling30Day} stroke={MOSS} type="monotone" />
@@ -140,7 +146,13 @@ function LinePanel({
         <XAxis dataKey="date" {...axisProps} />
         <YAxis {...axisProps} />
         <Tooltip contentStyle={tooltipStyle} />
-        <Line type={type} dataKey="pages" stroke={stroke} strokeWidth={2.5} dot={{ fill: INK, r: 2 }} />
+        <Line
+          type={type}
+          dataKey="pages"
+          stroke={stroke}
+          strokeWidth={2.5}
+          dot={{ fill: INK, r: 2 }}
+        />
       </LineChart>
     </ResponsiveContainer>
   );
@@ -153,14 +165,23 @@ function BarPanel({ data, fill }: { data: CountEntry[]; fill: string }) {
         {grid}
         <XAxis dataKey="name" {...axisProps} />
         <YAxis allowDecimals={false} {...axisProps} />
-        <Tooltip contentStyle={tooltipStyle} cursor={{ fill: INK, fillOpacity: 0.06 }} />
+        <Tooltip
+          contentStyle={tooltipStyle}
+          cursor={{ fill: INK, fillOpacity: 0.06 }}
+        />
         <Bar dataKey="value" fill={fill} />
       </BarChart>
     </ResponsiveContainer>
   );
 }
 
-function HorizontalBarPanel({ data, fill }: { data: CountEntry[]; fill: string }) {
+function HorizontalBarPanel({
+  data,
+  fill,
+}: {
+  data: CountEntry[];
+  fill: string;
+}) {
   return (
     <ResponsiveContainer width="100%" height={Math.max(240, data.length * 28)}>
       <BarChart
@@ -171,7 +192,10 @@ function HorizontalBarPanel({ data, fill }: { data: CountEntry[]; fill: string }
         {grid}
         <XAxis type="number" allowDecimals={false} {...axisProps} />
         <YAxis type="category" dataKey="name" width={120} {...axisProps} />
-        <Tooltip contentStyle={tooltipStyle} cursor={{ fill: INK, fillOpacity: 0.06 }} />
+        <Tooltip
+          contentStyle={tooltipStyle}
+          cursor={{ fill: INK, fillOpacity: 0.06 }}
+        />
         <Bar dataKey="value" fill={fill} />
       </BarChart>
     </ResponsiveContainer>

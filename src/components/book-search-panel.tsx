@@ -47,7 +47,11 @@ export function BookSearchPanel({
           aria-label="Book title"
           className="flex-1"
         />
-        <Button type="submit" variant="primary" disabled={pending || !query.trim()}>
+        <Button
+          type="submit"
+          variant="primary"
+          disabled={pending || !query.trim()}
+        >
           <Search className="h-4 w-4" strokeWidth={2.5} />
           {pending ? '…' : 'Search'}
         </Button>
@@ -81,7 +85,9 @@ export function BookSearchPanel({
                   <Badge>{c.publicationDate?.slice(0, 4) ?? '—'}</Badge>
                   <Badge variant="gilt">{c.pages ?? '?'} pp</Badge>
                   <Badge variant="moss">{languageName(c.language)}</Badge>
-                  <Badge variant={c.source === 'openlibrary' ? 'solid' : 'accent'}>
+                  <Badge
+                    variant={c.source === 'openlibrary' ? 'solid' : 'accent'}
+                  >
                     {c.source === 'openlibrary' ? 'OL' : 'GB'}
                   </Badge>
                 </div>

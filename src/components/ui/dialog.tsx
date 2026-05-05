@@ -28,7 +28,11 @@ const DialogContent = React.forwardRef<
 >(({ className, children, ...props }, ref) => (
   <DialogPortal>
     <DialogOverlay />
-    <DialogPrimitive.Content ref={ref} className={cn('lib-dialog', className)} {...props}>
+    <DialogPrimitive.Content
+      ref={ref}
+      className={cn('lib-dialog', className)}
+      {...props}
+    >
       {children}
       <DialogPrimitive.Close aria-label="Close" className="lib-dialog__close">
         <X className="h-4 w-4" strokeWidth={2.5} />

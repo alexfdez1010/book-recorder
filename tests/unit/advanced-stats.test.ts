@@ -132,9 +132,7 @@ describe('ageWhenReadHistogram', () => {
   });
 
   it('ignores books without publicationDate', () => {
-    const r = ageWhenReadHistogram([
-      { ...sample[0], publicationDate: null },
-    ]);
+    const r = ageWhenReadHistogram([{ ...sample[0], publicationDate: null }]);
     expect(r.every((e) => e.value === 0)).toBe(true);
   });
 });

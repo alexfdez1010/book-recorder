@@ -58,7 +58,10 @@ export function AuthorCombobox({
             aria-expanded={open}
             aria-controls={`${id ?? name}-listbox`}
             data-testid="author-combobox"
-            className={cn('lib-input lib-combobox-trigger', !value && 'is-empty')}
+            className={cn(
+              'lib-input lib-combobox-trigger',
+              !value && 'is-empty',
+            )}
           >
             <span className="truncate">
               {value || 'Select or type an author…'}
@@ -66,9 +69,14 @@ export function AuthorCombobox({
             <ChevronDown className="h-4 w-4 shrink-0 opacity-70" />
           </button>
         </PopoverTrigger>
-        <PopoverContent className="lib-combobox-pop" id={`${id ?? name}-listbox`}>
+        <PopoverContent
+          className="lib-combobox-pop"
+          id={`${id ?? name}-listbox`}
+        >
           <Command
-            filter={(v, s) => (v.toLowerCase().includes(s.toLowerCase()) ? 1 : 0)}
+            filter={(v, s) =>
+              v.toLowerCase().includes(s.toLowerCase()) ? 1 : 0
+            }
           >
             <CommandInput
               placeholder="Search authors…"

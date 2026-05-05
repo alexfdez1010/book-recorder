@@ -3,7 +3,10 @@ import { searchGoogleBooks } from '@/lib/books/googlebooks';
 
 async function searchOrSkip(query: string, limit: number) {
   try {
-    return { results: await searchGoogleBooks(query, limit), skipped: false as const };
+    return {
+      results: await searchGoogleBooks(query, limit),
+      skipped: false as const,
+    };
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
     if (msg.includes('429')) return { results: null, skipped: true as const };

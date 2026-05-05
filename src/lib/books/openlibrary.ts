@@ -20,7 +20,9 @@ interface OpenLibraryResponse {
 }
 
 function coverUrlFromId(id: number | undefined): string | null {
-  return typeof id === 'number' ? `https://covers.openlibrary.org/b/id/${id}-L.jpg` : null;
+  return typeof id === 'number'
+    ? `https://covers.openlibrary.org/b/id/${id}-L.jpg`
+    : null;
 }
 
 function toCandidate(doc: OpenLibraryDoc): BookCandidate | null {
@@ -30,8 +32,13 @@ function toCandidate(doc: OpenLibraryDoc): BookCandidate | null {
     externalId: doc.key,
     title: doc.title,
     author: doc.author_name[0],
-    publicationDate: doc.first_publish_year ? `${doc.first_publish_year}-01-01` : null,
-    pages: typeof doc.number_of_pages_median === 'number' ? doc.number_of_pages_median : null,
+    publicationDate: doc.first_publish_year
+      ? `${doc.first_publish_year}-01-01`
+      : null,
+    pages:
+      typeof doc.number_of_pages_median === 'number'
+        ? doc.number_of_pages_median
+        : null,
     coverUrl: coverUrlFromId(doc.cover_i),
     category: normalizeCategory(doc.subject?.[0]),
     language: normalizeLanguage(doc.language?.[0]),
@@ -92,5 +99,7 @@ export async function searchOpenLibrary(
   });
   if (!res.ok) throw new Error(`OpenLibrary error ${res.status}`);
   const data = (await res.json()) as OpenLibraryResponse;
-  return (data.docs ?? []).map(toCandidate).filter((c): c is BookCandidate => c !== null);
+  return (data.docs ?? [])
+    .map(toCandidate)
+    .filter((c): c is BookCandidate => c !== null);
 }

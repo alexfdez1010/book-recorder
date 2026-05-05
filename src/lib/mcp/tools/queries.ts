@@ -53,7 +53,9 @@ export function registerQueryTools(server: McpServer): void {
         await prisma.book.findMany({
           where: {
             status: effectiveStatus,
-            ...(author ? { author: { contains: author, mode: 'insensitive' } } : {}),
+            ...(author
+              ? { author: { contains: author, mode: 'insensitive' } }
+              : {}),
           },
           orderBy:
             effectiveStatus === 'finished'
@@ -69,7 +71,8 @@ export function registerQueryTools(server: McpServer): void {
     'list_to_read_books',
     {
       title: 'List to-read books',
-      description: 'List books queued on the to-read shelf, newest entries first.',
+      description:
+        'List books queued on the to-read shelf, newest entries first.',
       inputSchema: { limit: z.number().int().min(1).max(500).optional() },
     },
     async ({ limit }) => {
