@@ -6,6 +6,7 @@ export interface BookLike {
   author?: string;
   publicationDate?: Date | string | null;
   title?: string;
+  rating?: number | null;
 }
 
 export interface CountEntry {

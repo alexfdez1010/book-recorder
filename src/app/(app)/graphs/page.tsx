@@ -22,6 +22,14 @@ import {
   topAuthors,
   weekdayFinishes,
 } from '@/lib/stats/advanced';
+import {
+  averageRatingByCategory,
+  booksPerMonthByYear,
+  cumulativeBooks,
+  pagesPerWeekday,
+  publicationDecadeDistribution,
+  ratingDistribution,
+} from '@/lib/stats/extras';
 import { GraphsDashboard } from '@/components/graphs-dashboard';
 
 export default async function GraphsPage() {
@@ -34,6 +42,7 @@ export default async function GraphsPage() {
     author: b.author,
     title: b.title,
     publicationDate: b.publicationDate ? b.publicationDate.toISOString() : null,
+    rating: b.rating,
   }));
   const data = {
     booksPerMonth: booksPerMonth(plain),
@@ -45,12 +54,18 @@ export default async function GraphsPage() {
       value: e.value,
     })),
     cumulativePages: cumulativePages(plain),
+    cumulativeBooks: cumulativeBooks(plain),
     rolling30Day: rolling30DayPages(plain),
     weekday: weekdayFinishes(plain),
+    pagesPerWeekday: pagesPerWeekday(plain),
     pageLength: pageLengthHistogram(plain),
     pagesByCategory: pagesByCategory(plain),
     topAuthors: topAuthors(plain),
     ageWhenRead: ageWhenReadHistogram(plain),
+    ratingDistribution: ratingDistribution(plain),
+    avgRatingByCategory: averageRatingByCategory(plain),
+    publicationDecade: publicationDecadeDistribution(plain),
+    yearOverYear: booksPerMonthByYear(plain),
     meanPagesPerDay: meanPagesPerDay(plain),
     avgPagesPerBook: averagePagesPerBook(plain),
     avgDaysBetween: averageDaysBetweenFinishes(plain),
