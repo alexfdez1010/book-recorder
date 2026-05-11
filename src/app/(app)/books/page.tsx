@@ -1,4 +1,5 @@
 import { listAuthors, listBooks } from '@/lib/books/repository';
+import { listCategories } from '@/lib/books/categories-repository';
 import { languageName } from '@/lib/books/language';
 
 export const dynamic = 'force-dynamic';
@@ -23,7 +24,11 @@ function monthKey(d: Date): string {
 }
 
 export default async function BooksPage() {
-  const [books, authors] = await Promise.all([listBooks(), listAuthors()]);
+  const [books, authors, categories] = await Promise.all([
+    listBooks(),
+    listAuthors(),
+    listCategories(),
+  ]);
   const totalPages = books.reduce((s, b) => s + b.pages, 0);
 
   const groups = new Map<
@@ -49,7 +54,7 @@ export default async function BooksPage() {
             {books.length} books · {totalPages.toLocaleString()} pages
           </p>
         </div>
-        <AddBookDialog authors={authors} />
+        <AddBookDialog authors={authors} categories={categories} />
       </div>
 
       {books.length === 0 ? (
@@ -102,7 +107,11 @@ export default async function BooksPage() {
                     </div>
 
                     <div className="lib-card__foot">
-                      <EditBookDialog book={b} authors={authors} />
+                      <EditBookDialog
+                        book={b}
+                        authors={authors}
+                        categories={categories}
+                      />
                       <DeleteBookButton id={b.id} title={b.title} />
                     </div>
                   </li>

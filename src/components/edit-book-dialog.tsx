@@ -3,9 +3,9 @@
 import { useState, useTransition } from 'react';
 import { Pencil } from 'lucide-react';
 import { updateBookAction } from '@/lib/books/actions';
-import { BOOK_CATEGORIES } from '@/lib/books/categories';
 import { LANGUAGE_KEYS, LANGUAGE_NAMES } from '@/lib/books/language';
 import { AuthorCombobox } from '@/components/author-combobox';
+import { CategoryCombobox } from '@/components/category-combobox';
 import { Field, SelectField } from '@/components/form-fields';
 import { StarRating } from '@/components/star-rating';
 import { Button } from '@/components/ui/button';
@@ -40,9 +40,11 @@ function dateInput(d: Date | null): string {
 export function EditBookDialog({
   book,
   authors,
+  categories,
 }: {
   book: BookLike;
   authors: string[];
+  categories: string[];
 }) {
   const [open, setOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -123,12 +125,16 @@ export function EditBookDialog({
                 }))}
               />
             </div>
-            <SelectField
-              label="Category"
-              name="category"
-              defaultValue={book.category}
-              options={BOOK_CATEGORIES.map((c) => ({ value: c, label: c }))}
-            />
+            <div className="lib-field">
+              <Label htmlFor={`category-${book.id}`}>Category</Label>
+              <CategoryCombobox
+                id={`category-${book.id}`}
+                name="category"
+                categories={categories}
+                defaultValue={book.category}
+                required
+              />
+            </div>
             <Field
               label="Cover URL"
               name="coverUrl"

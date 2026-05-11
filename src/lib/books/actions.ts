@@ -8,6 +8,7 @@ import {
   setBookRating,
   updateBook,
 } from './repository';
+import { createCategory } from './categories-repository';
 import {
   markFinishedSchema,
   newBookSchema,
@@ -132,4 +133,19 @@ export async function searchBooksAction(
 ): Promise<BookCandidate[]> {
   await ensureAuth();
   return searchBooks(query, 10);
+}
+
+export async function createCategoryAction(
+  name: string,
+): Promise<{ name?: string; error?: string }> {
+  await ensureAuth();
+  const trimmed = (name ?? '').trim();
+  if (!trimmed) return { error: 'Category name is required' };
+  try {
+    const created = await createCategory(trimmed);
+    revalidateBookPaths();
+    return { name: created };
+  } catch (e) {
+    return { error: e instanceof Error ? e.message : 'Failed to add category' };
+  }
 }

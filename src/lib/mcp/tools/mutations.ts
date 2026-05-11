@@ -8,6 +8,7 @@ import {
   setBookRating,
   updateBook,
 } from '@/lib/books/repository';
+import { createCategory } from '@/lib/books/categories-repository';
 import { newBookSchema } from '@/lib/books/validation';
 import { bookFields, ok } from './shared';
 
@@ -141,6 +142,17 @@ export function registerMutationTools(server: McpServer): void {
       const updated = await setBookRating(id, rating);
       return ok(updated);
     },
+  );
+
+  server.registerTool(
+    'add_category',
+    {
+      title: 'Create a category',
+      description:
+        'Register a new category so it appears in the picker. Idempotent: returns the existing name if one already exists (case-insensitive).',
+      inputSchema: { name: z.string().min(1) },
+    },
+    async ({ name }) => ok({ name: await createCategory(name) }),
   );
 
   server.registerTool(

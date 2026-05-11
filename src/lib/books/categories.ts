@@ -1,8 +1,10 @@
 /**
- * Fixed enumeration of book categories. Keep between 10 and 15 to stay
- * useful on the Categories pie chart without fragmenting into long-tail noise.
+ * Canonical seed list of book categories. Mirrored by the seed migration so
+ * adapters always have a known target for `normalizeCategory`. The runtime
+ * list of available categories is loaded from the database (see
+ * `categoriesRepository`) so users can add custom ones.
  */
-export const BOOK_CATEGORIES = [
+export const SEED_BOOK_CATEGORIES = [
   'Fiction',
   'Science Fiction',
   'Fantasy',
@@ -20,9 +22,9 @@ export const BOOK_CATEGORIES = [
   'Other',
 ] as const;
 
-export type BookCategory = (typeof BOOK_CATEGORIES)[number];
+export type SeedBookCategory = (typeof SEED_BOOK_CATEGORIES)[number];
 
-const RULES: Array<[RegExp, BookCategory]> = [
+const RULES: Array<[RegExp, SeedBookCategory]> = [
   [/science[- ]?fiction|sci-?fi|space opera|dystop/i, 'Science Fiction'],
   [/fantasy|mythology|fairy tale/i, 'Fantasy'],
   [/mystery|thriller|crime|detective|suspense|noir/i, 'Mystery & Thriller'],
@@ -44,11 +46,11 @@ const RULES: Array<[RegExp, BookCategory]> = [
 
 /**
  * Map an arbitrary category string (Open Library subject or Google Books
- * category) to one of our enum values. Returns 'Other' when nothing matches.
+ * category) to one of our seed categories. Returns 'Other' when nothing
+ * matches. Used only by search adapters to pre-fill the form; users can
+ * still pick or create any category at save time.
  */
-export function normalizeCategory(
-  raw: string | null | undefined,
-): BookCategory {
+export function normalizeCategory(raw: string | null | undefined): string {
   if (!raw) return 'Other';
   for (const [re, cat] of RULES) {
     if (re.test(raw)) return cat;

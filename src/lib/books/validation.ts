@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import { BOOK_CATEGORIES } from './categories';
 import { LANGUAGE_KEYS } from './language';
 import { BOOK_STATUSES } from './status';
 
@@ -21,7 +20,7 @@ export const newBookSchema = z
       .or(z.literal('')),
     pages: z.coerce.number().int().positive('Pages must be positive'),
     coverUrl: z.string().url().optional().or(z.literal('')),
-    category: z.enum(BOOK_CATEGORIES),
+    category: z.string().min(1, 'Category is required'),
     language: z.enum(LANGUAGE_KEYS),
     status: z.enum(BOOK_STATUSES).default('finished'),
     finishedOn: z

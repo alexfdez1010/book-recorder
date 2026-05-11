@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import { BOOK_CATEGORIES } from '@/lib/books/categories';
 import { LANGUAGE_KEYS } from '@/lib/books/language';
 import { BOOK_STATUSES } from '@/lib/books/status';
 
@@ -7,7 +6,7 @@ export const bookFields = {
   title: z.string().min(1),
   author: z.string().min(1),
   pages: z.number().int().positive(),
-  category: z.enum(BOOK_CATEGORIES),
+  category: z.string().min(1),
   language: z.enum(LANGUAGE_KEYS),
   status: z.enum(BOOK_STATUSES).optional(),
   finishedOn: z

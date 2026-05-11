@@ -1,4 +1,5 @@
 import { listAuthors, listToReadBooks } from '@/lib/books/repository';
+import { listCategories } from '@/lib/books/categories-repository';
 import { languageName } from '@/lib/books/language';
 
 export const dynamic = 'force-dynamic';
@@ -10,9 +11,10 @@ import { MarkAsFinishedButton } from '@/components/mark-as-finished-button';
 import { Badge } from '@/components/ui/badge';
 
 export default async function ToReadPage() {
-  const [books, authors] = await Promise.all([
+  const [books, authors, categories] = await Promise.all([
     listToReadBooks(),
     listAuthors(),
+    listCategories(),
   ]);
   const totalPages = books.reduce((s, b) => s + b.pages, 0);
 
@@ -25,7 +27,11 @@ export default async function ToReadPage() {
             {books.length} books · {totalPages.toLocaleString()} pages queued
           </p>
         </div>
-        <AddBookDialog authors={authors} status="to-read" />
+        <AddBookDialog
+          authors={authors}
+          categories={categories}
+          status="to-read"
+        />
       </div>
 
       {books.length === 0 ? (
@@ -64,7 +70,11 @@ export default async function ToReadPage() {
 
               <div className="lib-card__foot">
                 <MarkAsFinishedButton id={b.id} title={b.title} />
-                <EditBookDialog book={b} authors={authors} />
+                <EditBookDialog
+                  book={b}
+                  authors={authors}
+                  categories={categories}
+                />
                 <DeleteBookButton id={b.id} title={b.title} />
               </div>
             </li>

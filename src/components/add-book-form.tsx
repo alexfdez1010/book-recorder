@@ -3,10 +3,10 @@
 import { useState, useTransition } from 'react';
 import { addBookAction } from '@/lib/books/actions';
 import type { BookCandidate } from '@/lib/books/types';
-import { BOOK_CATEGORIES } from '@/lib/books/categories';
 import { LANGUAGE_KEYS, LANGUAGE_NAMES } from '@/lib/books/language';
 import type { BookStatus } from '@/lib/books/status';
 import { AuthorCombobox } from '@/components/author-combobox';
+import { CategoryCombobox } from '@/components/category-combobox';
 import { Field, SelectField } from '@/components/form-fields';
 import { StarRating } from '@/components/star-rating';
 import { Button } from '@/components/ui/button';
@@ -19,12 +19,14 @@ function today(): string {
 export function AddBookForm({
   candidate,
   authors,
+  categories,
   status = 'finished',
   onCancel,
   onDone,
 }: {
   candidate: BookCandidate | null;
   authors: string[];
+  categories: string[];
   status?: BookStatus;
   onCancel: () => void;
   onDone: () => void;
@@ -106,12 +108,16 @@ export function AddBookForm({
         />
       </div>
 
-      <SelectField
-        label="Category"
-        name="category"
-        defaultValue={candidate?.category ?? 'Other'}
-        options={BOOK_CATEGORIES.map((c) => ({ value: c, label: c }))}
-      />
+      <div className="lib-field">
+        <Label htmlFor="category">Category</Label>
+        <CategoryCombobox
+          id="category"
+          name="category"
+          categories={categories}
+          defaultValue={candidate?.category ?? 'Other'}
+          required
+        />
+      </div>
       <Field
         label="Cover URL"
         name="coverUrl"

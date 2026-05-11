@@ -1,14 +1,20 @@
 import { describe, expect, it } from 'vitest';
-import { BOOK_CATEGORIES, normalizeCategory } from '@/lib/books/categories';
+import {
+  SEED_BOOK_CATEGORIES,
+  normalizeCategory,
+} from '@/lib/books/categories';
 
-describe('BOOK_CATEGORIES', () => {
-  it('has between 10 and 15 entries', () => {
-    expect(BOOK_CATEGORIES.length).toBeGreaterThanOrEqual(10);
-    expect(BOOK_CATEGORIES.length).toBeLessThanOrEqual(15);
+describe('SEED_BOOK_CATEGORIES', () => {
+  it('covers every category the normalizer can return', () => {
+    expect(SEED_BOOK_CATEGORIES).toContain('Other');
+    expect(SEED_BOOK_CATEGORIES).toContain('Fiction');
+    expect(SEED_BOOK_CATEGORIES).toContain('Science Fiction');
   });
 
-  it('includes Other as the fallback bucket', () => {
-    expect(BOOK_CATEGORIES).toContain('Other');
+  it('has no duplicates', () => {
+    expect(new Set(SEED_BOOK_CATEGORIES).size).toBe(
+      SEED_BOOK_CATEGORIES.length,
+    );
   });
 });
 

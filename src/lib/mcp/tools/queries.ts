@@ -3,6 +3,7 @@ import { z } from 'zod';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { prisma } from '@/lib/db/prisma';
 import { listBooks, listToReadBooks } from '@/lib/books/repository';
+import { listCategories } from '@/lib/books/categories-repository';
 import { searchBooks } from '@/lib/books/search';
 import { BOOK_STATUSES } from '@/lib/books/status';
 import {
@@ -79,6 +80,17 @@ export function registerQueryTools(server: McpServer): void {
       const books = await listToReadBooks();
       return ok(typeof limit === 'number' ? books.slice(0, limit) : books);
     },
+  );
+
+  server.registerTool(
+    'list_categories',
+    {
+      title: 'List categories',
+      description:
+        'Return every available book category, sorted alphabetically. Use the returned name when calling add_book / update_book.',
+      inputSchema: {},
+    },
+    async () => ok(await listCategories()),
   );
 
   server.registerTool(

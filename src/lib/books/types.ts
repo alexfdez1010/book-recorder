@@ -1,4 +1,3 @@
-import type { BookCategory } from './categories';
 import type { LanguageCode } from './language';
 
 /**
@@ -14,6 +13,6 @@ export interface BookCandidate {
   publicationDate: string | null;
   pages: number | null;
   coverUrl: string | null;
-  category: BookCategory;
+  category: string;
   language: LanguageCode | null;
 }

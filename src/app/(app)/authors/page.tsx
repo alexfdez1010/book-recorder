@@ -1,4 +1,5 @@
 import { listAuthors, listBooks } from '@/lib/books/repository';
+import { listCategories } from '@/lib/books/categories-repository';
 import { languageName } from '@/lib/books/language';
 import { groupByAuthor } from '@/lib/books/authors';
 import { BookCover } from '@/components/book-cover';
@@ -9,7 +10,11 @@ import { Badge } from '@/components/ui/badge';
 export const dynamic = 'force-dynamic';
 
 export default async function AuthorsPage() {
-  const [books, authors] = await Promise.all([listBooks(), listAuthors()]);
+  const [books, authors, categories] = await Promise.all([
+    listBooks(),
+    listAuthors(),
+    listCategories(),
+  ]);
   const groups = groupByAuthor(books);
 
   return (
@@ -64,7 +69,11 @@ export default async function AuthorsPage() {
                       </div>
                     </div>
                     <div className="lib-card__foot">
-                      <EditBookDialog book={b} authors={authors} />
+                      <EditBookDialog
+                        book={b}
+                        authors={authors}
+                        categories={categories}
+                      />
                       <DeleteBookButton id={b.id} title={b.title} />
                     </div>
                   </li>

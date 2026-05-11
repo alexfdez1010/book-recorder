@@ -23,9 +23,11 @@ type Mode =
 
 export function AddBookDialog({
   authors,
+  categories,
   status = 'finished',
 }: {
   authors: string[];
+  categories: string[];
   status?: BookStatus;
 }) {
   const [open, setOpen] = useState(false);
@@ -73,6 +75,7 @@ export function AddBookDialog({
             <AddBookForm
               candidate={mode.kind === 'selected' ? mode.candidate : null}
               authors={authors}
+              categories={categories}
               status={status}
               onCancel={close}
               onDone={close}
