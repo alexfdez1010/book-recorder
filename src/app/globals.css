@@ -1309,7 +1309,14 @@ body {
   .lib-cmd__list {
     max-height: 16rem;
     overflow-y: auto;
+    overscroll-behavior: contain;
     padding: 0.35rem 0;
+  }
+  /* cmdk sets [cmdk-list] height inline from a ResizeObserver, which can
+     defeat our max-height. Force the cap with the attribute selector. */
+  [cmdk-list].lib-cmd__list {
+    height: auto !important;
+    max-height: 16rem;
   }
   .lib-cmd__empty {
     padding: 0.75rem 0.85rem;
