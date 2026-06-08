@@ -26,7 +26,7 @@ model Book {
   language        String
   status          String    @default("finished")
   finishedOn      DateTime?
-  rating          Int?
+  rating          Float?
   externalId      String?
   source          String?
   createdAt       DateTime  @default(now())

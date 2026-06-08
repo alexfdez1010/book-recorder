@@ -52,21 +52,39 @@ const sample = [
 ];
 
 describe('ratingDistribution', () => {
-  it('counts each star bucket and Unrated', () => {
+  it('counts each half-star bucket and Unrated', () => {
     const r = ratingDistribution(sample);
     expect(r).toEqual([
+      { label: '0.5★', value: 0 },
       { label: '1★', value: 0 },
+      { label: '1.5★', value: 0 },
       { label: '2★', value: 0 },
+      { label: '2.5★', value: 0 },
       { label: '3★', value: 1 },
+      { label: '3.5★', value: 0 },
       { label: '4★', value: 1 },
+      { label: '4.5★', value: 0 },
       { label: '5★', value: 1 },
       { label: 'Unrated', value: 1 },
     ]);
   });
 
-  it('returns six zero buckets on empty input', () => {
+  it('buckets half-star ratings into their own slots', () => {
+    const r = ratingDistribution([
+      { ...sample[0], rating: 0.5 },
+      { ...sample[1], rating: 2.5 },
+      { ...sample[3], rating: 4.5 },
+    ]);
+    const counts = Object.fromEntries(r.map((e) => [e.label, e.value]));
+    expect(counts['0.5★']).toBe(1);
+    expect(counts['2.5★']).toBe(1);
+    expect(counts['4.5★']).toBe(1);
+    expect(counts['Unrated']).toBe(0);
+  });
+
+  it('returns eleven zero buckets on empty input', () => {
     const r = ratingDistribution([]);
-    expect(r).toHaveLength(6);
+    expect(r).toHaveLength(11);
     expect(r.every((e) => e.value === 0)).toBe(true);
   });
 });
@@ -77,6 +95,14 @@ describe('averageRatingByCategory', () => {
       { label: 'History', value: 4 }, // only Delta is rated in History
       { label: 'Sci-Fi', value: 4 }, // (5+3)/2
     ]);
+  });
+
+  it('averages half-star ratings without rounding away the fraction', () => {
+    const r = averageRatingByCategory([
+      { ...sample[0], category: 'Sci-Fi', rating: 4.5 },
+      { ...sample[1], category: 'Sci-Fi', rating: 3 },
+    ]);
+    expect(r).toEqual([{ label: 'Sci-Fi', value: 3.8 }]); // (4.5 + 3) / 2 = 3.75 → 3.8
   });
 
   it('skips categories with no rated books', () => {

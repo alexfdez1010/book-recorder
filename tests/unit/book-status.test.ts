@@ -85,7 +85,7 @@ describe('markFinishedSchema', () => {
     );
   });
 
-  it('accepts an optional rating between 1 and 5', () => {
+  it('accepts an optional rating between 0.5 and 5', () => {
     const ok = markFinishedSchema.safeParse({
       finishedOn: '2026-04-27',
       rating: 4,
@@ -98,22 +98,43 @@ describe('markFinishedSchema', () => {
     expect(empty.success && empty.data.rating).toBeUndefined();
   });
 
-  it('rejects ratings outside 1..5', () => {
-    expect(
-      markFinishedSchema.safeParse({ finishedOn: '2026-04-27', rating: 0 })
-        .success,
-    ).toBe(false);
-    expect(
-      markFinishedSchema.safeParse({ finishedOn: '2026-04-27', rating: 6 })
-        .success,
-    ).toBe(false);
+  it('accepts half-star ratings', () => {
+    for (const rating of [0.5, 2.5, 4.5]) {
+      const parsed = markFinishedSchema.safeParse({
+        finishedOn: '2026-04-27',
+        rating,
+      });
+      expect(parsed.success && parsed.data.rating).toBe(rating);
+    }
+  });
+
+  it('coerces a half-star "3.5" string from FormData', () => {
+    const parsed = markFinishedSchema.safeParse({
+      finishedOn: '2026-04-27',
+      rating: '3.5',
+    });
+    expect(parsed.success && parsed.data.rating).toBe(3.5);
+  });
+
+  it('rejects ratings outside 0.5..5 and non-half steps', () => {
+    for (const rating of [0, 6, 1.25, 2.7]) {
+      expect(
+        markFinishedSchema.safeParse({ finishedOn: '2026-04-27', rating })
+          .success,
+      ).toBe(false);
+    }
   });
 });
 
 describe('newBookSchema rating handling', () => {
-  it('accepts rating "4" string from FormData and coerces to int', () => {
+  it('accepts rating "4" string from FormData and coerces to a number', () => {
     const parsed = newBookSchema.safeParse({ ...finished, rating: '4' });
     expect(parsed.success && parsed.data.rating).toBe(4);
+  });
+
+  it('accepts a half-star "3.5" string from FormData', () => {
+    const parsed = newBookSchema.safeParse({ ...finished, rating: '3.5' });
+    expect(parsed.success && parsed.data.rating).toBe(3.5);
   });
 
   it('treats empty rating as undefined', () => {

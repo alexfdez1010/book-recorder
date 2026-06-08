@@ -110,11 +110,11 @@ export function registerMutationTools(server: McpServer): void {
     {
       title: 'Move a to-read book to finished',
       description:
-        'Promote a to-read book to the finished shelf by setting `finishedOn` (YYYY-MM-DD). Optionally include a 1–5 `rating`.',
+        'Promote a to-read book to the finished shelf by setting `finishedOn` (YYYY-MM-DD). Optionally include a 0.5–5 `rating` in half-star steps.',
       inputSchema: {
         id: z.string().min(1),
         finishedOn: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'YYYY-MM-DD'),
-        rating: z.number().int().min(1).max(5).optional(),
+        rating: z.number().min(0.5).max(5).multipleOf(0.5).optional(),
       },
     },
     async ({ id, finishedOn, rating }) => {
@@ -132,10 +132,10 @@ export function registerMutationTools(server: McpServer): void {
     {
       title: 'Set or clear a book rating',
       description:
-        'Set the 1–5 star rating for a book by id. Pass `rating: null` to clear it.',
+        'Set the 0.5–5 star rating (half-star steps) for a book by id. Pass `rating: null` to clear it.',
       inputSchema: {
         id: z.string().min(1),
-        rating: z.union([z.number().int().min(1).max(5), z.null()]),
+        rating: z.union([z.number().min(0.5).max(5).multipleOf(0.5), z.null()]),
       },
     },
     async ({ id, rating }) => {

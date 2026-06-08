@@ -22,11 +22,11 @@ export const bookFields = {
   source: z.enum(['openlibrary', 'googlebooks', 'manual']).optional(),
   rating: z
     .number()
-    .int()
-    .min(1)
+    .min(0.5)
     .max(5)
+    .multipleOf(0.5)
     .optional()
-    .describe('Optional 1–5 rating'),
+    .describe('Optional 0.5–5 rating in half-star steps'),
 };
 
 export function ok(value: unknown) {

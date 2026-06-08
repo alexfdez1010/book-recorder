@@ -21,23 +21,23 @@ const MONTHS = [
 ] as const;
 const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] as const;
 
+/** Half-star steps from 0.5 to 5, used to bucket the rating distribution. */
+const RATING_STEPS = [0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5] as const;
+
 function validRating(r: number | null | undefined): r is number {
-  return typeof r === 'number' && r >= 1 && r <= 5;
+  return typeof r === 'number' && r >= 0.5 && r <= 5;
 }
 
-/** Distribution of ratings (1★..5★) plus an "Unrated" bucket. */
+/** Distribution of ratings (0.5★..5★ in half steps) plus an "Unrated" bucket. */
 export function ratingDistribution(books: BookLike[]): CountEntry[] {
-  const buckets: CountEntry[] = [
-    { label: '1★', value: 0 },
-    { label: '2★', value: 0 },
-    { label: '3★', value: 0 },
-    { label: '4★', value: 0 },
-    { label: '5★', value: 0 },
-    { label: 'Unrated', value: 0 },
-  ];
+  const buckets: CountEntry[] = RATING_STEPS.map((s) => ({
+    label: `${s}★`,
+    value: 0,
+  }));
+  buckets.push({ label: 'Unrated', value: 0 });
   for (const b of books) {
-    if (validRating(b.rating)) buckets[b.rating - 1].value++;
-    else buckets[5].value++;
+    if (validRating(b.rating)) buckets[Math.round(b.rating * 2) - 1].value++;
+    else buckets[buckets.length - 1].value++;
   }
   return buckets;
 }

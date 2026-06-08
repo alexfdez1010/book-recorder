@@ -8,9 +8,43 @@ const STARS = [1, 2, 3, 4, 5] as const;
 
 export type StarRatingValue = number | null;
 
+type Fill = 'full' | 'half' | 'none';
+
+/** Label a half-star value like `2.5 stars` / `1 star` for screen readers. */
+function ratingLabel(v: number): string {
+  return `${v} star${v === 1 ? '' : 's'}`;
+}
+
 /**
- * Interactive 1–5 star picker with hover preview and a hidden input for form submission.
- * Pass `name` to expose the value as form data; otherwise control via `value` + `onChange`.
+ * One star: a muted outline overlaid by a brass fill clipped to the active
+ * fraction (full, left-half, or empty). Purely presentational.
+ */
+function StarIcon({ px, fill }: { px: string; fill: Fill }) {
+  return (
+    <span className="lib-rating__icon" aria-hidden>
+      <Star
+        className={cn(px, 'lib-rating__base')}
+        strokeWidth={2.5}
+        fill="none"
+      />
+      {fill !== 'none' ? (
+        <span
+          className="lib-rating__fill"
+          style={fill === 'half' ? { width: '50%' } : undefined}
+        >
+          <Star className={px} strokeWidth={2.5} fill="currentColor" />
+        </span>
+      ) : null}
+    </span>
+  );
+}
+
+/**
+ * Interactive 0.5–5 star picker with half-star precision, hover preview and a
+ * hidden input for form submission. Each star exposes a left hit-area (n − 0.5)
+ * and a right hit-area (n); clicking the currently selected value clears it.
+ * Pass `name` to expose the value as form data; otherwise control via `value`
+ * + `onChange`.
  */
 export function StarRating({
   name,
@@ -52,32 +86,32 @@ export function StarRating({
     >
       {name ? <input type="hidden" name={name} value={current ?? ''} /> : null}
       {STARS.map((n) => {
-        const filled = n <= display;
+        const fill: Fill =
+          display >= n ? 'full' : display >= n - 0.5 ? 'half' : 'none';
         return (
-          <button
-            key={n}
-            type="button"
-            role="radio"
-            aria-checked={current === n}
-            aria-label={`${n} star${n === 1 ? '' : 's'}`}
-            id={`${groupId}-${n}`}
-            disabled={readOnly}
-            onMouseEnter={() => setHover(n)}
-            onFocus={() => setHover(n)}
-            onBlur={() => setHover(null)}
-            onClick={() => set(current === n ? null : n)}
-            className={cn(
-              'lib-rating__star',
-              filled && 'lib-rating__star--on',
-              readOnly && 'lib-rating__star--ro',
-            )}
-          >
-            <Star
-              className={px}
-              strokeWidth={2.5}
-              fill={filled ? 'currentColor' : 'none'}
-            />
-          </button>
+          <span key={n} className="lib-rating__star">
+            <StarIcon px={px} fill={fill} />
+            {[n - 0.5, n].map((v) => (
+              <button
+                key={v}
+                type="button"
+                role="radio"
+                aria-checked={current === v}
+                aria-label={ratingLabel(v)}
+                id={`${groupId}-${v * 2}`}
+                disabled={readOnly}
+                onMouseEnter={() => setHover(v)}
+                onFocus={() => setHover(v)}
+                onBlur={() => setHover(null)}
+                onClick={() => set(current === v ? null : v)}
+                className={cn(
+                  'lib-rating__hit',
+                  v < n ? 'lib-rating__hit--l' : 'lib-rating__hit--r',
+                  readOnly && 'lib-rating__hit--ro',
+                )}
+              />
+            ))}
+          </span>
         );
       })}
     </div>

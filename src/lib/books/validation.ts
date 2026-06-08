@@ -6,7 +6,12 @@ const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
 
 const ratingSchema = z.preprocess(
   (v) => (v === '' || v === null || v === undefined ? undefined : v),
-  z.coerce.number().int().min(1, 'Rating 1–5').max(5, 'Rating 1–5').optional(),
+  z.coerce
+    .number()
+    .min(0.5, 'Rating 0.5–5')
+    .max(5, 'Rating 0.5–5')
+    .multipleOf(0.5, 'Rating must be in 0.5 steps')
+    .optional(),
 );
 
 export const newBookSchema = z
@@ -49,5 +54,5 @@ export const markFinishedSchema = z.object({
 
 export const ratingValueSchema = z.preprocess(
   (v) => (v === '' || v === null ? null : v),
-  z.union([z.coerce.number().int().min(1).max(5), z.null()]),
+  z.union([z.coerce.number().min(0.5).max(5).multipleOf(0.5), z.null()]),
 );

@@ -950,25 +950,46 @@ body {
     line-height: 1;
   }
   .lib-rating__star {
+    position: relative;
     display: inline-flex;
+    line-height: 0;
+  }
+  .lib-rating__icon {
+    position: relative;
+    display: inline-flex;
+  }
+  .lib-rating__base {
+    color: var(--ink-mute);
+  }
+  .lib-rating__fill {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    overflow: hidden;
+    color: var(--brass);
+  }
+  .lib-rating__hit {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 50%;
+    margin: 0;
     padding: 0;
     background: transparent;
     border: 0;
-    color: inherit;
     cursor: pointer;
-    transition: color 80ms ease;
   }
-  .lib-rating__star:hover:not(:disabled) {
-    color: var(--brass);
+  .lib-rating__hit--l {
+    left: 0;
   }
-  .lib-rating__star:focus-visible {
+  .lib-rating__hit--r {
+    right: 0;
+  }
+  .lib-rating__hit:focus-visible {
     outline: 2px solid var(--oxblood);
     outline-offset: 2px;
   }
-  .lib-rating__star--on {
-    color: var(--brass);
-  }
-  .lib-rating__star--ro {
+  .lib-rating__hit--ro {
     cursor: default;
   }
 
