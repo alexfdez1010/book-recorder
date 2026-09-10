@@ -2,15 +2,15 @@ import { test, expect } from '@playwright/test';
 
 const PASSWORD = process.env.PASSWORD ?? 'dev-password';
 
-/** Selects an item from an accessible HeroUI combobox. */
+/** Opens the explicit selection trigger and chooses an option, regardless of input focus. */
 async function chooseOption(
   page: import('@playwright/test').Page,
   label: string,
   option: string,
 ) {
-  const control = page
-    .getByRole('combobox', { name: label, exact: true })
-    .or(page.getByRole('button', { name: new RegExp(label) }));
+  const control = page.getByRole('button', {
+    name: label === 'Category' ? 'Show categories' : new RegExp(label),
+  });
   await control.click();
   await page.getByRole('option', { name: option, exact: true }).click();
 }
