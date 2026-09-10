@@ -3,16 +3,16 @@
 
   .lib-shell {
     color: var(--ink);
-    min-height: 100vh;
+    min-height: 100dvh;
   }
   .lib-main {
     margin-inline: auto;
     max-width: 72rem;
-    padding: 2rem 1rem;
+    padding: 2.5rem 1.25rem 4rem;
   }
   @media (min-width: 640px) {
     .lib-main {
-      padding: 3rem 2rem;
+      padding: 3.5rem 2rem 5rem;
     }
   }
 
@@ -32,7 +32,7 @@
   }
   .lib-month-head__title {
     font-family: var(--font-serif);
-    font-weight: 900;
+    font-weight: 500;
     font-size: clamp(1.15rem, 2vw, 1.55rem);
     letter-spacing: -0.01em;
     line-height: 1.1;

@@ -2,19 +2,21 @@
   /* ---- Form controls ------------------------------------------------ */
 
   .lib-label {
-    font-family: var(--font-mono);
-    font-size: 0.65rem;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    letter-spacing: 0;
+    text-transform: none;
     color: var(--ink-soft);
   }
 
   .lib-input,
   .lib-select {
     width: 100%;
+    min-height: 2.75rem;
+    border-radius: 6px;
     padding: 0.55rem 0.75rem;
     background: var(--bone);
-    border: var(--rule) solid var(--ink);
+    border: var(--rule) solid var(--paper-edge);
     color: var(--ink);
     font-family: var(--font-serif);
     font-size: 1rem;
@@ -28,9 +30,10 @@
   }
   .lib-input:focus,
   .lib-select:focus {
-    outline: none;
+    outline: 2px solid var(--leather);
+    outline-offset: 2px;
     background: var(--paper);
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--brass) 55%, transparent);
+    box-shadow: none;
   }
   .lib-input:disabled,
   .lib-select:disabled {
@@ -51,9 +54,9 @@
     border: var(--rule) solid var(--oxblood);
     background: var(--paper);
     color: var(--oxblood);
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    letter-spacing: 0;
+    text-transform: none;
   }
 }

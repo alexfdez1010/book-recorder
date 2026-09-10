@@ -9,7 +9,7 @@ import './globals.css';
 const fraunces = Fraunces({
   variable: '--font-fraunces',
   subsets: ['latin'],
-  weight: ['400', '600', '700', '900'],
+  weight: ['400', '500', '600', '700'],
 });
 const grotesk = Bricolage_Grotesque({
   variable: '--font-grotesk',

@@ -12,33 +12,33 @@
   }
 
   .lib-kicker {
-    font-family: var(--font-mono);
-    font-size: 0.66rem;
-    letter-spacing: 0.32em;
-    text-transform: uppercase;
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    letter-spacing: 0;
+    text-transform: none;
     color: var(--ink-mute);
   }
 
   .lib-subtitle {
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
+    font-family: var(--font-sans);
+    font-size: 0.875rem;
+    letter-spacing: 0;
+    text-transform: none;
     color: var(--ink-soft);
   }
 
   .lib-meta {
-    font-family: var(--font-mono);
-    font-size: 0.66rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    letter-spacing: 0;
+    text-transform: none;
     color: var(--ink-mute);
   }
 
   .lib-title {
     font-family: var(--font-serif);
-    font-weight: 900;
-    line-height: 0.95;
+    font-weight: 500;
+    line-height: 1.1;
     letter-spacing: -0.01em;
     color: var(--ink);
     font-size: clamp(1.75rem, 4vw, 2.75rem);
@@ -53,9 +53,9 @@
 
   .lib-wordmark {
     font-family: var(--font-serif);
-    font-weight: 900;
+    font-weight: 500;
     letter-spacing: -0.02em;
-    line-height: 0.85;
+    line-height: 1.1;
     font-variation-settings: 'opsz' 144;
   }
   .lib-wordmark__dot {

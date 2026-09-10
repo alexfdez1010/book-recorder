@@ -3,9 +3,10 @@
 
   .lib-panel {
     min-width: 0;
-    background: var(--paper-soft);
-    border: var(--rule) solid var(--ink);
-    box-shadow: var(--offset) var(--offset) 0 0 var(--walnut);
+    background: transparent;
+    border: 0;
+    border-radius: 8px;
+    box-shadow: none;
   }
   .lib-panel__head {
     display: flex;
@@ -13,20 +14,20 @@
     justify-content: space-between;
     gap: 1rem;
     padding: 0.75rem 1rem;
-    background: var(--paper);
-    border-block-end: 1px solid var(--ink);
+    background: transparent;
+    border: 0;
   }
   .lib-panel__eyebrow {
     /* gilt small-caps */
-    font-family: var(--font-mono);
-    font-size: 0.66rem;
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    letter-spacing: 0;
+    text-transform: none;
     color: var(--binding);
   }
   .lib-panel__title {
     font-family: var(--font-serif);
-    font-weight: 800;
+    font-weight: 500;
     font-size: 1.35rem;
     line-height: 1;
     letter-spacing: -0.005em;

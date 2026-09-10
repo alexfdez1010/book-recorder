@@ -1,66 +1,22 @@
 @layer components {
-  /* ---- Nav (file-tab strip on parchment, hanging off header) ------- */
-
   .lib-nav {
-    display: flex;
-    gap: 0;
-    padding-block-start: 0.75rem;
-    margin-block-end: calc(-1 * var(--rule));
-    overflow-x: auto;
-    scrollbar-width: none;
-  }
-  .lib-nav::-webkit-scrollbar {
-    display: none;
+    @apply flex gap-5 border-b border-paper-edge sm:gap-8;
   }
   .lib-nav-item {
-    flex-shrink: 0;
-    padding: 0.6rem 1rem 0.75rem;
-    border: var(--rule) solid var(--ink);
-    border-block-end: 0;
-    font-family: var(--font-mono);
-    font-size: 0.65rem;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    font-weight: 700;
-    background: var(--paper-soft);
-    color: var(--ink);
-    transition:
-      background-color 120ms ease,
-      color 120ms ease;
-  }
-  @media (max-width: 639px) {
-    .lib-nav {
-      display: grid;
-      grid-template-columns: repeat(5, minmax(0, 1fr));
-      width: 100%;
-      overflow: visible;
-    }
-    .lib-nav-item {
-      min-width: 0;
-      padding: 0.6rem 0.15rem 0.7rem;
-      font-size: 0.625rem;
-      min-height: 2.75rem;
-      align-content: center;
-      letter-spacing: 0.04em;
-      text-align: center;
-    }
-  }
-  @media (min-width: 640px) {
-    .lib-nav-item {
-      padding: 0.75rem 1.5rem 0.9rem;
-      font-size: 0.7rem;
-      letter-spacing: 0.22em;
-    }
-  }
-  .lib-nav-item + .lib-nav-item {
-    border-inline-start-width: 0;
+    @apply flex min-h-11 items-center border-b-2 border-transparent py-3 text-sm text-ink-mute transition-colors;
   }
   .lib-nav-item:hover {
-    background: var(--brass);
-    color: var(--ink);
+    @apply text-ink;
   }
   .lib-nav-item[aria-current='page'] {
-    background: var(--ink);
-    color: var(--paper);
+    @apply border-leather font-medium text-ink;
+  }
+  @media (max-width: 359px) {
+    .lib-nav {
+      @apply justify-between gap-2;
+    }
+    .lib-nav-item {
+      @apply text-xs;
+    }
   }
 }

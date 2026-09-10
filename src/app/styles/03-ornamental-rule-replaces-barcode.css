@@ -15,13 +15,13 @@
     content: '';
     flex: 1;
     height: 0;
-    border-top: 1px solid var(--ink);
-    box-shadow: 0 3px 0 -2px var(--ink); /* second hairline below = double rule */
+    border-top: 1px solid var(--paper-edge);
+    box-shadow: none; /* second hairline below = double rule */
     opacity: 0.65;
   }
   .lib-rule__ornament {
     color: var(--binding);
     font-size: 1.1rem;
-    letter-spacing: 0.25em;
+    letter-spacing: 0;
   }
 }

@@ -1,26 +1,6 @@
 @layer components {
   .lib-cover__gen-grain {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    mix-blend-mode: overlay;
-    opacity: 0.55;
-    background-image:
-      radial-gradient(
-        ellipse at 18% 12%,
-        color-mix(in srgb, var(--gen-accent) 70%, transparent) 0%,
-        transparent 55%
-      ),
-      radial-gradient(
-        circle at 82% 88%,
-        rgba(0, 0, 0, 0.45) 0%,
-        transparent 60%
-      ),
-      repeating-linear-gradient(
-        135deg,
-        transparent 0 2px,
-        rgba(255, 248, 226, 0.035) 2px 3px
-      );
+    display: none;
   }
   .lib-cover__gen-plate {
     position: relative;
@@ -36,14 +16,14 @@
     text-align: left;
   }
   .lib-cover__gen-mark {
-    font-family: var(--font-mono);
+    font-family: var(--font-sans);
     font-size: 0.55rem;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
+    letter-spacing: 0;
+    text-transform: none;
     color: color-mix(in srgb, var(--bone) 72%, transparent);
     align-self: flex-start;
     padding: 0.15rem 0.3rem;
-    border: 1px solid color-mix(in srgb, var(--bone) 55%, transparent);
+    border: 0;
   }
   .lib-cover__gen-rule {
     display: block;
@@ -58,7 +38,7 @@
   }
   .lib-cover__gen-title {
     font-family: var(--font-serif);
-    font-weight: 900;
+    font-weight: 500;
     font-size: 0.78rem;
     line-height: 1.05;
     letter-spacing: -0.005em;
@@ -72,10 +52,10 @@
     word-break: break-word;
   }
   .lib-cover__gen-author {
-    font-family: var(--font-mono);
+    font-family: var(--font-sans);
     font-size: 0.52rem;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
+    letter-spacing: 0;
+    text-transform: none;
     color: color-mix(in srgb, var(--bone) 82%, transparent);
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -83,7 +63,7 @@
     overflow: hidden;
   }
   .lib-cover--sm.lib-cover--gen {
-    box-shadow: 1px 1px 0 0 var(--walnut);
+    box-shadow: none;
   }
   .lib-cover__gen-initials {
     position: relative;
@@ -94,9 +74,9 @@
     align-items: center;
     justify-content: center;
     font-family: var(--font-serif);
-    font-weight: 900;
+    font-weight: 500;
     font-size: 1.15rem;
-    letter-spacing: 0.04em;
+    letter-spacing: 0;
     color: var(--bone);
     text-shadow: 0 1px 0 rgba(0, 0, 0, 0.35);
   }

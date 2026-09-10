@@ -1,125 +1,51 @@
 @layer components {
-  /* ---- Buttons ------------------------------------------------------ */
-
   .lib-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    padding: 0.7rem 1.25rem;
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    font-weight: 700;
-    color: var(--ink);
-    background: var(--paper-soft);
-    border: var(--rule) solid var(--ink);
-    box-shadow: 3px 3px 0 0 var(--walnut);
-    transition:
-      transform 100ms ease,
-      box-shadow 100ms ease,
-      background-color 100ms ease;
-    cursor: pointer;
-    user-select: none;
-    white-space: nowrap;
+    @apply inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-md border-0 bg-paper-soft px-5 py-2.5 font-sans text-sm font-medium text-ink transition-colors;
   }
   .lib-btn:hover:not(:disabled) {
-    transform: translate(-1px, -1px);
-    box-shadow: 4px 4px 0 0 var(--ink);
+    @apply bg-paper-edge;
   }
   .lib-btn:active:not(:disabled) {
-    transform: translate(3px, 3px);
-    box-shadow: 0 0 0 0 var(--ink);
-  }
-  .lib-btn:focus-visible {
-    outline: none;
-    box-shadow:
-      3px 3px 0 0 var(--walnut),
-      0 0 0 3px color-mix(in srgb, var(--brass) 60%, transparent);
+    transform: scale(0.98);
   }
   .lib-btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
+    @apply cursor-not-allowed opacity-50;
   }
-
-  .lib-btn--primary {
-    background: var(--ink);
-    color: var(--paper);
-    box-shadow: 3px 3px 0 0 var(--leather);
-  }
-  .lib-btn--primary:hover:not(:disabled) {
-    box-shadow: 4px 4px 0 0 var(--leather);
-  }
-
+  .lib-btn--primary,
   .lib-btn--accent {
-    background: var(--oxblood);
-    color: var(--paper);
-    box-shadow: 3px 3px 0 0 var(--ink);
+    @apply bg-leather text-bone;
   }
-
+  .lib-btn--primary:hover:not(:disabled),
+  .lib-btn--accent:hover:not(:disabled) {
+    @apply bg-ink;
+  }
   .lib-btn--destructive {
-    background: var(--oxblood);
-    color: var(--bone);
-    border-color: var(--ink);
-    box-shadow: 3px 3px 0 0 var(--ink);
+    @apply bg-oxblood text-bone;
   }
   .lib-btn--destructive:hover:not(:disabled) {
-    box-shadow: 4px 4px 0 0 var(--ink);
+    @apply bg-ink;
   }
-
-  .lib-btn--ghost {
-    background: transparent;
-    border-color: var(--ink);
-    box-shadow: none;
-    color: var(--ink);
-  }
-  .lib-btn--ghost:hover:not(:disabled) {
-    background: var(--paper-soft);
-    box-shadow: none;
-    transform: none;
-  }
+  .lib-btn--ghost,
   .lib-btn--ghost-light {
-    background: transparent;
-    border-color: rgba(250, 235, 205, 0.55);
-    box-shadow: none;
-    color: var(--bone);
+    @apply bg-transparent text-ink-mute;
   }
+  .lib-btn--ghost:hover:not(:disabled),
   .lib-btn--ghost-light:hover:not(:disabled) {
-    background: rgba(250, 235, 205, 0.12);
-    border-color: var(--bone);
-    box-shadow: none;
-    transform: none;
+    @apply bg-paper-soft text-ink;
   }
-
   .lib-btn--link {
-    padding: 0;
-    background: transparent;
-    border: 0;
-    box-shadow: none;
-    color: var(--ink);
-    text-decoration: underline;
-    text-decoration-thickness: 2px;
-    text-underline-offset: 4px;
-    text-transform: uppercase;
-    letter-spacing: 0.18em;
-    font-size: 0.7rem;
+    @apply bg-transparent px-1 text-ink-mute underline-offset-4;
   }
   .lib-btn--link:hover:not(:disabled) {
-    color: var(--oxblood);
-    transform: none;
-    box-shadow: none;
+    @apply bg-transparent text-ink underline;
   }
-
   .lib-btn--sm {
-    padding: 0.45rem 0.85rem;
-    font-size: 0.66rem;
+    @apply px-3 text-sm;
   }
   .lib-btn--lg {
-    padding: 0.95rem 1.75rem;
-    font-size: 0.85rem;
+    @apply px-6 py-3 text-base;
   }
   .lib-btn--block {
-    width: 100%;
+    @apply w-full;
   }
 }

@@ -42,7 +42,7 @@ export default async function AuthorsPage() {
                 <h2 className="lib-month-head__title">{group.author}</h2>
                 <span className="lib-meta">{group.books.length}</span>
               </header>
-              <ul className="grid grid-cols-1 gap-6 md:gap-8 md:grid-cols-2 xl:grid-cols-3">
+              <ul className="grid grid-cols-1 gap-x-12 gap-y-10 lg:grid-cols-2">
                 {group.books.map((b, idx) => (
                   <li key={b.id} className="lib-card">
                     <div className="lib-card__body">
@@ -59,12 +59,10 @@ export default async function AuthorsPage() {
                         <p className="lib-card__author" title={b.author}>
                           {b.author}
                         </p>
-                        <dl className="lib-card__grid">
-                          <dt>Pages</dt>
-                          <dd>{b.pages.toLocaleString()}</dd>
-                          <dt>Lang</dt>
-                          <dd>{languageName(b.language)}</dd>
-                        </dl>
+                        <p className="mt-3 text-sm text-ink-mute">
+                          {b.pages.toLocaleString()} pages ·{' '}
+                          {languageName(b.language)}
+                        </p>
                         <div className="mt-3">
                           <Badge variant="accent">{b.category}</Badge>
                         </div>

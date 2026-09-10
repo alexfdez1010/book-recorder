@@ -5,20 +5,21 @@
     position: relative;
     min-width: 0;
     background: var(--paper-soft);
-    border: var(--rule) solid var(--ink);
-    box-shadow: 3px 3px 0 0 var(--walnut);
+    border: 0;
+    border-radius: 8px;
+    box-shadow: none;
   }
   .lib-plate__head {
     padding: 0.5rem 0.85rem;
-    background: var(--paper);
-    border-block-end: 1px solid var(--ink);
+    background: transparent;
+    border: 0;
   }
   .lib-plate__label {
     /* same as kicker */
-    font-family: var(--font-mono);
-    font-size: 0.66rem;
-    letter-spacing: 0.28em;
-    text-transform: uppercase;
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    letter-spacing: 0;
+    text-transform: none;
     color: var(--ink-mute);
   }
   .lib-plate__body {
@@ -37,7 +38,7 @@
   }
   .lib-plate__value {
     font-family: var(--font-serif);
-    font-weight: 900;
+    font-weight: 500;
     font-size: clamp(1.75rem, 4vw, 2.75rem);
     line-height: 0.95;
     letter-spacing: -0.02em;
@@ -53,10 +54,10 @@
   .lib-plate__note {
     max-width: 100%;
     overflow-wrap: anywhere;
-    font-family: var(--font-mono);
-    font-size: 0.62rem;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    letter-spacing: 0;
+    text-transform: none;
     color: var(--ink-mute);
   }
 }

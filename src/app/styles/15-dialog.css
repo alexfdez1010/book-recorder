@@ -4,15 +4,16 @@
   .lib-dialog-overlay {
     position: fixed;
     inset: 0;
-    background: color-mix(in srgb, var(--ink) 70%, transparent);
+    background: color-mix(in srgb, var(--ink) 35%, transparent);
     backdrop-filter: blur(2px);
     z-index: 50;
   }
   .lib-dialog {
     width: 100%;
     background: var(--paper);
-    border: var(--rule) solid var(--ink);
-    box-shadow: var(--offset) var(--offset) 0 0 var(--walnut);
+    border: 0;
+    border-radius: 8px;
+    box-shadow: none;
   }
   .lib-dialog-container {
     width: min(44rem, calc(100% - 1rem));
@@ -27,8 +28,8 @@
     flex-direction: column;
     gap: 0.35rem;
     padding: 1rem 1.25rem;
-    background: var(--paper-soft);
-    border-block-end: 1px solid var(--ink);
+    background: transparent;
+    padding-inline-end: 3.5rem;
   }
   @media (min-width: 640px) {
     .lib-dialog__head {
@@ -37,7 +38,7 @@
   }
   .lib-dialog__title {
     font-family: var(--font-serif);
-    font-weight: 900;
+    font-weight: 500;
     font-size: 1.35rem;
     line-height: 1.1;
     letter-spacing: -0.01em;
@@ -48,10 +49,10 @@
     }
   }
   .lib-dialog__desc {
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    letter-spacing: 0;
+    text-transform: none;
     color: var(--ink-mute);
   }
   .lib-dialog__body {
@@ -70,8 +71,9 @@
     height: 2.25rem;
     display: grid;
     place-items: center;
-    border: var(--rule) solid var(--ink);
-    background: var(--paper-soft);
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
     color: var(--ink);
     cursor: pointer;
     transition:

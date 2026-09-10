@@ -4,34 +4,31 @@
   .lib-card {
     display: flex;
     flex-direction: column;
-    background: var(--paper-soft);
-    border: var(--rule) solid var(--ink);
-    box-shadow: 3px 3px 0 0 var(--walnut);
+    background: transparent;
+    border: 0;
+    box-shadow: none;
     transition:
       transform 120ms ease,
       box-shadow 120ms ease;
   }
-  .lib-card:hover {
-    transform: translate(-2px, -2px);
-    box-shadow: 5px 5px 0 0 var(--leather);
-  }
+
   .lib-card__call {
-    font-family: var(--font-mono);
-    font-size: 0.62rem;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    letter-spacing: 0;
+    text-transform: none;
     color: var(--ink-soft);
   }
   .lib-card__body {
     display: flex;
     flex: 1;
     gap: 1rem;
-    padding: 1rem;
+    padding: 0;
   }
   @media (min-width: 640px) {
     .lib-card__body {
       gap: 1.25rem;
-      padding: 1.25rem;
+      padding: 0;
     }
   }
   .lib-card__text {
@@ -43,19 +40,19 @@
   .lib-card__title {
     font-family: var(--font-serif);
     font-weight: 700;
-    font-size: 1.1rem;
-    line-height: 1.15;
+    font-size: 1.2rem;
+    line-height: 1.35;
     color: var(--ink);
     display: -webkit-box;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
-    min-height: calc(1.1rem * 1.15 * 3);
+    overflow-wrap: anywhere;
   }
   .lib-card__author {
     margin-block-start: 0.4rem;
-    font-family: var(--font-serif);
-    font-style: italic;
+    font-family: var(--font-sans);
+    font-style: normal;
     font-size: 0.9rem;
     color: var(--ink-soft);
     white-space: nowrap;
@@ -68,10 +65,10 @@
     display: grid;
     grid-template-columns: auto 1fr;
     gap: 0.25rem 1rem;
-    font-family: var(--font-mono);
-    font-size: 0.65rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    letter-spacing: 0;
+    text-transform: none;
   }
   .lib-card__grid dt {
     color: var(--ink-mute);
@@ -79,7 +76,7 @@
   .lib-card__grid dd {
     color: var(--ink);
     text-align: right;
-    font-family: var(--font-serif);
+    font-family: var(--font-sans);
     font-style: normal;
     font-size: 0.78rem;
     letter-spacing: 0;
@@ -93,17 +90,17 @@
     align-items: baseline;
     justify-content: flex-end;
     gap: 0.35rem 0.5rem;
-    font-size: 0.7rem;
-    line-height: 1.15;
+    font-size: 0.8rem;
+    line-height: 1.35;
   }
   .lib-card__dates > span {
     white-space: nowrap;
   }
   .lib-card__dates-tag {
-    font-family: var(--font-mono);
+    font-family: var(--font-sans);
     font-size: 0.6rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
+    letter-spacing: 0;
+    text-transform: none;
     color: var(--ink-mute);
   }
   .lib-card__dates-sep {
@@ -114,9 +111,9 @@
     align-items: center;
     justify-content: flex-end;
     gap: 1rem;
-    padding: 0.55rem 1rem;
-    background: var(--paper);
-    border-block-start: 1px solid var(--ink);
+    padding: 0.5rem 0 0;
+    flex-wrap: wrap;
+    background: transparent;
   }
 
   /* Cover frame */
@@ -126,9 +123,9 @@
     width: 5.5rem;
     flex-shrink: 0;
     overflow: hidden;
-    border: 1px solid var(--ink);
+    border-radius: 2px;
     background: var(--ink);
-    box-shadow: 2px 2px 0 0 var(--walnut);
+    box-shadow: none;
   }
   @media (min-width: 640px) {
     .lib-cover {
@@ -149,11 +146,11 @@
     justify-content: center;
     gap: 0.25rem;
     padding: 0 0.25rem;
-    font-family: var(--font-mono);
+    font-family: var(--font-sans);
     font-size: 0.55rem;
     text-align: center;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
+    letter-spacing: 0;
+    text-transform: none;
     color: var(--paper);
   }
   .lib-cover__placeholder span:first-child {
@@ -162,11 +159,7 @@
 
   /* Generated covers — hashed gradient when no artwork exists */
   .lib-cover--gen {
-    background: linear-gradient(
-      var(--gen-angle, 150deg),
-      var(--gen-a) 0%,
-      var(--gen-b) 100%
-    );
+    background: var(--gen-a);
     color: var(--bone);
     isolation: isolate;
   }

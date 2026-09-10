@@ -1,33 +1,22 @@
-/* ===========================================================================
-   OLD LIBRARY — design system (single source of truth)
-
-   Swap this file to reskin the app. Components use only semantic `.lib-*`
-   classes defined below plus layout utilities (flex/grid/spacing). No visual
-   decisions live in component files.
-
-   Palette & metaphor: reading room. Tanned parchment, espresso ink, mahogany
-   bindings, brass gilt, oxblood catalogue stamps, double-rule borders,
-   fleuron ornaments.
-=========================================================================== */
-
+/* Quiet reading room: warm paper, charcoal ink, restrained botanical accents. */
 :root {
   /* ---- Palette ------------------------------------------------------- */
-  --paper: #e4d4ad;
-  --paper-soft: #ecdfbe;
-  --paper-edge: #cdb886;
-  --bone: #f3e8c6;
+  --paper: #f8f7f3;
+  --paper-soft: #f0eee8;
+  --paper-edge: #dedbd2;
+  --bone: #fffefa;
 
-  --ink: #231608;
-  --ink-soft: #3a2614;
-  --ink-mute: #7a6340;
+  --ink: #292b26;
+  --ink-soft: #45483f;
+  --ink-mute: #6c6f64;
 
-  --leather: #5a2a17;
-  --walnut: #6b4423;
-  --chestnut: #8a5a2b;
+  --leather: #435044;
+  --walnut: #737b68;
+  --chestnut: #998d76;
 
-  --oxblood: #8a2318;
-  --brass: #b8832a;
-  --moss: #3d4a1f;
+  --oxblood: #804d43;
+  --brass: #a18a58;
+  --moss: #53684e;
 
   /* ---- Semantic roles ------------------------------------------------ */
   --background: var(--paper);
@@ -37,10 +26,10 @@
   --gilt: var(--brass);
 
   /* ---- Structure ----------------------------------------------------- */
-  --radius: 0px;
-  --rule: 2px;
-  --rule-double: 6px; /* for border-style: double */
-  --offset: 4px; /* hard-shadow depth cue */
+  --radius: 6px;
+  --rule: 1px;
+  --rule-double: 1px; /* for border-style: double */
+  --offset: 0px; /* hard-shadow depth cue */
   --measure: 72ch;
 
   /* Font aliases live outside @theme so semantic CSS can resolve them too. */
@@ -73,17 +62,15 @@
   --font-serif: var(--font-fraunces), 'Iowan Old Style', Georgia, serif;
   --font-mono: var(--font-jetbrains), ui-monospace, 'SFMono-Regular', monospace;
 
-  --radius: 0px;
+  --radius: 6px;
 }
 
 body {
   background: var(--paper);
   color: var(--ink);
-  font-family: var(--font-serif);
-  font-feature-settings:
-    'onum',
-    'lnum' 0,
-    'ss01';
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.6;
 }
 
 ::selection {
@@ -91,6 +78,16 @@ body {
   color: var(--paper);
 }
 
-/* ===========================================================================
-   Component layer — semantic `.lib-*` classes. Components compose these.
-=========================================================================== */
+:focus-visible {
+  outline: 2px solid var(--leather);
+  outline-offset: 4px;
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

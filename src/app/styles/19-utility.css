@@ -2,14 +2,14 @@
   /* ---- Utility ----------------------------------------------------- */
 
   .lib-linkish {
-    font-family: var(--font-mono);
-    font-size: 0.66rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    letter-spacing: 0;
+    text-transform: none;
     font-weight: 700;
     color: var(--ink);
     text-decoration: underline;
-    text-decoration-thickness: 2px;
+    text-decoration-thickness: 1px;
     text-underline-offset: 4px;
   }
   .lib-linkish:hover {
@@ -21,18 +21,19 @@
     padding: 3rem 1.5rem;
     text-align: center;
     background: var(--paper-soft);
-    border: var(--rule) solid var(--ink);
+    border: 0;
+    border-radius: 6px;
   }
   .lib-empty__title {
     font-family: var(--font-serif);
-    font-weight: 900;
+    font-weight: 500;
     font-size: clamp(1.35rem, 3vw, 2rem);
     color: var(--ink);
   }
 
   /* Row divider inside forms */
   .lib-row-rule {
-    border-block-start: 1px solid var(--ink);
+    border-block-start: 1px solid var(--paper-edge);
     padding-block-start: 1.25rem;
   }
 
@@ -52,7 +53,7 @@
     align-items: center;
     justify-content: space-between;
     padding: 0.5rem 0 0.75rem;
-    border-block-end: 1px dashed color-mix(in srgb, var(--ink) 40%, transparent);
+    border: 0;
   }
 
   /* Form layout helpers */
@@ -78,7 +79,7 @@
     justify-content: space-between;
     padding-block-start: 1.25rem;
     margin-block-start: 0.5rem;
-    border-block-start: 1px solid var(--ink);
+    border-block-start: 1px solid var(--paper-edge);
   }
 
   /* HeroUI selection controls */
@@ -106,8 +107,8 @@
     min-width: min(18rem, calc(100vw - 1rem));
     padding: 0.35rem;
     background: var(--bone);
-    border: var(--rule) solid var(--ink);
-    box-shadow: var(--offset) var(--offset) 0 0 var(--ink);
+    border: var(--rule) solid var(--paper-edge);
+    box-shadow: none;
     z-index: 60;
   }
   .lib-combobox__popover[data-entering='true'],

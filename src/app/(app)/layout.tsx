@@ -16,7 +16,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         <div className="lib-header__inner">
           <div className="lib-header__row">
             <Link href="/books" className="lib-wordmark lib-header__title">
-              BOOK<span className="lib-wordmark__dot">·</span>RECORDER
+              Book Recorder
             </Link>
             <LogoutButton />
           </div>
