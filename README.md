@@ -15,6 +15,7 @@ Type part of a title. The app searches **Open Library** and **Google Books** at 
 - Add a book with the date you finished it.
 - Browse your library grouped by month, with cover art and inline finish dates.
 - Edit anything that's wrong. Delete with a confirmation step so you don't lose entries by mistake.
+- To fill a missing cover on a saved book, open **Edit → Cover URL → Find cover by title**, choose a preview, then **Save**. The search uses the current Title field and selection changes only the cover URL; you can still paste a URL manually.
 - Save an optional personal opinion for each book in the add/edit form. Expand **Opinion** on a book card to read it. Opinions also work on queued books and the authors view.
 
 ### 📥 To-read pile
@@ -175,3 +176,5 @@ Developer-facing details (commands, architecture, conventions) live in [`AGENTS.
 ## 🪪 License
 
 [MIT](LICENSE) © Alejandro Fernández Camello. 📄
+
+Cover preview selection uses `selectBookCovers(candidates)` from `src/lib/books/covers.ts` to filter and deduplicate catalogue image URLs. For example, pass the results of `searchBooksAction(title)` to obtain `{ title, author, coverUrl }` previews.

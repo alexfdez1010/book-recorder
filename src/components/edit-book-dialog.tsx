@@ -7,6 +7,7 @@ import { LANGUAGE_KEYS, LANGUAGE_NAMES } from '@/lib/books/language';
 import { AuthorCombobox } from '@/components/author-combobox';
 import { CategoryCombobox } from '@/components/category-combobox';
 import { Field, SelectField } from '@/components/form-fields';
+import { CoverUrlField } from '@/components/cover-url-field';
 import { OpinionField } from '@/components/opinion-field';
 import { StarRating } from '@/components/star-rating';
 import { Button } from '@/components/ui/button';
@@ -137,12 +138,7 @@ export function EditBookDialog({
                 required
               />
             </div>
-            <Field
-              label="Cover URL"
-              name="coverUrl"
-              defaultValue={book.coverUrl ?? ''}
-              placeholder="https://…"
-            />
+            <CoverUrlField defaultValue={book.coverUrl} />
             {isFinished ? (
               <div className="lib-field">
                 <Label htmlFor={`rating-${book.id}`}>Rating</Label>
