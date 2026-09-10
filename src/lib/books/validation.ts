@@ -14,6 +14,21 @@ const ratingSchema = z.preprocess(
     .optional(),
 );
 
+/** Normalizes an optional opinion, treating blank input as absent. */
+export const opinionSchema = z.preprocess(
+  (value) =>
+    value === null ||
+    value === undefined ||
+    (typeof value === 'string' && value.trim() === '')
+      ? undefined
+      : value,
+  z
+    .string()
+    .trim()
+    .max(10_000, 'Opinion must be 10,000 characters or less')
+    .optional(),
+);
+
 export const newBookSchema = z
   .object({
     title: z.string().min(1, 'Title is required'),
@@ -36,6 +51,7 @@ export const newBookSchema = z
     externalId: z.string().optional().or(z.literal('')),
     source: z.enum(['openlibrary', 'googlebooks', 'manual']).optional(),
     rating: ratingSchema,
+    opinion: opinionSchema,
   })
   .refine(
     (d) => d.status !== 'finished' || (d.finishedOn && d.finishedOn !== ''),

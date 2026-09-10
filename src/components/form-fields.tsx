@@ -1,8 +1,10 @@
 'use client';
 
-import { Input, Select } from '@/components/ui/input';
+import { ListBox, Select } from '@heroui/react';
+import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
+/** Renders a labelled form input; native constraints validate submitted values. */
 export function Field({
   label,
   name,
@@ -39,6 +41,7 @@ export function Field({
   );
 }
 
+/** Renders a labelled required choice with its initial value and supplied options. */
 export function SelectField({
   label,
   name,
@@ -52,17 +55,33 @@ export function SelectField({
   options: ReadonlyArray<{ value: string; label: string }>;
   id?: string;
 }) {
-  const fieldId = id ?? name;
   return (
-    <div className="lib-field">
-      <Label htmlFor={fieldId}>{label}</Label>
-      <Select id={fieldId} name={name} defaultValue={defaultValue} required>
-        {options.map((o) => (
-          <option key={o.value} value={o.value}>
-            {o.label}
-          </option>
-        ))}
-      </Select>
-    </div>
+    <Select
+      className="lib-field"
+      defaultSelectedKey={defaultValue}
+      id={id}
+      isRequired
+      name={name}
+    >
+      <Label>{label}</Label>
+      <Select.Trigger className="lib-select">
+        <Select.Value />
+        <Select.Indicator />
+      </Select.Trigger>
+      <Select.Popover className="lib-select__popover">
+        <ListBox className="lib-select__list">
+          {options.map((option) => (
+            <ListBox.Item
+              key={option.value}
+              id={option.value}
+              textValue={option.label}
+            >
+              {option.label}
+              <ListBox.ItemIndicator />
+            </ListBox.Item>
+          ))}
+        </ListBox>
+      </Select.Popover>
+    </Select>
   );
 }

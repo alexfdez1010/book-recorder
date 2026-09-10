@@ -1,0 +1,10 @@
+@layer components {
+  /* ---- Footer ------------------------------------------------------- */
+
+  .lib-footer {
+    margin-inline: auto;
+    max-width: 72rem;
+    padding: 1rem 2rem 4rem;
+    color: var(--ink-mute);
+  }
+}

@@ -22,3 +22,15 @@ test('accepts correct password and lands on /books', async ({ page }) => {
   await expect(page).toHaveURL(/\/books$/);
   await expect(page.getByRole('heading', { name: 'Books' })).toBeVisible();
 });
+
+test('signs out and protects the library again', async ({ page }) => {
+  await page.goto('/login');
+  await page.getByLabel('Password').fill(PASSWORD);
+  await page.getByRole('button', { name: 'Unlock' }).click();
+  await expect(page).toHaveURL(/\/books$/);
+
+  await page.getByRole('button', { name: 'Sign out' }).click();
+  await expect(page).toHaveURL(/\/login$/);
+  await page.goto('/books');
+  await expect(page).toHaveURL(/\/login/);
+});

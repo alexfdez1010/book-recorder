@@ -32,7 +32,7 @@ You **MUST** strictly adhere to the following principles and workflow for **ALL*
 
 5. **Frontend Excellence with TailwindCSS 4:**
    - **Styling:** All frontend styling **MUST** utilize **TailwindCSS 4** following its utility-first best practices. Ensure class names are clean, logical, and maintainable.
-   - **Component Library:** Leverage the **shadcn UI library** (which uses TailwindCSS) for foundational UI components unless explicitly instructed otherwise. Components should be implemented following `shadcn UI`'s patterns.
+   - **Component Library:** Leverage **HeroUI v3** (built on TailwindCSS 4 and React Aria) for foundational UI components unless explicitly instructed otherwise. Follow HeroUI's compound component patterns and keep the library theme in the focused `src/app/styles/` files.
    - **UI/UX & Aesthetics:** Prioritize clean, intuitive, accessible, and aesthetically pleasing user interfaces. Adhere to established **UI/UX best practices**.
    - **Component Design:** Ensure all frontend components are **clean, highly reusable, performant,** accessible, and adhere strictly to React best practices (composition, state management, hooks, etc.).
 
@@ -138,7 +138,8 @@ Pre-commit gate (runs before allowing a commit): `bun run pre-commit` = `bun run
 
 - Prisma 6 + Postgres 16. **Port 5434** (not 5432) to avoid clashes. Compose files: `compose.yml` (dev), `compose-test.yml` (e2e).
 - Client is generated to `generated/prisma` (custom output, committed-ignored). Import via `src/lib/db/prisma.ts`.
-- Single `Book` model with indexes on `finishedOn` and `category`.
+- `Book` records include an optional `opinion` text field (up to 10,000 characters at the input boundary). Missing opinions stay null; legacy updates that omit the field preserve existing text. MCP exposes `set_opinion` to set or clear it.
+- `Book` indexes cover `finishedOn`, `category`, and `status`; categories also have their own model.
 
 ### Test pyramid
 
@@ -149,7 +150,7 @@ Pre-commit gate (runs before allowing a commit): `bun run pre-commit` = `bun run
 ## Project conventions
 
 - **200-line hard limit per source file** (test files exempted when justified). If a file grows past that, split by responsibility (SRP).
-- **TailwindCSS 4** utility-first. `shadcn` patterns for UI components.
+- **TailwindCSS 4** utility-first. `HeroUI v3` patterns for UI components.
 - SOLID is enforced in review. Depend on abstractions at module boundaries (adapters behind `BookCandidate`, stats functions taking plain `Book[]`).
 - TSDoc on exported functions/components; self-documenting code otherwise.
 - After any code change: assume `bun run lint-format` must pass. Tests are required for new logic.

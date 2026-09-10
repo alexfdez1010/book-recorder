@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
+/** Creates an authenticated session from the password; redirects to success or error. */
 async function loginAction(formData: FormData) {
   'use server';
   const password = String(formData.get('password') ?? '');
@@ -12,6 +13,7 @@ async function loginAction(formData: FormData) {
   redirect('/books');
 }
 
+/** Renders the accessible sign-in form and optional authentication error. */
 export default async function LoginPage({
   searchParams,
 }: {
@@ -19,7 +21,7 @@ export default async function LoginPage({
 }) {
   const { error } = await searchParams;
   return (
-    <main className="flex min-h-screen items-center justify-center p-4">
+    <main className="flex min-h-dvh items-center justify-center p-4">
       <form action={loginAction} className="lib-ticket">
         <div className="lib-ticket__head">
           <h1 className="lib-title">Book Recorder</h1>

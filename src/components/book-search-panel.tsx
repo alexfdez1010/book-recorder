@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 
+/** Searches external catalogues and lets the caller select or manually enter a book. */
 export function BookSearchPanel({
   onSelect,
   onManual,
@@ -22,6 +23,7 @@ export function BookSearchPanel({
   const [error, setError] = useState<string | null>(null);
   const [pending, start] = useTransition();
 
+  /** Queries the search action and displays empty or network error states. */
   function onSearch(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
@@ -38,14 +40,14 @@ export function BookSearchPanel({
 
   return (
     <div className="flex flex-col gap-6">
-      <form onSubmit={onSearch} className="flex gap-3">
+      <form onSubmit={onSearch} className="flex flex-col gap-3 sm:flex-row">
         <Input
           autoFocus
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Search title…"
           aria-label="Book title"
-          className="flex-1"
+          className="min-w-0 flex-1"
         />
         <Button
           type="submit"
@@ -57,7 +59,11 @@ export function BookSearchPanel({
         </Button>
       </form>
 
-      {error ? <p className="lib-field-error">✕ {error}</p> : null}
+      {error ? (
+        <p role="alert" className="lib-field-error">
+          ✕ {error}
+        </p>
+      ) : null}
 
       <div className="lib-stacks-head">
         <span className="lib-meta">

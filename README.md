@@ -15,6 +15,7 @@ Type part of a title. The app searches **Open Library** and **Google Books** at 
 - Add a book with the date you finished it.
 - Browse your library grouped by month, with cover art and inline finish dates.
 - Edit anything that's wrong. Delete with a confirmation step so you don't lose entries by mistake.
+- Save an optional personal opinion for each book in the add/edit form. Expand **Opinion** on a book card to read it. Opinions also work on queued books and the authors view.
 
 ### 📥 To-read pile
 
@@ -38,7 +39,7 @@ A whole reading dashboard:
 
 ### 🤖 Built-in AI agent access
 
-The app exposes its library through an **MCP server**, so any AI agent (Claude Code, Cursor, etc.) can search candidates, add books, mark to-read items finished, or pull your stats — same powers as the UI. Open the **/skill** page in the app, download the config, and your agent is wired up in two clicks.
+The app exposes its library through an **MCP server**, so any AI agent (Claude Code, Cursor, etc.) can search candidates, add books, read or update your opinions, mark to-read items finished, or pull your stats — same powers as the UI. Open the **/skill** page in the app, download the config, and your agent is wired up in two clicks.
 
 ### 🔐 Single-password gate
 
@@ -138,9 +139,36 @@ bun run lint-format           # ESLint + Prettier (run before committing)
 
 Your agent now has the same library tools as the UI — search, list, add, update, delete, stats, the lot.
 
+Opinions accept up to 10,000 characters. `get_book`, `list_books`, and
+`list_to_read_books` return the saved text (or `null`). Opinions are optional on
+`add_book` and `update_book`; omitting the field during an update preserves it.
+To change only that field,
+call `set_opinion` with the book id and text, or pass `null` to clear it:
+
+```ts
+await client.callTool({
+  name: 'set_opinion',
+  arguments: { id: 'book-id', opinion: 'A memorable, beautifully paced read.' },
+});
+```
+
 ## 🛠️ Under the hood
 
-Next.js 16 · React 19 · TypeScript · TailwindCSS 4 · Prisma 6 · PostgreSQL · Recharts · shadcn/ui · Bun.
+Next.js 16 · React 19 · TypeScript · TailwindCSS 4 · Prisma 6 · PostgreSQL · Recharts · [HeroUI v3](https://heroui.com/en/docs/react/getting-started/quick-start) · Bun.
+
+HeroUI supplies buttons, text controls, selects, searchable author/category pickers,
+chips, and modal dialogs. Small adapters under `src/components/ui` keep the visual
+library theme separate from book forms. Tailwind CSS 4 is imported before
+`@heroui/styles`, with the theme split by responsibility under `src/app/styles`.
+
+The opinion migration only adds a nullable text column; existing records retain
+all their metadata. A code rollback can leave this additive column in place.
+
+Responsive E2E coverage includes login, both shelves, authors, graphs, and MCP setup
+at 320, 390, and 1440 pixels, plus book forms and confirmation dialogs. The suite
+writes mobile/desktop screenshots to `test-results` and masks MCP credentials.
+Run `bun run test:e2e` against a disposable test database; it rebuilds the production
+app and recreates the test database before execution.
 
 Developer-facing details (commands, architecture, conventions) live in [`AGENTS.md`](AGENTS.md).
 

@@ -1,0 +1,43 @@
+@layer components {
+  /* ---- Panels (generic bordered container) ------------------------- */
+
+  .lib-panel {
+    min-width: 0;
+    background: var(--paper-soft);
+    border: var(--rule) solid var(--ink);
+    box-shadow: var(--offset) var(--offset) 0 0 var(--walnut);
+  }
+  .lib-panel__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.75rem 1rem;
+    background: var(--paper);
+    border-block-end: 1px solid var(--ink);
+  }
+  .lib-panel__eyebrow {
+    /* gilt small-caps */
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--binding);
+  }
+  .lib-panel__title {
+    font-family: var(--font-serif);
+    font-weight: 800;
+    font-size: 1.35rem;
+    line-height: 1;
+    letter-spacing: -0.005em;
+    color: var(--ink);
+  }
+  .lib-panel__body {
+    padding: 1rem;
+  }
+  @media (min-width: 640px) {
+    .lib-panel__body {
+      padding: 1.5rem;
+    }
+  }
+}

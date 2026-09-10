@@ -1,3 +1,4 @@
+import { BookOpinion } from '@/components/book-opinion';
 import { listAuthors, listBooks } from '@/lib/books/repository';
 import { listCategories } from '@/lib/books/categories-repository';
 import { languageName } from '@/lib/books/language';
@@ -16,6 +17,7 @@ const MONTH_FORMAT = new Intl.DateTimeFormat('en-US', {
   timeZone: 'UTC',
 });
 
+/** Returns a UTC month key so books group consistently across time zones. */
 function monthKey(d: Date): string {
   const date = new Date(d);
   const y = date.getUTCFullYear();
@@ -23,6 +25,7 @@ function monthKey(d: Date): string {
   return `${y}-${m}`;
 }
 
+/** Loads the library data and renders the responsive catalogue view. */
 export default async function BooksPage() {
   const [books, authors, categories] = await Promise.all([
     listBooks(),
@@ -106,6 +109,7 @@ export default async function BooksPage() {
                       </div>
                     </div>
 
+                    <BookOpinion opinion={b.opinion} />
                     <div className="lib-card__foot">
                       <EditBookDialog
                         book={b}

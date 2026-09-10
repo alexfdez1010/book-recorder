@@ -27,8 +27,16 @@ export const bookFields = {
     .multipleOf(0.5)
     .optional()
     .describe('Optional 0.5–5 rating in half-star steps'),
+  opinion: z
+    .string()
+    .trim()
+    .max(10_000)
+    .nullable()
+    .optional()
+    .describe("Optional reader's opinion, up to 10,000 characters"),
 };
 
+/** Serialize a successful tool result as MCP text content. */
 export function ok(value: unknown) {
   return {
     content: [{ type: 'text' as const, text: JSON.stringify(value, null, 2) }],

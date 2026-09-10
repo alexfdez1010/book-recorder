@@ -1,0 +1,59 @@
+@layer components {
+  /* ---- Form controls ------------------------------------------------ */
+
+  .lib-label {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  .lib-input,
+  .lib-select {
+    width: 100%;
+    padding: 0.55rem 0.75rem;
+    background: var(--bone);
+    border: var(--rule) solid var(--ink);
+    color: var(--ink);
+    font-family: var(--font-serif);
+    font-size: 1rem;
+    line-height: 1.3;
+    transition: background-color 120ms ease;
+  }
+  .lib-input::placeholder,
+  .lib-select::placeholder {
+    color: var(--ink-mute);
+    font-style: italic;
+  }
+  .lib-input:focus,
+  .lib-select:focus {
+    outline: none;
+    background: var(--paper);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--brass) 55%, transparent);
+  }
+  .lib-input:disabled,
+  .lib-select:disabled {
+    opacity: 0.5;
+  }
+
+  .lib-select {
+    appearance: none;
+    background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='%23231608' d='M4 6l4 4 4-4'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 14px 14px;
+    padding-inline-end: 2.25rem;
+  }
+
+  .lib-field-error {
+    padding: 0.5rem 0.75rem;
+    border: var(--rule) solid var(--oxblood);
+    background: var(--paper);
+    color: var(--oxblood);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+}

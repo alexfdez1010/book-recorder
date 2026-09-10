@@ -1,48 +1,99 @@
+'use client';
+
 import * as React from 'react';
-import { Slot } from '@radix-ui/react-slot';
-import { cva, type VariantProps } from 'class-variance-authority';
+import { Button as HeroButton } from '@heroui/react';
 import { cn } from '@/lib/utils';
 
-const buttonVariants = cva('lib-btn', {
-  variants: {
-    variant: {
-      default: '',
-      primary: 'lib-btn--primary',
-      accent: 'lib-btn--accent',
-      destructive: 'lib-btn--destructive',
-      ghost: 'lib-btn--ghost',
-      'ghost-light': 'lib-btn--ghost-light',
-      link: 'lib-btn--link',
-    },
-    size: {
-      sm: 'lib-btn--sm',
-      md: '',
-      lg: 'lib-btn--lg',
-      block: 'lib-btn--block',
-    },
-  },
-  defaultVariants: { variant: 'primary', size: 'md' },
-});
+type ButtonVariant =
+  | 'default'
+  | 'primary'
+  | 'accent'
+  | 'destructive'
+  | 'ghost'
+  | 'ghost-light'
+  | 'link';
+type ButtonSize = 'sm' | 'md' | 'lg' | 'block';
 
-export interface ButtonProps
-  extends
-    React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {
+const variantClasses: Record<ButtonVariant, string> = {
+  default: '',
+  primary: 'lib-btn--primary',
+  accent: 'lib-btn--accent',
+  destructive: 'lib-btn--destructive',
+  ghost: 'lib-btn--ghost',
+  'ghost-light': 'lib-btn--ghost-light',
+  link: 'lib-btn--link',
+};
+const sizeClasses: Record<ButtonSize, string> = {
+  sm: 'lib-btn--sm',
+  md: '',
+  lg: 'lib-btn--lg',
+  block: 'lib-btn--block',
+};
+
+export interface ButtonProps extends Omit<
+  React.ComponentProps<typeof HeroButton>,
+  'isDisabled' | 'size' | 'variant'
+> {
   asChild?: boolean;
+  disabled?: boolean;
+  size?: ButtonSize;
+  variant?: ButtonVariant;
 }
 
+/** Renders the library button skin on HeroUI's accessible button primitive. */
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
-    const Comp = asChild ? Slot : 'button';
+  (
+    {
+      asChild = false,
+      children,
+      className,
+      disabled,
+      size = 'md',
+      variant = 'primary',
+      ...props
+    },
+    ref,
+  ) => {
+    const classes = cn(
+      'lib-btn',
+      variantClasses[variant],
+      sizeClasses[size],
+      className,
+    );
+    if (asChild && React.isValidElement(children)) {
+      const child = children as React.ReactElement<{ className?: string }>;
+      return React.cloneElement(child, {
+        className: cn(classes, child.props.className),
+      });
+    }
     return (
-      <Comp
+      <HeroButton
         ref={ref}
-        className={cn(buttonVariants({ variant, size }), className)}
+        className={classes}
+        isDisabled={disabled}
         {...props}
-      />
+      >
+        {children}
+      </HeroButton>
     );
   },
 );
 Button.displayName = 'Button';
 
-export { buttonVariants };
+/** Returns the semantic class names for a button variant and size. */
+export function buttonVariants({
+  className,
+  size = 'md',
+  variant = 'primary',
+}: {
+  className?: string;
+  size?: ButtonSize | null;
+  variant?: ButtonVariant | null;
+} = {}): string {
+  return cn(
+    'lib-btn',
+    variantClasses[variant ?? 'primary'],
+    sizeClasses[size ?? 'md'],
+    className,
+  );
+}

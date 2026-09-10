@@ -8,14 +8,17 @@ import type { BookStatus } from '@/lib/books/status';
 import { AuthorCombobox } from '@/components/author-combobox';
 import { CategoryCombobox } from '@/components/category-combobox';
 import { Field, SelectField } from '@/components/form-fields';
+import { OpinionField } from '@/components/opinion-field';
 import { StarRating } from '@/components/star-rating';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 
+/** Returns today as a UTC date for the default completion field. */
 function today(): string {
   return new Date().toISOString().slice(0, 10);
 }
 
+/** Renders book creation fields; submits through the server action and reports errors. */
 export function AddBookForm({
   candidate,
   authors,
@@ -37,6 +40,7 @@ export function AddBookForm({
   const [error, setError] = useState<string | null>(null);
   const [pending, start] = useTransition();
 
+  /** Saves submitted book fields; closes only after successful persistence. */
   function submit(formData: FormData) {
     setError(null);
     start(async () => {
@@ -131,6 +135,8 @@ export function AddBookForm({
           <StarRating name="rating" defaultValue={null} />
         </div>
       ) : null}
+
+      <OpinionField />
 
       {error ? (
         <p role="alert" className="lib-field-error">

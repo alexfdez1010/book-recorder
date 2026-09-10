@@ -23,11 +23,18 @@ describe('skill markdown', () => {
     for (const tool of [
       'search_books',
       'add_book',
+      'add_to_read_book',
       'list_books',
+      'list_to_read_books',
       'list_books_by_author',
+      'list_categories',
       'list_authors',
       'get_book',
       'update_book',
+      'set_opinion',
+      'set_rating',
+      'add_category',
+      'mark_as_finished',
       'delete_book',
       'get_stats',
     ]) {

@@ -27,6 +27,7 @@ model Book {
   status          String    @default("finished")
   finishedOn      DateTime?
   rating          Float?
+  opinion         String?
   externalId      String?
   source          String?
   createdAt       DateTime  @default(now())

@@ -16,8 +16,14 @@ export interface NewBookInput {
   externalId: string | null;
   source: string | null;
   rating: number | null;
+  opinion?: string | null;
 }
 
+/**
+ * Persist a new book.
+ * @param input - Normalized metadata; an omitted opinion uses the database null default.
+ * @returns The created database record.
+ */
 export async function createBook(input: NewBookInput): Promise<Book> {
   return prisma.book.create({ data: input });
 }
@@ -57,6 +63,12 @@ export async function deleteBook(id: string): Promise<void> {
 
 export type UpdateBookInput = Omit<NewBookInput, 'externalId' | 'source'>;
 
+/**
+ * Replace editable book metadata.
+ * @param id - Database id of the book to update.
+ * @param input - Normalized fields; omitted optional fields remain unchanged.
+ * @returns The updated database record.
+ */
 export async function updateBook(
   id: string,
   input: UpdateBookInput,
@@ -84,4 +96,17 @@ export async function setBookRating(
   rating: number | null,
 ): Promise<Book> {
   return prisma.book.update({ where: { id }, data: { rating } });
+}
+
+/**
+ * Set or clear the reader's opinion for one book.
+ * @param id - Database id of the book to update.
+ * @param opinion - Normalized opinion text, or null to clear it.
+ * @returns The updated database record.
+ */
+export async function setBookOpinion(
+  id: string,
+  opinion: string | null,
+): Promise<Book> {
+  return prisma.book.update({ where: { id }, data: { opinion } });
 }

@@ -27,16 +27,16 @@ export const metadata: Metadata = {
   description: 'A library ledger of volumes finished.',
 };
 
+/** Provides document metadata and root-scoped font variables for the shared theme. */
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${fraunces.variable} ${grotesk.variable} ${jetbrains.variable} antialiased`}
-      >
-        {children}
-      </body>
+    <html
+      lang="en"
+      className={`${fraunces.variable} ${grotesk.variable} ${jetbrains.variable}`}
+    >
+      <body className="antialiased">{children}</body>
     </html>
   );
 }

@@ -1,0 +1,55 @@
+@layer components {
+  /* ---- Star rating -------------------------------------------------- */
+
+  .lib-rating {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.1rem;
+    flex: 0 0 auto;
+    color: var(--ink-mute);
+    line-height: 1;
+  }
+  .lib-rating__star {
+    position: relative;
+    display: inline-flex;
+    line-height: 0;
+  }
+  .lib-rating__icon {
+    position: relative;
+    display: inline-flex;
+  }
+  .lib-rating__base {
+    color: var(--ink-mute);
+  }
+  .lib-rating__fill {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    overflow: hidden;
+    color: var(--brass);
+  }
+  .lib-rating__hit {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 50%;
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+  }
+  .lib-rating__hit--l {
+    left: 0;
+  }
+  .lib-rating__hit--r {
+    right: 0;
+  }
+  .lib-rating__hit:focus-visible {
+    outline: 2px solid var(--oxblood);
+    outline-offset: 2px;
+  }
+  .lib-rating__hit--ro {
+    cursor: default;
+  }
+}

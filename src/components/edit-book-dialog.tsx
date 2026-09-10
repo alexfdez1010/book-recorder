@@ -7,6 +7,7 @@ import { LANGUAGE_KEYS, LANGUAGE_NAMES } from '@/lib/books/language';
 import { AuthorCombobox } from '@/components/author-combobox';
 import { CategoryCombobox } from '@/components/category-combobox';
 import { Field, SelectField } from '@/components/form-fields';
+import { OpinionField } from '@/components/opinion-field';
 import { StarRating } from '@/components/star-rating';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
@@ -16,7 +17,6 @@ import {
   DialogHeader,
   DialogBody,
   DialogTitle,
-  DialogTrigger,
 } from '@/components/ui/dialog';
 
 type BookLike = {
@@ -31,12 +31,15 @@ type BookLike = {
   status: string;
   finishedOn: Date | null;
   rating: number | null;
+  opinion: string | null;
 };
 
+/** Formats nullable dates for native date inputs; null produces an empty field. */
 function dateInput(d: Date | null): string {
   return d ? new Date(d).toISOString().slice(0, 10) : '';
 }
 
+/** Edits a persisted book; failed saves stay open with an accessible error. */
 export function EditBookDialog({
   book,
   authors,
@@ -51,6 +54,7 @@ export function EditBookDialog({
   const [pending, start] = useTransition();
   const isFinished = book.status === 'finished';
 
+  /** Persists form values and closes the dialog only on success. */
   function submit(formData: FormData) {
     setError(null);
     start(async () => {
@@ -62,12 +66,10 @@ export function EditBookDialog({
 
   return (
     <Dialog open={open} onOpenChange={(o) => !pending && setOpen(o)}>
-      <DialogTrigger asChild>
-        <button className="lib-amend" type="button">
-          <Pencil className="h-3 w-3" strokeWidth={2.5} />
-          Edit
-        </button>
-      </DialogTrigger>
+      <Button variant="link" className="lib-amend" type="button">
+        <Pencil className="h-3 w-3" strokeWidth={2.5} />
+        Edit
+      </Button>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Edit book</DialogTitle>
@@ -147,6 +149,7 @@ export function EditBookDialog({
                 <StarRating name="rating" defaultValue={book.rating ?? null} />
               </div>
             ) : null}
+            <OpinionField defaultValue={book.opinion} />
             {error ? (
               <p role="alert" className="lib-field-error">
                 ✕ {error}

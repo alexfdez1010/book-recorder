@@ -1,0 +1,35 @@
+@layer components {
+  /* ---- Badges ------------------------------------------------------- */
+
+  .lib-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.15rem 0.55rem;
+    border: 1.5px solid var(--ink);
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+  .lib-badge--accent {
+    border-color: var(--oxblood);
+    color: var(--oxblood);
+  }
+  .lib-badge--gilt {
+    border-color: var(--brass);
+    color: var(--leather);
+  }
+  .lib-badge--moss {
+    border-color: var(--moss);
+    color: var(--moss);
+  }
+  .lib-badge--solid {
+    background: var(--ink);
+    color: var(--paper);
+    border-color: var(--ink);
+  }
+}

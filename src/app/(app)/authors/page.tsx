@@ -1,3 +1,4 @@
+import { BookOpinion } from '@/components/book-opinion';
 import { listAuthors, listBooks } from '@/lib/books/repository';
 import { listCategories } from '@/lib/books/categories-repository';
 import { languageName } from '@/lib/books/language';
@@ -9,6 +10,7 @@ import { Badge } from '@/components/ui/badge';
 
 export const dynamic = 'force-dynamic';
 
+/** Loads the library data and renders the responsive catalogue view. */
 export default async function AuthorsPage() {
   const [books, authors, categories] = await Promise.all([
     listBooks(),
@@ -68,6 +70,7 @@ export default async function AuthorsPage() {
                         </div>
                       </div>
                     </div>
+                    <BookOpinion opinion={b.opinion} />
                     <div className="lib-card__foot">
                       <EditBookDialog
                         book={b}

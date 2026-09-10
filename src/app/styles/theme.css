@@ -1,0 +1,96 @@
+/* ===========================================================================
+   OLD LIBRARY — design system (single source of truth)
+
+   Swap this file to reskin the app. Components use only semantic `.lib-*`
+   classes defined below plus layout utilities (flex/grid/spacing). No visual
+   decisions live in component files.
+
+   Palette & metaphor: reading room. Tanned parchment, espresso ink, mahogany
+   bindings, brass gilt, oxblood catalogue stamps, double-rule borders,
+   fleuron ornaments.
+=========================================================================== */
+
+:root {
+  /* ---- Palette ------------------------------------------------------- */
+  --paper: #e4d4ad;
+  --paper-soft: #ecdfbe;
+  --paper-edge: #cdb886;
+  --bone: #f3e8c6;
+
+  --ink: #231608;
+  --ink-soft: #3a2614;
+  --ink-mute: #7a6340;
+
+  --leather: #5a2a17;
+  --walnut: #6b4423;
+  --chestnut: #8a5a2b;
+
+  --oxblood: #8a2318;
+  --brass: #b8832a;
+  --moss: #3d4a1f;
+
+  /* ---- Semantic roles ------------------------------------------------ */
+  --background: var(--paper);
+  --foreground: var(--ink);
+  --binding: var(--leather);
+  --accent: var(--oxblood);
+  --gilt: var(--brass);
+
+  /* ---- Structure ----------------------------------------------------- */
+  --radius: 0px;
+  --rule: 2px;
+  --rule-double: 6px; /* for border-style: double */
+  --offset: 4px; /* hard-shadow depth cue */
+  --measure: 72ch;
+
+  /* Font aliases live outside @theme so semantic CSS can resolve them too. */
+  --font-sans: var(--font-grotesk), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-fraunces), 'Iowan Old Style', Georgia, serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, 'SFMono-Regular', monospace;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-paper: var(--paper);
+  --color-paper-soft: var(--paper-soft);
+  --color-paper-edge: var(--paper-edge);
+  --color-bone: var(--bone);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-ink-mute: var(--ink-mute);
+  --color-leather: var(--leather);
+  --color-walnut: var(--walnut);
+  --color-chestnut: var(--chestnut);
+  --color-oxblood: var(--oxblood);
+  --color-brass: var(--brass);
+  --color-moss: var(--moss);
+  /* historic aliases */
+  --color-blood: var(--oxblood);
+  --color-ochre: var(--brass);
+
+  --font-sans: var(--font-grotesk), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-fraunces), 'Iowan Old Style', Georgia, serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, 'SFMono-Regular', monospace;
+
+  --radius: 0px;
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-serif);
+  font-feature-settings:
+    'onum',
+    'lnum' 0,
+    'ss01';
+}
+
+::selection {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+/* ===========================================================================
+   Component layer — semantic `.lib-*` classes. Components compose these.
+=========================================================================== */

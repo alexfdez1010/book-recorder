@@ -11,14 +11,14 @@ import {
   DialogBody,
   DialogTitle,
   DialogDescription,
-  DialogClose,
-  DialogTrigger,
 } from '@/components/ui/dialog';
 
+/** Confirms deletion for the supplied book; disables controls while saving. */
 export function DeleteBookButton({ id, title }: { id: string; title: string }) {
   const [open, setOpen] = useState(false);
   const [pending, start] = useTransition();
 
+  /** Deletes the selected book and closes the confirmation after success. */
   function confirm() {
     start(async () => {
       await deleteBookAction(id);
@@ -28,12 +28,15 @@ export function DeleteBookButton({ id, title }: { id: string; title: string }) {
 
   return (
     <Dialog open={open} onOpenChange={(o) => !pending && setOpen(o)}>
-      <DialogTrigger asChild>
-        <button className="lib-strike" type="button" disabled={pending}>
-          <Trash2 className="h-3 w-3" strokeWidth={2.5} />
-          {pending ? '…' : 'Delete'}
-        </button>
-      </DialogTrigger>
+      <Button
+        variant="link"
+        className="lib-strike"
+        type="button"
+        disabled={pending}
+      >
+        <Trash2 className="h-3 w-3" strokeWidth={2.5} />
+        {pending ? '…' : 'Delete'}
+      </Button>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Delete book?</DialogTitle>
@@ -41,11 +44,14 @@ export function DeleteBookButton({ id, title }: { id: string; title: string }) {
         </DialogHeader>
         <DialogBody>
           <div className="flex justify-end gap-3">
-            <DialogClose asChild>
-              <Button variant="ghost" type="button" disabled={pending}>
-                Cancel
-              </Button>
-            </DialogClose>
+            <Button
+              variant="ghost"
+              type="button"
+              disabled={pending}
+              onClick={() => setOpen(false)}
+            >
+              Cancel
+            </Button>
             <Button
               variant="primary"
               type="button"

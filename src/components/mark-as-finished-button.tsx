@@ -14,14 +14,14 @@ import {
   DialogBody,
   DialogTitle,
   DialogDescription,
-  DialogClose,
-  DialogTrigger,
 } from '@/components/ui/dialog';
 
+/** Returns the UTC date used as the default completion date. */
 function today(): string {
   return new Date().toISOString().slice(0, 10);
 }
 
+/** Moves a queued book to the finished shelf after confirming date and rating. */
 export function MarkAsFinishedButton({
   id,
   title,
@@ -35,6 +35,7 @@ export function MarkAsFinishedButton({
   const [error, setError] = useState<string | null>(null);
   const [pending, start] = useTransition();
 
+  /** Persists completion, resetting fields on success or showing validation errors. */
   function confirm() {
     setError(null);
     start(async () => {
@@ -57,12 +58,15 @@ export function MarkAsFinishedButton({
         if (!o) setError(null);
       }}
     >
-      <DialogTrigger asChild>
-        <button className="lib-amend" type="button" disabled={pending}>
-          <BookCheck className="h-3 w-3" strokeWidth={2.5} />
-          {pending ? '…' : 'Mark finished'}
-        </button>
-      </DialogTrigger>
+      <Button
+        variant="link"
+        className="lib-amend"
+        type="button"
+        disabled={pending}
+      >
+        <BookCheck className="h-3 w-3" strokeWidth={2.5} />
+        {pending ? '…' : 'Mark finished'}
+      </Button>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Mark as finished</DialogTitle>
@@ -92,11 +96,14 @@ export function MarkAsFinishedButton({
               </p>
             ) : null}
             <div className="flex justify-end gap-3">
-              <DialogClose asChild>
-                <Button variant="ghost" type="button" disabled={pending}>
-                  Cancel
-                </Button>
-              </DialogClose>
+              <Button
+                variant="ghost"
+                type="button"
+                disabled={pending}
+                onClick={() => setOpen(false)}
+              >
+                Cancel
+              </Button>
               <Button
                 variant="primary"
                 type="button"

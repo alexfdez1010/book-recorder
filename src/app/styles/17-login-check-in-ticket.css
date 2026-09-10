@@ -1,0 +1,23 @@
+@layer components {
+  /* ---- Login (check-in ticket) ------------------------------------- */
+
+  .lib-ticket {
+    width: 100%;
+    max-width: 26rem;
+    background: var(--paper-soft);
+    border: var(--rule) solid var(--ink);
+    box-shadow: var(--offset) var(--offset) 0 0 var(--walnut);
+    position: relative;
+  }
+  .lib-ticket__head {
+    padding: 1.5rem 1.5rem 1.25rem;
+    background: var(--paper);
+    border-block-end: 1px solid var(--ink);
+  }
+  .lib-ticket__body {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+}

@@ -3,15 +3,13 @@ import { z } from 'zod';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import {
   createBook,
-  deleteBook,
   markBookAsFinished,
-  setBookRating,
   updateBook,
 } from '@/lib/books/repository';
-import { createCategory } from '@/lib/books/categories-repository';
 import { newBookSchema } from '@/lib/books/validation';
 import { bookFields, ok } from './shared';
 
+/** Register create, full-update, and reading-status MCP commands. */
 export function registerMutationTools(server: McpServer): void {
   server.registerTool(
     'add_book',
@@ -40,6 +38,7 @@ export function registerMutationTools(server: McpServer): void {
         externalId: parsed.externalId ? parsed.externalId : null,
         source: parsed.source ?? 'manual',
         rating: parsed.rating ?? null,
+        opinion: parsed.opinion ?? null,
       });
       return ok(created);
     },
@@ -70,6 +69,7 @@ export function registerMutationTools(server: McpServer): void {
         externalId: parsed.externalId ? parsed.externalId : null,
         source: parsed.source ?? 'manual',
         rating: parsed.rating ?? null,
+        opinion: parsed.opinion ?? null,
       });
       return ok(created);
     },
@@ -100,6 +100,9 @@ export function registerMutationTools(server: McpServer): void {
         finishedOn:
           isFinished && parsed.finishedOn ? new Date(parsed.finishedOn) : null,
         rating: parsed.rating ?? null,
+        ...(Object.hasOwn(rest, 'opinion')
+          ? { opinion: parsed.opinion ?? null }
+          : {}),
       });
       return ok(updated);
     },
@@ -124,47 +127,6 @@ export function registerMutationTools(server: McpServer): void {
         rating ?? null,
       );
       return ok(updated);
-    },
-  );
-
-  server.registerTool(
-    'set_rating',
-    {
-      title: 'Set or clear a book rating',
-      description:
-        'Set the 0.5–5 star rating (half-star steps) for a book by id. Pass `rating: null` to clear it.',
-      inputSchema: {
-        id: z.string().min(1),
-        rating: z.union([z.number().min(0.5).max(5).multipleOf(0.5), z.null()]),
-      },
-    },
-    async ({ id, rating }) => {
-      const updated = await setBookRating(id, rating);
-      return ok(updated);
-    },
-  );
-
-  server.registerTool(
-    'add_category',
-    {
-      title: 'Create a category',
-      description:
-        'Register a new category so it appears in the picker. Idempotent: returns the existing name if one already exists (case-insensitive).',
-      inputSchema: { name: z.string().min(1) },
-    },
-    async ({ name }) => ok({ name: await createCategory(name) }),
-  );
-
-  server.registerTool(
-    'delete_book',
-    {
-      title: 'Delete a book',
-      description: 'Permanently delete a book record by id.',
-      inputSchema: { id: z.string().min(1) },
-    },
-    async ({ id }) => {
-      await deleteBook(id);
-      return ok({ deleted: id });
     },
   );
 }

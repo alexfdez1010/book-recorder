@@ -9,7 +9,7 @@ loadEnv();
 const PASSWORD = process.env.PASSWORD ?? 'dev-password';
 const SECRET = process.env.AUTH_SECRET ?? 'dev-secret';
 
-const MCP_URL = 'http://localhost:3000/api/mcp/mcp';
+const MCP_URL = process.env.MCP_URL ?? 'http://localhost:3000/api/mcp/mcp';
 
 const TOKEN = createHash('sha256')
   .update(`${PASSWORD}::${SECRET}`)
@@ -19,12 +19,16 @@ const TOOL_NAMES = [
   'search_books',
   'list_books',
   'list_to_read_books',
+  'list_categories',
   'list_authors',
   'list_books_by_author',
   'get_book',
   'add_book',
   'add_to_read_book',
   'update_book',
+  'set_opinion',
+  'set_rating',
+  'add_category',
   'mark_as_finished',
   'delete_book',
   'get_stats',
@@ -39,11 +43,15 @@ async function connect(token = TOKEN) {
   return { client, transport };
 }
 
-function parseToolJson<T>(result: {
-  content: Array<{ type: string; text?: string }>;
-}): T {
-  const text = result.content.find((c) => c.type === 'text')?.text;
+function parseToolJson<T>(result: unknown): T {
+  const toolResult = result as {
+    content?: Array<{ type: string; text?: string }>;
+    isError?: boolean;
+  };
+  const content = toolResult.content;
+  const text = content?.find((c) => c.type === 'text')?.text;
   expect(text, 'tool returned no text content').toBeTruthy();
+  expect(toolResult.isError, text).not.toBe(true);
   return JSON.parse(text!) as T;
 }
 
@@ -85,7 +93,7 @@ test('exposes the full tool catalog via tools/list', async () => {
   }
 });
 
-test('add_book → list_books_by_author → delete_book happy path', async () => {
+test('add_book → set_opinion → list_books_by_author → delete_book', async () => {
   const { client, transport } = await connect();
   const finishedOn = new Date().toISOString().slice(0, 10);
   const title = `MCP E2E Book ${Date.now()}`;
@@ -109,10 +117,38 @@ test('add_book → list_books_by_author → delete_book happy path', async () =>
     expect(added.id).toBeTruthy();
     expect(added.title).toBe(title);
 
+    const opinion = 'A concise opinion recorded through MCP.';
+    const updated = parseToolJson<{ id: string; opinion: string | null }>(
+      await client.callTool({
+        name: 'set_opinion',
+        arguments: { id: added.id, opinion },
+      }),
+    );
+    expect(updated.opinion).toBe(opinion);
+
+    const metadataUpdate = parseToolJson<{
+      id: string;
+      opinion: string | null;
+    }>(
+      await client.callTool({
+        name: 'update_book',
+        arguments: {
+          id: added.id,
+          title,
+          author,
+          pages: 322,
+          category: 'Other',
+          language: 'en',
+          finishedOn,
+        },
+      }),
+    );
+    expect(metadataUpdate.opinion).toBe(opinion);
+
     const byAuthor = parseToolJson<{
       author: string;
       count: number;
-      books: Array<{ id: string; title: string }>;
+      books: Array<{ id: string; title: string; opinion: string | null }>;
     }>(
       await client.callTool({
         name: 'list_books_by_author',
@@ -121,8 +157,18 @@ test('add_book → list_books_by_author → delete_book happy path', async () =>
     );
     expect(byAuthor.count).toBeGreaterThanOrEqual(1);
     expect(
-      byAuthor.books.some((b) => b.id === added.id && b.title === title),
+      byAuthor.books.some(
+        (b) => b.id === added.id && b.title === title && b.opinion === opinion,
+      ),
     ).toBe(true);
+
+    const cleared = parseToolJson<{ opinion: string | null }>(
+      await client.callTool({
+        name: 'set_opinion',
+        arguments: { id: added.id, opinion: null },
+      }),
+    );
+    expect(cleared.opinion).toBeNull();
 
     const deleted = parseToolJson<{ deleted: string }>(
       await client.callTool({

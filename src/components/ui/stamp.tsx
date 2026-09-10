@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { cn } from '@/lib/utils';
 
+/** Renders a compact catalogue-style status mark. */
 export function Stamp({
   className,
   variant = 'accent',
@@ -18,6 +19,7 @@ export function Stamp({
   );
 }
 
+/** Renders a decorative, screen-reader-hidden section separator. */
 export function Rule({
   ornament = '❦',
   className,

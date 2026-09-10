@@ -1,0 +1,41 @@
+@layer components {
+  /* ---- Search results list ----------------------------------------- */
+
+  .lib-result {
+    display: flex;
+    gap: 1rem;
+    width: 100%;
+    padding: 0.85rem;
+    text-align: start;
+    background: var(--bone);
+    border: var(--rule) solid var(--ink);
+    box-shadow: 2px 2px 0 0 var(--walnut);
+    transition:
+      transform 100ms ease,
+      box-shadow 100ms ease;
+    cursor: pointer;
+  }
+  .lib-result:hover {
+    transform: translate(-1px, -1px);
+    box-shadow: 3px 3px 0 0 var(--ink);
+  }
+  .lib-result__title {
+    font-family: var(--font-serif);
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: 1.2;
+    color: var(--ink);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .lib-result__author {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}

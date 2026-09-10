@@ -1,0 +1,65 @@
+@layer components {
+  /* ---- Typography helpers ------------------------------------------- */
+
+  .lib-serif {
+    font-family: var(--font-serif);
+  }
+  .lib-sans {
+    font-family: var(--font-sans);
+  }
+  .lib-mono {
+    font-family: var(--font-mono);
+  }
+
+  .lib-kicker {
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+  }
+
+  .lib-subtitle {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  .lib-meta {
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+  }
+
+  .lib-title {
+    font-family: var(--font-serif);
+    font-weight: 900;
+    line-height: 0.95;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    font-size: clamp(1.75rem, 4vw, 2.75rem);
+    font-variation-settings:
+      'opsz' 144,
+      'SOFT' 0;
+  }
+
+  .lib-title--xl {
+    font-size: clamp(2.25rem, 5vw, 3.5rem);
+  }
+
+  .lib-wordmark {
+    font-family: var(--font-serif);
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    line-height: 0.85;
+    font-variation-settings: 'opsz' 144;
+  }
+  .lib-wordmark__dot {
+    color: var(--oxblood);
+    padding-inline: 0.1em;
+  }
+}

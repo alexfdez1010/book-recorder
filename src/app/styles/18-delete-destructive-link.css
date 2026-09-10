@@ -1,0 +1,51 @@
+@layer components {
+  /* ---- Delete / destructive link ----------------------------------- */
+
+  .lib-strike {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding-block-end: 2px;
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--oxblood);
+    border-block-end: 2px solid var(--oxblood);
+    background: transparent;
+    cursor: pointer;
+  }
+  .lib-strike:hover:not(:disabled) {
+    color: var(--ink);
+    border-color: var(--ink);
+  }
+  .lib-strike:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .lib-amend {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding-block-end: 2px;
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--ink);
+    border-block-end: 2px solid var(--ink);
+    background: transparent;
+    cursor: pointer;
+  }
+  .lib-amend:hover:not(:disabled) {
+    color: var(--leather);
+    border-color: var(--leather);
+  }
+  .lib-amend:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}

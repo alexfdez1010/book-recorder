@@ -1,157 +1,135 @@
 'use client';
 
 import { useMemo, useState, useTransition } from 'react';
-import { Check, ChevronDown } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import type { Key } from '@heroui/react';
+import { ComboBox, Input, ListBox } from '@heroui/react';
 import { createCategoryAction } from '@/lib/books/actions';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from '@/components/ui/command';
 
-/**
- * Category picker backed by the DB. Lets the user search the known list and
- * register a brand-new category inline; the new value is persisted via the
- * server action before being selected, so subsequent renders see it too.
- */
-export function CategoryCombobox({
-  name,
-  categories,
-  defaultValue = '',
-  required,
-  id,
-}: {
-  name: string;
+const CREATE_CATEGORY_KEY = '__create_category__';
+
+export interface CategoryComboboxProps {
   categories: string[];
   defaultValue?: string;
-  required?: boolean;
   id?: string;
-}) {
-  const [value, setValue] = useState(defaultValue);
-  const [open, setOpen] = useState(false);
-  const [query, setQuery] = useState('');
-  const [extras, setExtras] = useState<string[]>([]);
+  name: string;
+  required?: boolean;
+}
+
+/** Selects a persisted category and creates missing categories inline. */
+export function CategoryCombobox({
+  categories,
+  defaultValue = '',
+  id,
+  name,
+  required,
+}: CategoryComboboxProps) {
   const [error, setError] = useState<string | null>(null);
-  const [pending, start] = useTransition();
-
-  const merged = useMemo(() => {
-    const set = new Set<string>([...categories, ...extras]);
-    return Array.from(set).sort((a, b) => a.localeCompare(b));
-  }, [categories, extras]);
-
-  const trimmed = query.trim();
+  const [extras, setExtras] = useState<string[]>([]);
+  const [inputValue, setInputValue] = useState(defaultValue);
+  const [value, setValue] = useState(defaultValue);
+  const [pending, startTransition] = useTransition();
+  const options = useMemo(
+    () =>
+      [...new Set([...categories, ...extras])].sort((a, b) =>
+        a.localeCompare(b),
+      ),
+    [categories, extras],
+  );
+  const trimmed = inputValue.trim();
   const allowCreate =
     trimmed.length > 0 &&
-    !merged.some((c) => c.toLowerCase() === trimmed.toLowerCase());
+    !options.some(
+      (category) =>
+        category.toLocaleLowerCase() === trimmed.toLocaleLowerCase(),
+    );
 
-  function pick(next: string) {
+  /** Commits a known category or starts persistence for the custom option. */
+  function selectCategory(key: Key | null): void {
+    if (key === null) return;
+    if (key === CREATE_CATEGORY_KEY) {
+      createCategory(trimmed);
+      return;
+    }
+    const next = String(key);
     setValue(next);
-    setOpen(false);
-    setQuery('');
+    setInputValue(next);
     setError(null);
   }
 
-  function createAndPick() {
+  /** Persists a category before exposing it as the selected form value. */
+  function createCategory(category: string): void {
     setError(null);
-    start(async () => {
-      const result = await createCategoryAction(trimmed);
+    startTransition(async () => {
+      const result = await createCategoryAction(category);
       if (result.error || !result.name) {
         setError(result.error ?? 'Failed to add category');
         return;
       }
-      setExtras((prev) =>
-        prev.includes(result.name!) ? prev : [...prev, result.name!],
+      setExtras((current) =>
+        current.includes(result.name!) ? current : [...current, result.name!],
       );
-      pick(result.name);
+      setValue(result.name);
+      setInputValue(result.name);
     });
   }
 
   return (
     <>
       <input type="hidden" name={name} value={value} required={required} />
-      <Popover open={open} onOpenChange={setOpen}>
-        <PopoverTrigger asChild>
-          <button
-            type="button"
+      <ComboBox
+        aria-label="Category"
+        className="lib-combobox"
+        inputValue={inputValue}
+        isDisabled={pending}
+        isRequired={required}
+        menuTrigger="focus"
+        onInputChange={(next) => {
+          setInputValue(next);
+          setValue('');
+          setError(null);
+        }}
+        onSelectionChange={selectCategory}
+        selectedKey={value || null}
+      >
+        <ComboBox.InputGroup className="lib-combobox__group">
+          <Input
             id={id}
-            role="combobox"
-            aria-expanded={open}
-            aria-controls={`${id ?? name}-listbox`}
-            data-testid="category-combobox"
-            className={cn(
-              'lib-input lib-combobox-trigger',
-              !value && 'is-empty',
-            )}
-          >
-            <span className="truncate">
-              {value || 'Select or create a category…'}
-            </span>
-            <ChevronDown className="h-4 w-4 shrink-0 opacity-70" />
-          </button>
-        </PopoverTrigger>
-        <PopoverContent
-          className="lib-combobox-pop"
-          id={`${id ?? name}-listbox`}
+            className="lib-input lib-combobox__input"
+            placeholder="Search categories…"
+            required={required}
+          />
+          <ComboBox.Trigger
+            aria-label="Show categories"
+            className="lib-combobox__trigger"
+          />
+        </ComboBox.InputGroup>
+        <ComboBox.Popover
+          className="lib-combobox__popover"
+          placement="bottom start"
         >
-          <Command
-            filter={(v, s) =>
-              v.toLowerCase().includes(s.toLowerCase()) ? 1 : 0
-            }
-          >
-            <CommandInput
-              placeholder="Search categories…"
-              value={query}
-              onValueChange={(v) => {
-                setQuery(v);
-                setError(null);
-              }}
-            />
-            <CommandList>
-              <CommandEmpty>No category found.</CommandEmpty>
-              {allowCreate ? (
-                <CommandGroup heading="Add new">
-                  <CommandItem
-                    value={`__new__:${trimmed}`}
-                    onSelect={createAndPick}
-                    disabled={pending}
-                  >
-                    {pending ? 'Adding…' : `+ Create "${trimmed}"`}
-                  </CommandItem>
-                </CommandGroup>
-              ) : null}
-              {merged.length > 0 ? (
-                <CommandGroup heading="Categories">
-                  {merged.map((c) => (
-                    <CommandItem key={c} value={c} onSelect={() => pick(c)}>
-                      <Check
-                        className={cn(
-                          'mr-2 h-3.5 w-3.5',
-                          value === c ? 'opacity-100' : 'opacity-0',
-                        )}
-                      />
-                      {c}
-                    </CommandItem>
-                  ))}
-                </CommandGroup>
-              ) : null}
-            </CommandList>
-          </Command>
-          {error ? (
-            <p role="alert" className="lib-field-error px-3 py-2">
-              ✕ {error}
-            </p>
-          ) : null}
-        </PopoverContent>
-      </Popover>
+          <ListBox className="lib-combobox__list">
+            {allowCreate ? (
+              <ListBox.Item
+                id={CREATE_CATEGORY_KEY}
+                textValue={`Create ${trimmed}`}
+              >
+                {pending ? 'Adding…' : `Create "${trimmed}"`}
+              </ListBox.Item>
+            ) : null}
+            {options.map((category) => (
+              <ListBox.Item key={category} id={category} textValue={category}>
+                {category}
+                <ListBox.ItemIndicator />
+              </ListBox.Item>
+            ))}
+          </ListBox>
+        </ComboBox.Popover>
+      </ComboBox>
+      {error ? (
+        <p role="alert" className="lib-field-error">
+          {error}
+        </p>
+      ) : null}
     </>
   );
 }

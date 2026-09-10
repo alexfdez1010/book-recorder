@@ -1,0 +1,42 @@
+@layer components {
+  /* ---- Page sections ------------------------------------------------ */
+
+  .lib-shell {
+    color: var(--ink);
+    min-height: 100vh;
+  }
+  .lib-main {
+    margin-inline: auto;
+    max-width: 72rem;
+    padding: 2rem 1rem;
+  }
+  @media (min-width: 640px) {
+    .lib-main {
+      padding: 3rem 2rem;
+    }
+  }
+
+  .lib-section-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1.25rem;
+  }
+
+  .lib-month-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .lib-month-head__title {
+    font-family: var(--font-serif);
+    font-weight: 900;
+    font-size: clamp(1.15rem, 2vw, 1.55rem);
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+    color: var(--ink);
+    word-break: break-word;
+  }
+}

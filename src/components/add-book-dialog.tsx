@@ -13,7 +13,6 @@ import {
   DialogHeader,
   DialogBody,
   DialogTitle,
-  DialogTrigger,
 } from '@/components/ui/dialog';
 
 type Mode =
@@ -21,6 +20,7 @@ type Mode =
   | { kind: 'selected'; candidate: BookCandidate }
   | { kind: 'manual' };
 
+/** Coordinates catalogue search and manual entry; resets selection when dismissed. */
 export function AddBookDialog({
   authors,
   categories,
@@ -33,6 +33,7 @@ export function AddBookDialog({
   const [open, setOpen] = useState(false);
   const [mode, setMode] = useState<Mode>({ kind: 'search' });
 
+  /** Closes the dialog and resets its search mode after save or cancellation. */
   function close() {
     setOpen(false);
     setMode({ kind: 'search' });
@@ -55,12 +56,10 @@ export function AddBookDialog({
         if (!o) setMode({ kind: 'search' });
       }}
     >
-      <DialogTrigger asChild>
-        <Button variant="accent">
-          <Plus className="h-4 w-4" strokeWidth={2.5} />
-          {triggerLabel}
-        </Button>
-      </DialogTrigger>
+      <Button variant="accent">
+        <Plus className="h-4 w-4" strokeWidth={2.5} />
+        {triggerLabel}
+      </Button>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>

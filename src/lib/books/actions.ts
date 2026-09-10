@@ -29,6 +29,12 @@ function revalidateBookPaths() {
   revalidatePath('/graphs');
 }
 
+/**
+ * Validate and persist an authenticated book form submission.
+ * @param formData - Book fields; blank optional values are stored as null.
+ * @returns Validation messages, or an empty object after revalidating book views.
+ * @throws When the request has no authenticated session.
+ */
 export async function addBookAction(
   formData: FormData,
 ): Promise<{ error?: string }> {
@@ -53,11 +59,19 @@ export async function addBookAction(
     externalId: d.externalId ? d.externalId : null,
     source: d.source ?? 'manual',
     rating: d.rating ?? null,
+    opinion: d.opinion ?? null,
   });
   revalidateBookPaths();
   return {};
 }
 
+/**
+ * Validate and update an authenticated book form submission.
+ * @param id - Database id of the book to update.
+ * @param formData - Complete editable metadata; omitted opinion is preserved.
+ * @returns Validation messages, or an empty object after revalidating book views.
+ * @throws When the request has no authenticated session.
+ */
 export async function updateBookAction(
   id: string,
   formData: FormData,
@@ -81,6 +95,7 @@ export async function updateBookAction(
     status: d.status,
     finishedOn: isFinished && d.finishedOn ? new Date(d.finishedOn) : null,
     rating: d.rating ?? null,
+    ...(Object.hasOwn(raw, 'opinion') ? { opinion: d.opinion ?? null } : {}),
   });
   revalidateBookPaths();
   return {};

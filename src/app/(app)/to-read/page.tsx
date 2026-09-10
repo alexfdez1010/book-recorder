@@ -1,3 +1,4 @@
+import { BookOpinion } from '@/components/book-opinion';
 import { listAuthors, listToReadBooks } from '@/lib/books/repository';
 import { listCategories } from '@/lib/books/categories-repository';
 import { languageName } from '@/lib/books/language';
@@ -10,6 +11,7 @@ import { EditBookDialog } from '@/components/edit-book-dialog';
 import { MarkAsFinishedButton } from '@/components/mark-as-finished-button';
 import { Badge } from '@/components/ui/badge';
 
+/** Loads the library data and renders the responsive catalogue view. */
 export default async function ToReadPage() {
   const [books, authors, categories] = await Promise.all([
     listToReadBooks(),
@@ -68,6 +70,7 @@ export default async function ToReadPage() {
                 </div>
               </div>
 
+              <BookOpinion opinion={b.opinion} />
               <div className="lib-card__foot">
                 <MarkAsFinishedButton id={b.id} title={b.title} />
                 <EditBookDialog

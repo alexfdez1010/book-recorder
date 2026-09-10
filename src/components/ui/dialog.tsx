@@ -1,93 +1,86 @@
 'use client';
 
 import * as React from 'react';
-import * as DialogPrimitive from '@radix-ui/react-dialog';
-import { X } from 'lucide-react';
+import { Modal } from '@heroui/react';
 import { cn } from '@/lib/utils';
 
-const Dialog = DialogPrimitive.Root;
-const DialogTrigger = DialogPrimitive.Trigger;
-const DialogPortal = DialogPrimitive.Portal;
-const DialogClose = DialogPrimitive.Close;
+export interface DialogProps {
+  children: React.ReactNode;
+  onOpenChange?: (open: boolean) => void;
+  open?: boolean;
+}
 
-const DialogOverlay = React.forwardRef<
-  React.ComponentRef<typeof DialogPrimitive.Overlay>,
-  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Overlay>
->(({ className, ...props }, ref) => (
-  <DialogPrimitive.Overlay
-    ref={ref}
-    className={cn('lib-dialog-overlay', className)}
-    {...props}
-  />
-));
-DialogOverlay.displayName = DialogPrimitive.Overlay.displayName;
-
-const DialogContent = React.forwardRef<
-  React.ComponentRef<typeof DialogPrimitive.Content>,
-  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>
->(({ className, children, ...props }, ref) => (
-  <DialogPortal>
-    <DialogOverlay />
-    <DialogPrimitive.Content
-      ref={ref}
-      className={cn('lib-dialog', className)}
-      {...props}
-    >
+/** Provides controlled HeroUI modal state to a trigger and dialog content. */
+export function Dialog({ children, onOpenChange, open }: DialogProps) {
+  return (
+    <Modal isOpen={open} onOpenChange={onOpenChange}>
       {children}
-      <DialogPrimitive.Close aria-label="Close" className="lib-dialog__close">
-        <X className="h-4 w-4" strokeWidth={2.5} />
-      </DialogPrimitive.Close>
-    </DialogPrimitive.Content>
-  </DialogPortal>
-));
-DialogContent.displayName = DialogPrimitive.Content.displayName;
+    </Modal>
+  );
+}
 
-const DialogHeader = ({
+/** Renders the backdrop, responsive container, dialog surface, and close affordance. */
+export function DialogContent({
+  className,
+  children,
+  ...props
+}: Omit<React.ComponentProps<typeof Modal.Dialog>, 'children'> & {
+  children: React.ReactNode;
+}) {
+  return (
+    <Modal.Backdrop className="lib-dialog-overlay">
+      <Modal.Container
+        className="lib-dialog-container"
+        placement="auto"
+        scroll="inside"
+        size="lg"
+      >
+        <Modal.Dialog className={cn('lib-dialog', className)} {...props}>
+          {children}
+          <Modal.CloseTrigger
+            aria-label="Close"
+            className="lib-dialog__close"
+          />
+        </Modal.Dialog>
+      </Modal.Container>
+    </Modal.Backdrop>
+  );
+}
+
+/** Groups a dialog heading and its optional description. */
+export function DialogHeader({
   className,
   ...props
-}: React.HTMLAttributes<HTMLDivElement>) => (
-  <div className={cn('lib-dialog__head', className)} {...props} />
-);
-DialogHeader.displayName = 'DialogHeader';
+}: React.ComponentProps<typeof Modal.Header>) {
+  return (
+    <Modal.Header className={cn('lib-dialog__head', className)} {...props} />
+  );
+}
 
-const DialogTitle = React.forwardRef<
-  React.ComponentRef<typeof DialogPrimitive.Title>,
-  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Title>
->(({ className, ...props }, ref) => (
-  <DialogPrimitive.Title
-    ref={ref}
-    className={cn('lib-dialog__title', className)}
-    {...props}
-  />
-));
-DialogTitle.displayName = DialogPrimitive.Title.displayName;
-
-const DialogDescription = React.forwardRef<
-  React.ComponentRef<typeof DialogPrimitive.Description>,
-  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Description>
->(({ className, ...props }, ref) => (
-  <DialogPrimitive.Description
-    ref={ref}
-    className={cn('lib-dialog__desc', className)}
-    {...props}
-  />
-));
-DialogDescription.displayName = DialogPrimitive.Description.displayName;
-
-const DialogBody = ({
+/** Provides the scrollable content region of a dialog. */
+export function DialogBody({
   className,
   ...props
-}: React.HTMLAttributes<HTMLDivElement>) => (
-  <div className={cn('lib-dialog__body', className)} {...props} />
-);
+}: React.ComponentProps<typeof Modal.Body>) {
+  return (
+    <Modal.Body className={cn('lib-dialog__body', className)} {...props} />
+  );
+}
 
-export {
-  Dialog,
-  DialogTrigger,
-  DialogContent,
-  DialogHeader,
-  DialogBody,
-  DialogTitle,
-  DialogDescription,
-  DialogClose,
-};
+/** Supplies the accessible heading for a dialog. */
+export function DialogTitle({
+  className,
+  ...props
+}: React.ComponentProps<typeof Modal.Heading>) {
+  return (
+    <Modal.Heading className={cn('lib-dialog__title', className)} {...props} />
+  );
+}
+
+/** Adds supporting text below a dialog heading. */
+export function DialogDescription({
+  className,
+  ...props
+}: React.HTMLAttributes<HTMLParagraphElement>) {
+  return <p className={cn('lib-dialog__desc', className)} {...props} />;
+}
