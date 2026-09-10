@@ -129,8 +129,12 @@ bun run lint-format           # ESLint + Prettier (run before committing)
 
 1. Push the repo to GitHub and import it in Vercel.
 2. Provision a Postgres database (Neon, Supabase, Vercel Marketplace, anything).
-3. Set `DATABASE_URL`, `PASSWORD`, and `AUTH_SECRET` in your project's environment variables.
-4. Deploy. Migrations run automatically on every push. ✅
+3. Set `DATABASE_URL` (pooled), `DATABASE_URL_UNPOOLED` (direct), `PASSWORD`, and `AUTH_SECRET` in Vercel. The Neon integration supplies both database URLs.
+4. Deploy. `vercel.json` runs `bun run vercel-build`: compile first, then apply migrations over the direct connection on production deployments. A migration failure prevents promotion.
+
+`bun run build` only generates Prisma Client and compiles Next.js; it does not connect to the database. `bun run database:deploy` applies migrations separately, with limited retries for connection failures or advisory-lock contention. Local PostgreSQL can continue using only `DATABASE_URL`.
+
+Preview deployments do not automatically migrate: this project's preview variables currently share the production database. Give previews a separate Neon branch before testing schema changes. See [deployment configuration and rollback](docs/deployment.md).
 
 ## 🤖 Using the MCP server
 

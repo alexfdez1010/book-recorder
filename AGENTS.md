@@ -88,7 +88,7 @@ This project uses **Bun** as the package manager and script runner. Install deps
 
 ```bash
 bun run dev                 # Postgres (port 5434) + Next dev server (turbopack)
-bun run build               # prisma generate && prisma migrate deploy && next build
+bun run build               # prisma generate && next build
 bun run lint                # eslint + prisma format
 bun run lint-format         # lint + prettier write
 bun run test                # unit + integration + e2e (full pipeline)
@@ -161,4 +161,8 @@ Pre-commit gate (runs before allowing a commit): `bun run pre-commit` = `bun run
 
 ## Deployment
 
-Vercel preset. Build command runs `prisma generate && prisma migrate deploy && next build`, so migrations auto-apply on every deploy. Provide `DATABASE_URL` / `PASSWORD` / `AUTH_SECRET` as env vars.
+Vercel preset. `bun run build` generates Prisma Client and compiles without database access. `vercel.json` selects `bun run vercel-build`, which compiles first and runs `bun run database:deploy` only for `VERCEL_ENV=production`. Failed migrations prevent promotion.
+
+The migration runner prefers `DATABASE_URL_UNPOOLED`, then `DIRECT_URL`, with `DATABASE_URL` as the local fallback. Neon migrations reject pooled connections and default to a 15-second connection timeout. Only connection failures and advisory-lock timeouts retry, at most three attempts; SQL and authentication errors fail immediately. Runtime Prisma continues using the pooled `DATABASE_URL`. Never disable Prisma advisory locking.
+
+Provide `DATABASE_URL` / `DATABASE_URL_UNPOOLED` / `PASSWORD` / `AUTH_SECRET` in Vercel. Preview currently shares production data and does not auto-migrate; isolate it with a Neon branch before schema-change previews. See `docs/deployment.md` for commands and rollback.
