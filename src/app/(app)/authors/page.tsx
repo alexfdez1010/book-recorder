@@ -33,6 +33,9 @@ export default async function AuthorsPage() {
       {groups.length === 0 ? (
         <div className="lib-empty">
           <p className="lib-empty__title">No authors yet.</p>
+          <p className="mx-auto mt-3 max-w-md text-sm text-ink-soft">
+            Authors appear here as you add finished books to your library.
+          </p>
         </div>
       ) : (
         <div className="flex flex-col gap-14">

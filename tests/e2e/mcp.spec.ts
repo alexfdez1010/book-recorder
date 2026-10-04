@@ -9,7 +9,9 @@ loadEnv();
 const PASSWORD = process.env.PASSWORD ?? 'dev-password';
 const SECRET = process.env.AUTH_SECRET ?? 'dev-secret';
 
-const MCP_URL = process.env.MCP_URL ?? 'http://localhost:3000/api/mcp/mcp';
+const MCP_URL =
+  process.env.MCP_URL ??
+  `http://localhost:${process.env.BOOK_RECORDER_TEST_APP_PORT || '3000'}/api/mcp/mcp`;
 
 const TOKEN = createHash('sha256')
   .update(`${PASSWORD}::${SECRET}`)

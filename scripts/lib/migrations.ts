@@ -15,8 +15,11 @@ export interface MigrationDependencies {
  * Selects a direct migration URL from env, falling back to DATABASE_URL locally.
  * Returns a URL with a bounded Neon connection timeout; rejects pooled Neon URLs
  * and invalid configuration without including credentials in error messages.
+ * @param env - Optional database URLs; unrelated process variables are not required.
  */
-export function migrationUrl(env: NodeJS.ProcessEnv): string {
+export function migrationUrl(
+  env: Readonly<Record<string, string | undefined>>,
+): string {
   const value = env.DATABASE_URL_UNPOOLED || env.DIRECT_URL || env.DATABASE_URL;
   if (!value)
     throw new Error(

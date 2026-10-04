@@ -78,6 +78,7 @@ export function AddBookDialog({
               status={status}
               onCancel={close}
               onDone={close}
+              onBack={() => setMode({ kind: 'search' })}
             />
           )}
         </DialogBody>

@@ -77,12 +77,13 @@ export function CategoryCombobox({
     <>
       <input type="hidden" name={name} value={value} required={required} />
       <ComboBox
+        allowsEmptyCollection
         aria-label="Category"
         className="lib-combobox"
         inputValue={inputValue}
         isDisabled={pending}
         isRequired={required}
-        menuTrigger="focus"
+        menuTrigger="input"
         onInputChange={(next) => {
           setInputValue(next);
           setValue('');

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useTransition } from 'react';
+import { ArrowLeft } from 'lucide-react';
 import { addBookAction } from '@/lib/books/actions';
 import type { BookCandidate } from '@/lib/books/types';
 import { LANGUAGE_KEYS, LANGUAGE_NAMES } from '@/lib/books/language';
@@ -12,13 +13,13 @@ import { OpinionField } from '@/components/opinion-field';
 import { StarRating } from '@/components/star-rating';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
+import { localDate } from '@/lib/books/local-date';
 
-/** Returns today as a UTC date for the default completion field. */
-function today(): string {
-  return new Date().toISOString().slice(0, 10);
-}
-
-/** Renders book creation fields; submits through the server action and reports errors. */
+/**
+ * Renders creation fields and reports server validation without dismissing the form.
+ * @param props - Optional candidate, choices, status and navigation/save callbacks.
+ * @returns A book form with local completion date; Back is blocked while saving.
+ */
 export function AddBookForm({
   candidate,
   authors,
@@ -26,6 +27,7 @@ export function AddBookForm({
   status = 'finished',
   onCancel,
   onDone,
+  onBack,
 }: {
   candidate: BookCandidate | null;
   authors: string[];
@@ -33,6 +35,7 @@ export function AddBookForm({
   status?: BookStatus;
   onCancel: () => void;
   onDone: () => void;
+  onBack?: () => void;
 }) {
   const source = candidate?.source ?? 'manual';
   const externalId = candidate?.externalId ?? '';
@@ -59,6 +62,19 @@ export function AddBookForm({
       <input type="hidden" name="externalId" value={externalId} />
       <input type="hidden" name="source" value={source} />
       <input type="hidden" name="status" value={status} />
+
+      {onBack ? (
+        <Button
+          type="button"
+          variant="link"
+          className="self-start"
+          onClick={onBack}
+          disabled={pending}
+        >
+          <ArrowLeft className="h-4 w-4" aria-hidden />
+          Back to search
+        </Button>
+      ) : null}
 
       <Field
         label="Title"
@@ -89,7 +105,7 @@ export function AddBookForm({
             label="Finished on"
             name="finishedOn"
             type="date"
-            defaultValue={today()}
+            defaultValue={localDate()}
             required
           />
         ) : null}

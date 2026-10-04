@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useTransition } from 'react';
-import { Search } from 'lucide-react';
+import { useId, useState, useTransition } from 'react';
+import { ArrowRight, Search } from 'lucide-react';
 import { searchBooksAction } from '@/lib/books/actions';
 import type { BookCandidate } from '@/lib/books/types';
 import { languageName } from '@/lib/books/language';
@@ -9,8 +9,13 @@ import { BookCover } from '@/components/book-cover';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
+import { Label } from '@/components/ui/label';
 
-/** Searches external catalogues and lets the caller select or manually enter a book. */
+/**
+ * Searches catalogues and announces loading, results and recoverable failures.
+ * @param props - Callbacks for selecting a candidate or entering details manually.
+ * @returns Search controls and results; blank queries never issue a request.
+ */
 export function BookSearchPanel({
   onSelect,
   onManual,
@@ -22,59 +27,91 @@ export function BookSearchPanel({
   const [results, setResults] = useState<BookCandidate[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [pending, start] = useTransition();
+  const [searched, setSearched] = useState(false);
+  const inputId = useId();
 
   /** Queries the search action and displays empty or network error states. */
   function onSearch(e: React.FormEvent) {
     e.preventDefault();
+    if (pending || !query.trim()) return;
     setError(null);
+    setResults([]);
+    setSearched(false);
     start(async () => {
       try {
-        const list = await searchBooksAction(query);
+        const list = await searchBooksAction(query.trim());
         setResults(list);
-        if (list.length === 0) setError('No matches.');
+        setSearched(true);
       } catch {
-        setError('Network error.');
+        setError(
+          'Could not search for books. Try again or add the book manually.',
+        );
       }
     });
   }
 
   return (
     <div className="flex flex-col gap-6">
-      <form onSubmit={onSearch} className="flex flex-col gap-3 sm:flex-row">
-        <Input
-          autoFocus
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search title…"
-          aria-label="Book title"
-          className="min-w-0 flex-1"
-        />
-        <Button
-          type="submit"
-          variant="primary"
-          disabled={pending || !query.trim()}
-        >
-          <Search className="h-4 w-4" strokeWidth={2.5} />
-          {pending ? '…' : 'Search'}
-        </Button>
+      <form onSubmit={onSearch} className="flex flex-col gap-3">
+        <Label htmlFor={inputId}>Book title</Label>
+        <div className="flex flex-col gap-3 sm:flex-row">
+          <Input
+            id={inputId}
+            autoFocus
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Search title…"
+            aria-label="Book title"
+            disabled={pending}
+            className="min-w-0 flex-1"
+          />
+          <Button
+            type="submit"
+            variant="primary"
+            disabled={pending || !query.trim()}
+          >
+            <Search className="h-4 w-4" strokeWidth={2.5} aria-hidden />
+            {pending ? 'Searching…' : 'Search'}
+          </Button>
+        </div>
       </form>
 
       {error ? (
         <p role="alert" className="lib-field-error">
-          ✕ {error}
+          {error}
         </p>
       ) : null}
 
       <div className="lib-stacks-head">
-        <span className="lib-meta">
-          {results.length > 0 ? `${results.length} results` : ''}
+        <span className="lib-meta" role="status" aria-atomic="true">
+          {pending
+            ? 'Searching catalogues…'
+            : searched
+              ? `${results.length} results`
+              : 'Search by title or add your own details.'}
         </span>
-        <button type="button" onClick={onManual} className="lib-linkish">
-          Add manually →
-        </button>
+        <Button
+          type="button"
+          onClick={onManual}
+          variant="link"
+          className="shrink-0"
+        >
+          Add manually <ArrowRight className="h-4 w-4" aria-hidden />
+        </Button>
       </div>
 
-      <ul className="lib-stacks" data-testid="search-results">
+      {searched && results.length === 0 ? (
+        <p className="text-sm text-ink-soft">
+          No matches. Try another title or add the book manually.
+        </p>
+      ) : null}
+
+      <ul
+        className="lib-stacks"
+        data-testid="search-results"
+        aria-label="Book search results"
+        aria-busy={pending}
+      >
         {results.map((c) => (
           <li key={`${c.source}-${c.externalId}`}>
             <button onClick={() => onSelect(c)} className="lib-result">

@@ -7,6 +7,7 @@ import { StarRating } from '@/components/star-rating';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { localDate } from '@/lib/books/local-date';
 import {
   Dialog,
   DialogContent,
@@ -15,11 +16,6 @@ import {
   DialogTitle,
   DialogDescription,
 } from '@/components/ui/dialog';
-
-/** Returns the UTC date used as the default completion date. */
-function today(): string {
-  return new Date().toISOString().slice(0, 10);
-}
 
 /** Moves a queued book to the finished shelf after confirming date and rating. */
 export function MarkAsFinishedButton({
@@ -30,7 +26,7 @@ export function MarkAsFinishedButton({
   title: string;
 }) {
   const [open, setOpen] = useState(false);
-  const [date, setDate] = useState(today);
+  const [date, setDate] = useState('');
   const [rating, setRating] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [pending, start] = useTransition();
@@ -43,7 +39,6 @@ export function MarkAsFinishedButton({
       if (result.error) setError(result.error);
       else {
         setOpen(false);
-        setDate(today());
         setRating(null);
       }
     });
@@ -55,6 +50,7 @@ export function MarkAsFinishedButton({
       onOpenChange={(o) => {
         if (pending) return;
         setOpen(o);
+        if (o) setDate(localDate());
         if (!o) setError(null);
       }}
     >

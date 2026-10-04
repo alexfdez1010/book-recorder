@@ -18,7 +18,7 @@
     "test": "bun run test:unit && bun run test:integration && bun run test:e2e",
     "test:unit": "vitest run --dir tests/unit",
     "test:integration": "vitest run --dir tests/integration --disable-console-intercept",
-    "test:e2e": "bun run database:test && bun run build && start-server-and-test start http://localhost:3000 'bunx playwright test' && bun run database:down",
+    "test:e2e": "bun run database:test && bun run build && start-server-and-test \"bun run start --port ${BOOK_RECORDER_TEST_APP_PORT:-3000}\" http://localhost:${BOOK_RECORDER_TEST_APP_PORT:-3000} 'bunx playwright test' && bun run database:down",
     "test:specific": "bunx playwright test -g",
     "database:dev": "bun run database && prisma migrate dev",
     "database:deploy": "bun scripts/migrate-deploy.ts",

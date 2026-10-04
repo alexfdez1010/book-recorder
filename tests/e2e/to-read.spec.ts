@@ -2,16 +2,19 @@ import { test, expect } from '@playwright/test';
 
 const PASSWORD = process.env.PASSWORD ?? 'dev-password';
 
-/** Selects a category from the accessible HeroUI combobox. */
+test.use({ timezoneId: 'Europe/Madrid' });
+
+/** Opens a choice explicitly so input focus alone never toggles its popover. */
 async function chooseOption(
   page: import('@playwright/test').Page,
   label: string,
   option: string,
 ) {
-  await page
-    .getByRole('combobox', { name: label, exact: true })
-    .or(page.getByRole('button', { name: new RegExp(label) }))
-    .click();
+  const control = page.getByRole('button', {
+    name: label === 'Category' ? 'Show categories' : new RegExp(label),
+  });
+  await control.scrollIntoViewIfNeeded();
+  await control.click();
   await page.getByRole('option', { name: option, exact: true }).click();
 }
 
@@ -37,6 +40,7 @@ test.beforeEach(async ({ page }) => {
 });
 
 test('queue a to-read book and promote it to finished', async ({ page }) => {
+  await page.clock.setFixedTime(new Date('2026-10-04T21:59:00Z'));
   await page.getByRole('link', { name: 'To read' }).click();
   await expect(page).toHaveURL(/\/to-read$/);
 
@@ -68,8 +72,17 @@ test('queue a to-read book and promote it to finished', async ({ page }) => {
   // Promote it.
   await page.getByRole('link', { name: 'To read' }).click();
   const card = page.locator('li.lib-card', { hasText: title });
+  await page.clock.setFixedTime(new Date('2026-10-04T22:01:00Z'));
   await card.getByRole('button', { name: /Mark finished/ }).click();
   await expect(page.getByRole('dialog')).toBeVisible();
+  await expect(page.getByLabel('Finished on')).toHaveValue('2026-10-05');
+  await page
+    .getByRole('dialog')
+    .getByRole('button', { name: 'Cancel' })
+    .click();
+  await page.clock.setFixedTime(new Date('2026-10-05T22:01:00Z'));
+  await card.getByRole('button', { name: /Mark finished/ }).click();
+  await expect(page.getByLabel('Finished on')).toHaveValue('2026-10-06');
   await page
     .getByRole('dialog')
     .getByRole('button', { name: /Mark finished/ })

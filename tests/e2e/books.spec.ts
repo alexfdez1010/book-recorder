@@ -11,6 +11,7 @@ async function chooseOption(
   const control = page.getByRole('button', {
     name: label === 'Category' ? 'Show categories' : new RegExp(label),
   });
+  await control.scrollIntoViewIfNeeded();
   await control.click();
   await page.getByRole('option', { name: option, exact: true }).click();
 }

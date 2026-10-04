@@ -63,6 +63,10 @@ export default async function BooksPage() {
       {books.length === 0 ? (
         <div className="lib-empty">
           <p className="lib-empty__title">No books yet.</p>
+          <p className="mx-auto mt-3 max-w-md text-sm text-ink-soft">
+            Start with a book you’ve finished. Choose Add book to search by
+            title or enter the details yourself.
+          </p>
         </div>
       ) : (
         <div className="flex flex-col gap-14">
@@ -102,19 +106,21 @@ export default async function BooksPage() {
                           >
                             {b.category}
                           </Badge>
-                          <InlineRating id={b.id} rating={b.rating} />
                         </div>
                       </div>
                     </div>
 
                     <BookOpinion opinion={b.opinion} />
-                    <div className="lib-card__foot">
-                      <EditBookDialog
-                        book={b}
-                        authors={authors}
-                        categories={categories}
-                      />
-                      <DeleteBookButton id={b.id} title={b.title} />
+                    <div className="lib-card__foot justify-between">
+                      <InlineRating id={b.id} rating={b.rating} />
+                      <div className="ml-auto flex items-center gap-4">
+                        <EditBookDialog
+                          book={b}
+                          authors={authors}
+                          categories={categories}
+                        />
+                        <DeleteBookButton id={b.id} title={b.title} />
+                      </div>
                     </div>
                   </li>
                 ))}

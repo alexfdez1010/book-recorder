@@ -12,6 +12,10 @@
   .lib-rating__star {
     position: relative;
     display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 3rem;
+    height: 2.75rem;
     line-height: 0;
   }
   .lib-rating__icon {
@@ -49,7 +53,14 @@
     outline: 2px solid var(--oxblood);
     outline-offset: 2px;
   }
-  .lib-rating__hit--ro {
-    cursor: default;
+  .lib-rating__hit[aria-disabled='true'] {
+    cursor: wait;
+  }
+  .lib-rating[aria-disabled='true'] {
+    opacity: 0.6;
+  }
+  .lib-rating[data-readonly] .lib-rating__star {
+    width: auto;
+    height: auto;
   }
 }

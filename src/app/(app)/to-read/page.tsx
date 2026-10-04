@@ -39,6 +39,10 @@ export default async function ToReadPage() {
       {books.length === 0 ? (
         <div className="lib-empty">
           <p className="lib-empty__title">Nothing queued yet.</p>
+          <p className="mx-auto mt-3 max-w-md text-sm text-ink-soft">
+            Keep your next reads here. Choose Add to read, then mark each book
+            finished when you’re done.
+          </p>
         </div>
       ) : (
         <ul className="grid grid-cols-1 gap-x-12 gap-y-10 lg:grid-cols-2">

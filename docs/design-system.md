@@ -13,10 +13,24 @@ Use `.lib-title` for page headings, `.lib-subtitle` for useful counts, `.lib-car
 
 ## Verification
 
-Run `bun run pre-commit` with the test database environment configured. Responsive Playwright coverage exercises 320px, 390px and 1440px screens, including login, all routes, adding, editing, deleting and marking books finished. Inspect the screenshots produced under `test-results/` before shipping visual changes. Use test credentials and the disposable test database, never production data.
+Run `bun run pre-commit` with the test database environment configured. Test containers use the separate `book-recorder-test` Compose project so cleanup does not target the development database. The test Compose file defaults to host port 5434; set `BOOK_RECORDER_TEST_DB_PORT` and the matching `DATABASE_URL` to isolate it when that port is occupied. The app defaults to port 3000; `BOOK_RECORDER_TEST_APP_PORT` sets the production test server, readiness URL and Playwright/MCP test URLs together. For example, run the entire gate with database port 5544, app port 3001 and disposable credentials:
+
+```bash
+BOOK_RECORDER_TEST_DB_PORT=5544 \
+BOOK_RECORDER_TEST_APP_PORT=3001 \
+DATABASE_URL='postgresql://postgres:postgres@localhost:5544/book_recorder_test?schema=public' \
+PASSWORD='test-only-password' \
+AUTH_SECRET='test-only-auth-secret-for-local-verification' \
+bun run pre-commit
+```
+
+Responsive Playwright coverage exercises 320px, 390px and 1440px screens, including login, all routes, adding, editing, deleting and marking books finished. Inspect the screenshots produced under `test-results/` before shipping visual changes. Use test credentials and the disposable test database, never production data.
 
 ## Official references
 
 - [Tailwind CSS theme variables](https://tailwindcss.com/docs/theme)
 - [HeroUI styling and component composition](https://heroui.com/en/docs/react/getting-started/styling)
 - [Next.js font optimization](https://nextjs.org/docs/app/getting-started/fonts)
+- [Docker Compose variable interpolation](https://docs.docker.com/compose/how-tos/environment-variables/variable-interpolation/)
+- [Next.js CLI server port](https://nextjs.org/docs/app/api-reference/cli/next#next-start-options)
+- [Playwright test configuration](https://playwright.dev/docs/test-configuration)
