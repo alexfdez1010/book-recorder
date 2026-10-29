@@ -1,4 +1,5 @@
 import { redirect } from 'next/navigation';
+import { BrandMark } from '@/components/brand-mark';
 import { BookOpen, ArrowRight, LockKeyhole } from 'lucide-react';
 import { createSession } from '@/lib/auth/session';
 import { Button } from '@/components/ui/button';
@@ -28,14 +29,14 @@ export default async function LoginPage({
         aria-label="Your personal reading library"
       >
         <span className="flex items-center gap-3 text-sm font-medium">
-          <BookOpen size={22} strokeWidth={1.5} />
+          <BrandMark size={36} />
           Book Recorder
         </span>
         <div>
           <p className="lib-login-story__title">
             A life
             <br />
-            in books.
+            in books
           </p>
           <p className="mt-6 max-w-xs text-base leading-relaxed text-ink-soft">
             Keep the stories that stay with you. Make room for the ones still to
@@ -47,7 +48,7 @@ export default async function LoginPage({
               <span>
                 The stories
                 <br />
-                we keep.
+                we keep
               </span>
             </div>
             <div className="lib-login-volume bg-[#a88c65]">
@@ -55,7 +56,7 @@ export default async function LoginPage({
               <span>
                 One more
                 <br />
-                chapter.
+                chapter
               </span>
             </div>
             <div className="lib-login-volume bg-[#64796c]">
@@ -63,24 +64,22 @@ export default async function LoginPage({
               <span>
                 A world
                 <br />
-                within.
+                within
               </span>
             </div>
           </div>
         </div>
         <p className="text-xs text-ink-soft">
-          Your personal library. A little more considered.
+          Your personal library, thoughtfully kept
         </p>
       </section>
       <div className="lib-login-form-area">
         <form action={loginAction} className="lib-ticket">
           <div className="lib-ticket__head">
-            <span className="lib-brand-icon mb-7" aria-hidden="true">
-              <BookOpen size={22} strokeWidth={1.6} />
-            </span>
+            <BrandMark className="mb-7" />
             <h1 className="lib-title !text-[2.25rem]">Book Recorder</h1>
             <p className="mt-3 text-sm leading-relaxed text-ink-mute">
-              Welcome back. Your next chapter is waiting.
+              Welcome back to your reading space
             </p>
           </div>
           <div className="lib-ticket__body">

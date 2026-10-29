@@ -1,0 +1,2 @@
+# Preserve upstream font license bytes, including their original whitespace
+src/app/fonts/*-OFL.txt -whitespace

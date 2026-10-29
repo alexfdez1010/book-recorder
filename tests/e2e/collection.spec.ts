@@ -55,7 +55,7 @@ test('collection search, empty recovery and layout controls preserve book action
 
   await search.fill(`Missing collection ${crypto.randomUUID()}`);
   await expect(cards).toHaveCount(0);
-  await expect(page.getByText('No matching books.')).toBeVisible();
+  await expect(page.getByText('No matching books')).toBeVisible();
   await page.getByRole('button', { name: 'Show all books' }).click();
   await expect(search).toHaveValue('');
   await expect(page.getByRole('heading', { name: title })).toBeVisible();

@@ -40,7 +40,7 @@ export function RecentPerformance({
               Recent performance
             </h2>
             <p className="mt-1 text-sm text-ink-mute">
-              A closer look at your reading rhythm.
+              A closer look at your reading rhythm
             </p>
           </div>
           <Tabs.ListContainer className="w-auto max-w-full">
@@ -72,7 +72,10 @@ export function RecentPerformance({
             className="flex min-w-0 flex-col gap-6 outline-offset-4"
           >
             <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-ink-mute">
-              <p>{formatPeriod(period.start, period.end)} · includes today</p>
+              <p>
+                {formatPeriod(period.start, period.end)}{' '}
+                <span className="ml-2">Includes today</span>
+              </p>
               <p>
                 Compared with{' '}
                 {formatPeriod(period.previousStart, period.previousEnd)}

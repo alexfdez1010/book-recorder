@@ -6,7 +6,7 @@
 
 - `src/app/styles/theme.css` owns semantic palette aliases, shared easing, keyboard focus and the CSS reduced-motion override. Chart adapters reference the same custom properties.
 - Focused files under `src/app/styles/` compose Tailwind CSS 4 utilities into reusable presentation. HeroUI v3 owns accessible controls, selection and modal behavior.
-- `src/app/layout.tsx` loads Fraunces, Geist and JetBrains Mono through `next/font`. Fraunces carries page and book identity; Geist carries controls, labels and reading data.
+- `src/app/layout.tsx` loads the licensed local Fraunces, Geist and JetBrains Mono assets through `next/font/local`, preserving their variable axes. JetBrains Mono is not preloaded outside its code use; source URLs and licenses live in `src/app/fonts/`. Fraunces carries page and book identity; Geist carries controls, labels and reading data.
 - The authenticated layout owns the desktop rail and compact sticky header. Routes load persisted data; collection components own local search and grid/list presentation.
 - Pure collection and statistics functions own transformations. Existing form, opinion, rating and action components retain their data contracts.
 
@@ -48,3 +48,7 @@ Collection tests cover local search, layout controls and recovery. Recent-perfor
 - [Next.js font optimization](https://nextjs.org/docs/app/getting-started/fonts)
 - [React deferred rendering](https://react.dev/reference/react/useDeferredValue)
 - [Docker Compose startup and readiness options](https://docs.docker.com/reference/cli/docker/compose/up/)
+
+## Brand and installation
+
+Use `<BrandMark size={40} />` beside accessible Book Recorder text; its optional `className` controls placement and its image is decorative. `BrandMark` renders the shared `public/brand-mark.svg` beside the Book Recorder name in the header and sign-in page. It preserves the original two red volumes with a clearer vector silhouette, gold bands and warm parchment background. App icons derive from the same mark, including a maskable PNG and Apple touch icon. Keep titles, subtitles and brands free of periods and decorative dots. See [PWA installation and offline behavior](pwa.md) for public resources, privacy boundaries and testing.

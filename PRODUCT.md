@@ -26,6 +26,10 @@ Repository-derived context: a reader manages their own library behind a shared-p
 
 The user explicitly delegated visual and interaction decisions, requested exceptional motion and UX, declined questions, and authorized publication to main after verification. Product assumptions above are derived from the existing application, not a separate interview.
 
+## Installation
+
+Installable as a standalone PWA with a shared two-volume logo. Offline navigation shows public recovery guidance; private books and opinions remain network-only. Push notifications and offline editing are outside the current feature.
+
 ## Evidence on Hand
 
 The repository's real routes, data model, existing tests and working interactions define product truth. Demo fixtures used for visual verification must stay in the disposable test database.

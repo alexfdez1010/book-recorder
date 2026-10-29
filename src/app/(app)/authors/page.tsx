@@ -17,7 +17,7 @@ export default async function AuthorsPage() {
     <section className="flex min-w-0 flex-col gap-9">
       <CollectionHeader
         title="Authors"
-        description={`${count} ${count === 1 ? 'voice' : 'voices'} in your reading life.`}
+        description={`${count} ${count === 1 ? 'voice' : 'voices'} in your reading life`}
         count={books.length}
         pages={books.reduce((sum, book) => sum + book.pages, 0)}
       />
@@ -26,7 +26,7 @@ export default async function AuthorsPage() {
         authors={authors}
         categories={categories}
         grouping="author"
-        emptyTitle="No authors yet."
+        emptyTitle="No authors yet"
         emptyDescription="Authors appear here as you add finished books to your library."
       />
     </section>

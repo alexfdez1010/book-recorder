@@ -32,9 +32,7 @@ export function CollectionHeader({
             {count.toLocaleString('en-US')}
           </span>{' '}
           {count === 1 ? 'book' : 'books'}
-          <span aria-hidden="true" className="px-2.5">
-            ·
-          </span>
+          <span aria-hidden="true" className="px-2.5" />
           <span className="font-medium text-ink">
             {pages.toLocaleString('en-US')}
           </span>{' '}

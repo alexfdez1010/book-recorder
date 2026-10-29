@@ -1,26 +1,50 @@
-import type { Metadata } from 'next';
-import { Fraunces, Geist, JetBrains_Mono } from 'next/font/google';
+import type { Metadata, Viewport } from 'next';
+import localFont from 'next/font/local';
 import './globals.css';
+import { PwaRegistration } from '@/components/pwa-registration';
 
-const fraunces = Fraunces({
+const fraunces = localFont({
+  src: './fonts/fraunces.ttf',
   variable: '--font-fraunces',
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
+  weight: '400 700',
+  style: 'normal',
+  display: 'swap',
+  adjustFontFallback: 'Times New Roman',
 });
-const grotesk = Geist({
+const grotesk = localFont({
+  src: './fonts/geist.ttf',
   variable: '--font-grotesk',
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
+  weight: '400 700',
+  style: 'normal',
+  display: 'swap',
 });
-const jetbrains = JetBrains_Mono({
+const jetbrains = localFont({
+  src: './fonts/jetbrains-mono.ttf',
+  preload: false,
   variable: '--font-jetbrains',
-  subsets: ['latin'],
-  weight: ['400', '500', '700'],
+  weight: '400 700',
+  style: 'normal',
+  display: 'swap',
 });
 
 export const metadata: Metadata = {
-  title: 'Book Recorder · Your personal library',
-  description: 'The books you finish. The stories you keep.',
+  title: 'Book Recorder',
+  description: 'The books you finish and the stories you keep',
+  applicationName: 'Book Recorder',
+  manifest: '/manifest.webmanifest',
+  appleWebApp: {
+    capable: true,
+    title: 'Book Recorder',
+    statusBarStyle: 'default',
+  },
+  icons: { icon: '/brand-mark.svg', apple: '/apple-touch-icon.png' },
+};
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  viewportFit: 'cover',
+  themeColor: '#f7f7f2',
 };
 
 /** Provides document metadata and root-scoped font variables for the shared theme. */
@@ -32,7 +56,10 @@ export default function RootLayout({
       lang="en"
       className={`${fraunces.variable} ${grotesk.variable} ${jetbrains.variable}`}
     >
-      <body className="antialiased">{children}</body>
+      <body className="antialiased">
+        {children}
+        <PwaRegistration />
+      </body>
     </html>
   );
 }

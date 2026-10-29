@@ -29,9 +29,8 @@ export default async function SkillPage() {
         <div className="flex flex-col gap-2">
           <h1 className="lib-title">Skill</h1>
           <p className="lib-subtitle">
-            Plug the book-recorder MCP server into any MCP-aware agent. The
-            skill file tells the agent which tools exist; the agent decides when
-            to call them.
+            Connect your library to an MCP-aware agent with the tools and
+            conventions it needs
           </p>
         </div>
       </div>

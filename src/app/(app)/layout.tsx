@@ -1,7 +1,9 @@
 import Link from 'next/link';
+import { BrandMark } from '@/components/brand-mark';
+import { InstallAppButton } from '@/components/install-app-button';
 import { NavLink } from '@/components/nav-link';
 import { LogoutButton } from '@/components/logout-button';
-import { BookOpen, ArrowUpRight } from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
 
 /** Renders the authenticated navigation shell and focusable content destination. */
 export default function AppLayout({ children }: { children: React.ReactNode }) {
@@ -17,14 +19,10 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         <div className="lib-header__inner">
           <div className="lib-header__row">
             <Link href="/books" className="lib-wordmark lib-header__title">
-              <span className="lib-brand-icon" aria-hidden="true">
-                <BookOpen size={21} strokeWidth={1.7} />
-              </span>
+              <BrandMark />
               <span>
                 Book
-                <span className="block">
-                  Recorder<span className="text-leather">.</span>
-                </span>
+                <span className="block">Recorder</span>
               </span>
             </Link>
             <span className="lib-mobile-logout">
@@ -38,9 +36,10 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             <NavLink href="/graphs">Graphs</NavLink>
             <NavLink href="/skill">Skill</NavLink>
           </nav>
+          <InstallAppButton className="my-3 w-full" />
           <div className="lib-sidebar-footer">
             <div className="mb-5 border-t border-paper-edge pt-5">
-              <p className="text-sm font-medium">One book at a time.</p>
+              <p className="text-sm font-medium">One book at a time</p>
               <p className="mt-1 text-xs leading-relaxed text-ink-mute">
                 A little space for everything
                 <br />
@@ -49,7 +48,6 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             </div>
             <div className="flex items-center justify-between gap-2">
               <span className="flex items-center gap-2 text-xs text-ink-mute">
-                <span className="size-1.5 rounded-full bg-leather" />
                 Personal library
               </span>
               <LogoutButton />

@@ -26,7 +26,7 @@ export function GraphsDashboard({ data }: { data: GraphsData }) {
       <RecentPerformance week={data.recentWeek} month={data.recentMonth} />
       {data.totalBooks === 0 ? (
         <div className="lib-empty">
-          <p className="lib-empty__title">Your reading story starts here.</p>
+          <p className="lib-empty__title">Your reading story starts here</p>
           <p className="mt-2 text-sm text-ink-mute">
             Add a finished book to see your all-time patterns.
           </p>
@@ -44,7 +44,7 @@ export function GraphsDashboard({ data }: { data: GraphsData }) {
               The bigger picture
             </h2>
             <p className="mt-1 text-sm text-ink-mute">
-              Your complete reading history, at a glance.
+              Your complete reading history at a glance
             </p>
           </div>
           <div className="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">

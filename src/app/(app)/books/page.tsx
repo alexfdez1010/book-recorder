@@ -17,7 +17,7 @@ export default async function BooksPage() {
     <section className="flex min-w-0 flex-col gap-9">
       <CollectionHeader
         title="Books"
-        description="The books you finish. The stories you keep."
+        description="The books you finish and the stories you keep"
         count={books.length}
         pages={books.reduce((sum, book) => sum + book.pages, 0)}
       >
@@ -29,7 +29,7 @@ export default async function BooksPage() {
         categories={categories}
         grouping="month"
         showRating
-        emptyTitle="No books yet."
+        emptyTitle="No books yet"
         emptyDescription="Start with a book you’ve finished. Choose Add book to search by title or enter the details yourself."
       />
     </section>

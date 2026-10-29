@@ -85,7 +85,7 @@ export function BookCollection({
               className="mx-auto mb-4 text-ink-mute"
               aria-hidden="true"
             />
-            <p className="lib-empty__title">No matching books.</p>
+            <p className="lib-empty__title">No matching books</p>
             <p className="mt-3 text-sm text-ink-soft">
               Try another title, author or category.
             </p>

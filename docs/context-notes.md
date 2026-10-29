@@ -29,3 +29,16 @@ Recorded on 2026-10-29 for subsequent work on the library experience.
 ## Verification recorded
 
 The final 2026-10-29 `bun run pre-commit` run completed successfully with 159 unit tests, 6 live integration tests and 32 browser tests, plus production build, lint and formatting. The final browser suite includes Spanish-locale hydration checks for library and graphs, 320/390/1440px containment, keyboard tabs and core book flows. Independent visual review requested stronger unselected-rating contrast and deterministic graph number formatting; both corrections are included.
+
+## PWA and identity decisions
+
+- The user authorizes a refined new logo and prefers the original two red volumes over the generic green book icon. The vector mark in `public/brand-mark.svg` is the common source for the header, sign-in and all installation icons. The installed app keeps the existing authenticated library start route.
+- Titles, subtitles and brands must have no periods or decorative dot separators. This is a permanent user preference, also recorded in `AGENTS.md`. Do not alter punctuation in user-authored book titles or opinions.
+- Register substantial work in an existing matching Simple Tasks project, using Miscelánea only when no project fits. Never create a project just to record a chat. Book Recorder, Simple Tasks and Simple Finance work belongs to Miscelánea on the current board, per the user’s explicit clarification. Do not create projects with those names unless requested.
+
+- The PWA installation invitation is retained by the root layout before sign-in and consumed through a shared browser store. Do not move native event capture back into the authenticated shell: the browser may offer installation on the login page.
+- A repeatable production-build failure matched Next’s handling of extensionless Google Fonts URLs, described in [upstream issue 99114](https://github.com/vercel/next.js/issues/99114). Font families and axes are preserved as local licensed assets so subsequent builds do not depend on Google’s CSS response shape. Font source and licensing are recorded beside those assets.
+
+## PWA verification recorded
+
+The final PWA production gate on 2026-10-29 passed build, 6 integration tests, 35 browser tests, lint and formatting. The complete unit rerun, including the local-font asset checks added during the build repair, passed 216 tests. Chrome manifest/installability diagnostics were clean. Browser checks cover an install offer raised before sign-in, offline navigation after sign-out, recovery, public-only cache contents and responsive screenshots.

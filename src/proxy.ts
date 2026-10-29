@@ -2,17 +2,12 @@ import { NextRequest, NextResponse } from 'next/server';
 import { AUTH_COOKIE } from '@/lib/auth/constants';
 import { hashToken, timingSafeEqual } from '@/lib/auth/token';
 
-const PUBLIC_PATHS = ['/login', '/api/login', '/api/mcp'];
+import { isPublicPath } from '@/lib/auth/public-paths';
 
-function isPublic(pathname: string): boolean {
-  return PUBLIC_PATHS.some(
-    (p) => pathname === p || pathname.startsWith(`${p}/`),
-  );
-}
-
+/** Validates private requests against the shared session hash; public assets bypass cookies. */
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  if (isPublic(pathname)) return NextResponse.next();
+  if (isPublicPath(pathname)) return NextResponse.next();
 
   const cookie = request.cookies.get(AUTH_COOKIE)?.value;
   const password = process.env.PASSWORD;

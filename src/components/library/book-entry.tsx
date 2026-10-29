@@ -50,10 +50,7 @@ export function BookEntry({
           </p>
           <p className="mt-auto pt-4 text-xs text-ink-mute">
             {book.pages.toLocaleString('en-US')} pages{' '}
-            <span aria-hidden="true" className="px-1">
-              ·
-            </span>{' '}
-            {languageName(book.language)}
+            <span className="ml-3">{languageName(book.language)}</span>
           </p>
         </div>
       </div>

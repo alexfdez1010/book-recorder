@@ -205,6 +205,8 @@ Panels and book entries use the panel radius; controls and navigation use the co
 
 ## Components
 
+The shared brand mark uses two muted red book spines, gold bands and a dark shelf on warm parchment, refined from the original favicon. `public/brand-mark.svg` supplies the header and sign-in mark; installation PNGs and the favicon derive from that vector. Keep the Book Recorder wordmark free of decorative dots. UI headings and subtitles have no periods or dot separators; book titles and opinions retain their original punctuation.
+
 ### Buttons
 
 Controls are soft, compact and deliberate. The base target is at least 44px high, with medium sans serif text and the frontmatter padding. The larger variant is at least 48px high. Primary and accent variants share Forest Binding; default is Folded Paper, ghost is transparent, and destructive is Clay Red. Link buttons keep a small inline gutter and underline on hover. Disabled buttons have half opacity and a disabled cursor.

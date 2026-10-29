@@ -186,3 +186,7 @@ The implemented visual system is recorded in [`DESIGN.md`](DESIGN.md), with [des
 [MIT](LICENSE) © Alejandro Fernández Camello. 📄
 
 Cover preview selection uses `selectBookCovers(candidates)` from `src/lib/books/covers.ts` to filter and deduplicate catalogue image URLs. For example, pass the results of `searchBooksAction(title)` to obtain `{ title, author, coverUrl }` previews.
+
+### Install as an app
+
+Book Recorder can be installed from a supporting browser on desktop or mobile. Use Install app when offered, or Safari’s Share menu and Add to Home Screen on iPhone and iPad. [PWA documentation](docs/pwa.md) describes supported installation, offline recovery and privacy boundaries.

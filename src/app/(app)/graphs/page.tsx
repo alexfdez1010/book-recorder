@@ -85,7 +85,7 @@ export default async function GraphsPage() {
         <div>
           <h1 className="lib-title">Graphs</h1>
           <p className="lib-subtitle mt-3">
-            Find the patterns in every chapter.
+            Find the patterns in every chapter
           </p>
         </div>
       </div>
