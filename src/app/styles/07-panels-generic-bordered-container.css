@@ -1,44 +1,17 @@
 @layer components {
-  /* ---- Panels (generic bordered container) ------------------------- */
-
   .lib-panel {
-    min-width: 0;
-    background: transparent;
-    border: 0;
-    border-radius: 8px;
-    box-shadow: none;
+    @apply min-w-0 overflow-hidden rounded-[14px] bg-bone;
   }
   .lib-panel__head {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 1rem;
-    padding: 0.75rem 1rem;
-    background: transparent;
-    border: 0;
+    @apply flex flex-wrap items-baseline justify-between gap-3 px-5 pt-6 sm:px-7;
   }
   .lib-panel__eyebrow {
-    /* gilt small-caps */
-    font-family: var(--font-sans);
-    font-size: 0.8rem;
-    letter-spacing: 0;
-    text-transform: none;
-    color: var(--binding);
+    @apply text-xs font-medium text-leather;
   }
   .lib-panel__title {
-    font-family: var(--font-serif);
-    font-weight: 500;
-    font-size: 1.35rem;
-    line-height: 1;
-    letter-spacing: -0.005em;
-    color: var(--ink);
+    @apply font-sans text-base font-medium leading-snug tracking-[-0.02em] text-ink;
   }
   .lib-panel__body {
-    padding: 1rem;
-  }
-  @media (min-width: 640px) {
-    .lib-panel__body {
-      padding: 1.5rem;
-    }
+    @apply min-w-0 px-4 pb-6 pt-5 sm:px-6;
   }
 }

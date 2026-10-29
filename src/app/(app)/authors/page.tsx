@@ -1,92 +1,34 @@
-import { BookOpinion } from '@/components/book-opinion';
+import { BookCollection } from '@/components/library/book-collection';
+import { CollectionHeader } from '@/components/library/collection-header';
 import { listAuthors, listBooks } from '@/lib/books/repository';
 import { listCategories } from '@/lib/books/categories-repository';
-import { languageName } from '@/lib/books/language';
-import { groupByAuthor } from '@/lib/books/authors';
-import { BookCover } from '@/components/book-cover';
-import { DeleteBookButton } from '@/components/delete-book-button';
-import { EditBookDialog } from '@/components/edit-book-dialog';
-import { Badge } from '@/components/ui/badge';
 
 export const dynamic = 'force-dynamic';
 
-/** Loads the library data and renders the responsive catalogue view. */
+/** Loads completed books grouped by author, retaining existing edit actions. */
 export default async function AuthorsPage() {
   const [books, authors, categories] = await Promise.all([
     listBooks(),
     listAuthors(),
     listCategories(),
   ]);
-  const groups = groupByAuthor(books);
-
+  const count = new Set(books.map((book) => book.author)).size;
   return (
-    <section className="flex flex-col gap-10">
-      <div className="lib-section-head">
-        <div className="flex flex-col gap-2">
-          <h1 className="lib-title">Authors</h1>
-          <p className="lib-subtitle">
-            {groups.length} authors · {books.length} books
-          </p>
-        </div>
-      </div>
-
-      {groups.length === 0 ? (
-        <div className="lib-empty">
-          <p className="lib-empty__title">No authors yet.</p>
-          <p className="mx-auto mt-3 max-w-md text-sm text-ink-soft">
-            Authors appear here as you add finished books to your library.
-          </p>
-        </div>
-      ) : (
-        <div className="flex flex-col gap-14">
-          {groups.map((group, gIdx) => (
-            <section key={group.author} className="flex flex-col gap-6">
-              <header className="lib-month-head">
-                <h2 className="lib-month-head__title">{group.author}</h2>
-                <span className="lib-meta">{group.books.length}</span>
-              </header>
-              <ul className="grid grid-cols-1 gap-x-12 gap-y-10 lg:grid-cols-2">
-                {group.books.map((b, idx) => (
-                  <li key={b.id} className="lib-card">
-                    <div className="lib-card__body">
-                      <BookCover
-                        title={b.title}
-                        author={b.author}
-                        coverUrl={b.coverUrl}
-                        priority={gIdx === 0 && idx < 6}
-                      />
-                      <div className="lib-card__text">
-                        <h3 className="lib-card__title" title={b.title}>
-                          {b.title}
-                        </h3>
-                        <p className="lib-card__author" title={b.author}>
-                          {b.author}
-                        </p>
-                        <p className="mt-3 text-sm text-ink-mute">
-                          {b.pages.toLocaleString()} pages ·{' '}
-                          {languageName(b.language)}
-                        </p>
-                        <div className="mt-3">
-                          <Badge variant="accent">{b.category}</Badge>
-                        </div>
-                      </div>
-                    </div>
-                    <BookOpinion opinion={b.opinion} />
-                    <div className="lib-card__foot">
-                      <EditBookDialog
-                        book={b}
-                        authors={authors}
-                        categories={categories}
-                      />
-                      <DeleteBookButton id={b.id} title={b.title} />
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </section>
-          ))}
-        </div>
-      )}
+    <section className="flex min-w-0 flex-col gap-9">
+      <CollectionHeader
+        title="Authors"
+        description={`${count} ${count === 1 ? 'voice' : 'voices'} in your reading life.`}
+        count={books.length}
+        pages={books.reduce((sum, book) => sum + book.pages, 0)}
+      />
+      <BookCollection
+        books={books}
+        authors={authors}
+        categories={categories}
+        grouping="author"
+        emptyTitle="No authors yet."
+        emptyDescription="Authors appear here as you add finished books to your library."
+      />
     </section>
   );
 }

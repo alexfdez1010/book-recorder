@@ -9,6 +9,7 @@ import {
   Legend,
 } from 'recharts';
 import type { CountEntry } from '@/lib/stats/aggregate';
+import { useChartMotion } from './use-chart-motion';
 
 export const INK = 'var(--ink)';
 export const OXBLOOD = 'var(--oxblood)';
@@ -22,16 +23,16 @@ export const PAPER_SOFT = 'var(--paper-soft)';
 export const PALETTE = [LEATHER, BRASS, WALNUT, OXBLOOD, CHESTNUT, MOSS, INK];
 
 export const tooltipStyle = {
-  backgroundColor: PAPER_SOFT,
-  border: '1px solid var(--ink)',
-  borderRadius: 0,
-  fontFamily: 'var(--font-jetbrains)',
-  fontSize: 11,
-  textTransform: 'uppercase' as const,
-  letterSpacing: '0.08em',
-  padding: '6px 10px',
+  backgroundColor: 'var(--bone)',
+  border: '1px solid var(--paper-edge)',
+  borderRadius: 10,
+  fontFamily: 'var(--font-sans)',
+  fontSize: 12,
+  color: INK,
+  padding: '10px 14px',
 };
 
+/** Frames one historical chart with a descriptive heading and responsive body. */
 export function Panel({
   title,
   children,
@@ -49,6 +50,7 @@ export function Panel({
   );
 }
 
+/** Displays a lifetime metric; optional notes explain textual or numeric values. */
 export function Kpi({
   label,
   value,
@@ -77,7 +79,9 @@ export function Kpi({
   );
 }
 
+/** Renders a compact distribution; tooltips and legend identify each segment. */
 export function DistributionPie({ entries }: { entries: CountEntry[] }) {
+  const animate = useChartMotion();
   return (
     <ResponsiveContainer width="100%" height={240}>
       <PieChart>
@@ -85,14 +89,13 @@ export function DistributionPie({ entries }: { entries: CountEntry[] }) {
           data={entries.map((e) => ({ name: e.label, value: e.value }))}
           dataKey="value"
           nameKey="name"
-          outerRadius={80}
-          stroke={INK}
-          strokeWidth={2}
-          label={{
-            fontFamily: 'var(--font-jetbrains)',
-            fontSize: 10,
-            fill: INK,
-          }}
+          outerRadius={78}
+          innerRadius={52}
+          paddingAngle={2}
+          stroke="var(--bone)"
+          strokeWidth={3}
+          animationDuration={450}
+          isAnimationActive={animate}
         >
           {entries.map((_, i) => (
             <Cell key={i} fill={PALETTE[i % PALETTE.length]} />
@@ -101,10 +104,8 @@ export function DistributionPie({ entries }: { entries: CountEntry[] }) {
         <Tooltip contentStyle={tooltipStyle} />
         <Legend
           wrapperStyle={{
-            fontFamily: 'var(--font-jetbrains)',
-            fontSize: 10,
-            textTransform: 'uppercase',
-            letterSpacing: '0.1em',
+            fontFamily: 'var(--font-sans)',
+            fontSize: 11,
           }}
         />
       </PieChart>

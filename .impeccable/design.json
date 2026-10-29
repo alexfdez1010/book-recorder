@@ -1,0 +1,437 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-29T18:20:03.387481Z",
+  "title": "Design System: Book Recorder",
+  "extensions": {
+    "colorMeta": {
+      "leather": {
+        "role": "primary",
+        "displayName": "Forest Binding",
+        "tonalRamp": [
+          "oklch(15% 0.0543 159.43)",
+          "oklch(26% 0.0543 159.43)",
+          "oklch(38% 0.0543 159.43)",
+          "oklch(49% 0.0543 159.43)",
+          "oklch(61% 0.0543 159.43)",
+          "oklch(72% 0.0543 159.43)",
+          "oklch(84% 0.0543 159.43)",
+          "oklch(95% 0.0543 159.43)"
+        ]
+      },
+      "leather-hover": {
+        "role": "primary",
+        "displayName": "Forest Binding Hover",
+        "tonalRamp": [
+          "oklch(15% 0.0500 158.92)",
+          "oklch(26% 0.0500 158.92)",
+          "oklch(38% 0.0500 158.92)",
+          "oklch(49% 0.0500 158.92)",
+          "oklch(61% 0.0500 158.92)",
+          "oklch(72% 0.0500 158.92)",
+          "oklch(84% 0.0500 158.92)",
+          "oklch(95% 0.0500 158.92)"
+        ]
+      },
+      "accent-soft": {
+        "role": "primary",
+        "displayName": "Pale Leaf",
+        "tonalRamp": [
+          "oklch(15% 0.0107 136.56)",
+          "oklch(26% 0.0107 136.56)",
+          "oklch(38% 0.0107 136.56)",
+          "oklch(49% 0.0107 136.56)",
+          "oklch(61% 0.0107 136.56)",
+          "oklch(72% 0.0107 136.56)",
+          "oklch(84% 0.0107 136.56)",
+          "oklch(95% 0.0107 136.56)"
+        ]
+      },
+      "paper": {
+        "role": "neutral",
+        "displayName": "Ivory Paper",
+        "tonalRamp": [
+          "oklch(15% 0.0066 106.52)",
+          "oklch(26% 0.0066 106.52)",
+          "oklch(38% 0.0066 106.52)",
+          "oklch(49% 0.0066 106.52)",
+          "oklch(61% 0.0066 106.52)",
+          "oklch(72% 0.0066 106.52)",
+          "oklch(84% 0.0066 106.52)",
+          "oklch(95% 0.0066 106.52)"
+        ]
+      },
+      "paper-soft": {
+        "role": "neutral",
+        "displayName": "Folded Paper",
+        "tonalRamp": [
+          "oklch(15% 0.0093 113.16)",
+          "oklch(26% 0.0093 113.16)",
+          "oklch(38% 0.0093 113.16)",
+          "oklch(49% 0.0093 113.16)",
+          "oklch(61% 0.0093 113.16)",
+          "oklch(72% 0.0093 113.16)",
+          "oklch(84% 0.0093 113.16)",
+          "oklch(95% 0.0093 113.16)"
+        ]
+      },
+      "paper-edge": {
+        "role": "neutral",
+        "displayName": "Paper Edge",
+        "tonalRamp": [
+          "oklch(15% 0.0128 126.38)",
+          "oklch(26% 0.0128 126.38)",
+          "oklch(38% 0.0128 126.38)",
+          "oklch(49% 0.0128 126.38)",
+          "oklch(61% 0.0128 126.38)",
+          "oklch(72% 0.0128 126.38)",
+          "oklch(84% 0.0128 126.38)",
+          "oklch(95% 0.0128 126.38)"
+        ]
+      },
+      "bone": {
+        "role": "neutral",
+        "displayName": "White Page",
+        "tonalRamp": [
+          "oklch(15% 0.0000 0.00)",
+          "oklch(26% 0.0000 0.00)",
+          "oklch(38% 0.0000 0.00)",
+          "oklch(49% 0.0000 0.00)",
+          "oklch(61% 0.0000 0.00)",
+          "oklch(72% 0.0000 0.00)",
+          "oklch(84% 0.0000 0.00)",
+          "oklch(95% 0.0000 0.00)"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Charcoal Ink",
+        "tonalRamp": [
+          "oklch(15% 0.0101 164.17)",
+          "oklch(26% 0.0101 164.17)",
+          "oklch(38% 0.0101 164.17)",
+          "oklch(49% 0.0101 164.17)",
+          "oklch(61% 0.0101 164.17)",
+          "oklch(72% 0.0101 164.17)",
+          "oklch(84% 0.0101 164.17)",
+          "oklch(95% 0.0101 164.17)"
+        ]
+      },
+      "ink-soft": {
+        "role": "neutral",
+        "displayName": "Soft Ink",
+        "tonalRamp": [
+          "oklch(15% 0.0178 157.71)",
+          "oklch(26% 0.0178 157.71)",
+          "oklch(38% 0.0178 157.71)",
+          "oklch(49% 0.0178 157.71)",
+          "oklch(61% 0.0178 157.71)",
+          "oklch(72% 0.0178 157.71)",
+          "oklch(84% 0.0178 157.71)",
+          "oklch(95% 0.0178 157.71)"
+        ]
+      },
+      "ink-mute": {
+        "role": "neutral",
+        "displayName": "Quiet Ink",
+        "tonalRamp": [
+          "oklch(15% 0.0143 156.72)",
+          "oklch(26% 0.0143 156.72)",
+          "oklch(38% 0.0143 156.72)",
+          "oklch(49% 0.0143 156.72)",
+          "oklch(61% 0.0143 156.72)",
+          "oklch(72% 0.0143 156.72)",
+          "oklch(84% 0.0143 156.72)",
+          "oklch(95% 0.0143 156.72)"
+        ]
+      },
+      "walnut": {
+        "role": "secondary",
+        "displayName": "Quiet Sage",
+        "tonalRamp": [
+          "oklch(15% 0.0358 132.49)",
+          "oklch(26% 0.0358 132.49)",
+          "oklch(38% 0.0358 132.49)",
+          "oklch(49% 0.0358 132.49)",
+          "oklch(61% 0.0358 132.49)",
+          "oklch(72% 0.0358 132.49)",
+          "oklch(84% 0.0358 132.49)",
+          "oklch(95% 0.0358 132.49)"
+        ]
+      },
+      "chestnut": {
+        "role": "secondary",
+        "displayName": "Warm Chestnut",
+        "tonalRamp": [
+          "oklch(15% 0.0489 78.66)",
+          "oklch(26% 0.0489 78.66)",
+          "oklch(38% 0.0489 78.66)",
+          "oklch(49% 0.0489 78.66)",
+          "oklch(61% 0.0489 78.66)",
+          "oklch(72% 0.0489 78.66)",
+          "oklch(84% 0.0489 78.66)",
+          "oklch(95% 0.0489 78.66)"
+        ]
+      },
+      "oxblood": {
+        "role": "secondary",
+        "displayName": "Clay Red",
+        "tonalRamp": [
+          "oklch(15% 0.1113 29.86)",
+          "oklch(26% 0.1113 29.86)",
+          "oklch(38% 0.1113 29.86)",
+          "oklch(49% 0.1113 29.86)",
+          "oklch(61% 0.1113 29.86)",
+          "oklch(72% 0.1113 29.86)",
+          "oklch(84% 0.1113 29.86)",
+          "oklch(95% 0.1113 29.86)"
+        ]
+      },
+      "brass": {
+        "role": "secondary",
+        "displayName": "Muted Brass",
+        "tonalRamp": [
+          "oklch(15% 0.0949 78.24)",
+          "oklch(26% 0.0949 78.24)",
+          "oklch(38% 0.0949 78.24)",
+          "oklch(49% 0.0949 78.24)",
+          "oklch(61% 0.0949 78.24)",
+          "oklch(72% 0.0949 78.24)",
+          "oklch(84% 0.0949 78.24)",
+          "oklch(95% 0.0949 78.24)"
+        ]
+      },
+      "moss": {
+        "role": "secondary",
+        "displayName": "Reading Moss",
+        "tonalRamp": [
+          "oklch(15% 0.0654 151.63)",
+          "oklch(26% 0.0654 151.63)",
+          "oklch(38% 0.0654 151.63)",
+          "oklch(49% 0.0654 151.63)",
+          "oklch(61% 0.0654 151.63)",
+          "oklch(72% 0.0654 151.63)",
+          "oklch(84% 0.0654 151.63)",
+          "oklch(95% 0.0654 151.63)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Page Heading",
+        "purpose": "Fraunces page identity; grows from 640px."
+      },
+      "title": {
+        "displayName": "Book Title",
+        "purpose": "Readable literary titles beside covers."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Base reading text and fields."
+      },
+      "label": {
+        "displayName": "Control Label",
+        "purpose": "Medium Geist controls."
+      },
+      "metadata": {
+        "displayName": "Metadata",
+        "purpose": "Secondary counts and supporting data."
+      }
+    },
+    "shadows": [
+      {
+        "name": "book-rest",
+        "value": "2px 4px 6px #2537281a, 5px 10px 20px #25372812",
+        "purpose": "Cover at rest."
+      },
+      {
+        "name": "book-hover",
+        "value": "3px 6px 8px #2537281a, 7px 15px 24px #25372820",
+        "purpose": "Fine-pointer cover lift."
+      },
+      {
+        "name": "card-hover",
+        "value": "0 8px 24px #25372808",
+        "purpose": "Subtle entry response."
+      },
+      {
+        "name": "button-primary",
+        "value": "0 3px 6px #365b4714",
+        "purpose": "Shallow primary action."
+      },
+      {
+        "name": "picker",
+        "value": "0 12px 30px #2537281f",
+        "purpose": "Selection popover."
+      },
+      {
+        "name": "dialog",
+        "value": "0 24px 80px #1b30292e",
+        "purpose": "Focused modal surface."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-library",
+        "value": "cubic-bezier(0.22, 1, 0.36, 1)",
+        "purpose": "Cover, modal and control settling."
+      },
+      {
+        "name": "cover-duration",
+        "value": "380ms",
+        "purpose": "Cover lift and shadow."
+      },
+      {
+        "name": "dialog-enter",
+        "value": "360ms",
+        "purpose": "Modal settling."
+      },
+      {
+        "name": "dialog-exit",
+        "value": "160ms",
+        "purpose": "Modal dismissal."
+      },
+      {
+        "name": "chart-current",
+        "value": "400ms",
+        "purpose": "Recent current-series update."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "sm",
+        "value": "640px"
+      },
+      {
+        "name": "lg",
+        "value": "1024px"
+      },
+      {
+        "name": "xl",
+        "value": "1280px"
+      },
+      {
+        "name": "wide-container",
+        "value": "1664px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Primary save and add actions.",
+      "html": "<button class=\"ds-btn-primary\">Save book</button>",
+      "css": ".ds-btn-primary{display:inline-flex;min-height:44px;align-items:center;justify-content:center;gap:8px;border:0;border-radius:12px;padding:10px 20px;font-family:var(--font-sans,Geist,system-ui,sans-serif);font-size:14px;font-weight:500;cursor:pointer;transition:background-color 180ms ease,color 180ms ease,transform 200ms var(--ease-library,cubic-bezier(.22,1,.36,1)),box-shadow 200ms ease;background:var(--leather,#365b47);color:var(--bone,#ffffff);box-shadow:0 3px 6px #365b4714;}.ds-btn-primary:hover:not(:disabled){background:var(--leather-hover,#294a38);box-shadow:0 4px 10px #365b4726;}.ds-btn-primary:focus-visible{outline:2px solid var(--leather,#365b47);outline-offset:4px;}.ds-btn-primary:active:not(:disabled){transform:scale(.96)}.ds-btn-primary:disabled{opacity:.5;cursor:not-allowed}"
+    },
+    {
+      "name": "Default Button",
+      "kind": "button",
+      "refersTo": "button-default",
+      "description": "Secondary actions on a soft neutral surface.",
+      "html": "<button class=\"ds-btn-default\">Cancel</button>",
+      "css": ".ds-btn-default{display:inline-flex;min-height:44px;align-items:center;justify-content:center;gap:8px;border:0;border-radius:12px;padding:10px 20px;font-family:var(--font-sans,Geist,system-ui,sans-serif);font-size:14px;font-weight:500;cursor:pointer;transition:background-color 180ms ease,color 180ms ease,transform 200ms var(--ease-library,cubic-bezier(.22,1,.36,1)),box-shadow 200ms ease;background:var(--paper-soft,#eeefe8);color:var(--ink,#252b28);}.ds-btn-default:hover:not(:disabled){background:var(--paper-edge,#dfe3da);}.ds-btn-default:focus-visible{outline:2px solid var(--leather,#365b47);outline-offset:4px;}.ds-btn-default:active:not(:disabled){transform:scale(.96)}.ds-btn-default:disabled{opacity:.5;cursor:not-allowed}"
+    },
+    {
+      "name": "Destructive Button",
+      "kind": "button",
+      "refersTo": "button-destructive",
+      "description": "Confirmed destructive actions.",
+      "html": "<button class=\"ds-btn-destructive\">Delete book</button>",
+      "css": ".ds-btn-destructive{display:inline-flex;min-height:44px;align-items:center;justify-content:center;gap:8px;border:0;border-radius:12px;padding:10px 20px;font-family:var(--font-sans,Geist,system-ui,sans-serif);font-size:14px;font-weight:500;cursor:pointer;transition:background-color 180ms ease,color 180ms ease,transform 200ms var(--ease-library,cubic-bezier(.22,1,.36,1)),box-shadow 200ms ease;background:var(--oxblood,#a14f43);color:var(--bone,#ffffff);}.ds-btn-destructive:hover:not(:disabled){background:#873c32;}.ds-btn-destructive:focus-visible{outline:2px solid var(--leather,#365b47);outline-offset:4px;}.ds-btn-destructive:active:not(:disabled){transform:scale(.96)}.ds-btn-destructive:disabled{opacity:.5;cursor:not-allowed}"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Quiet supporting actions.",
+      "html": "<button class=\"ds-btn-ghost\">Edit</button>",
+      "css": ".ds-btn-ghost{display:inline-flex;min-height:44px;align-items:center;justify-content:center;gap:8px;border:0;border-radius:12px;padding:10px 20px;font-family:var(--font-sans,Geist,system-ui,sans-serif);font-size:14px;font-weight:500;cursor:pointer;transition:background-color 180ms ease,color 180ms ease,transform 200ms var(--ease-library,cubic-bezier(.22,1,.36,1)),box-shadow 200ms ease;background:transparent;color:var(--ink-mute,#68716b);}.ds-btn-ghost:hover:not(:disabled){background:var(--paper-soft,#eeefe8);color:var(--ink,#252b28);}.ds-btn-ghost:focus-visible{outline:2px solid var(--leather,#365b47);outline-offset:4px;}.ds-btn-ghost:active:not(:disabled){transform:scale(.96)}.ds-btn-ghost:disabled{opacity:.5;cursor:not-allowed}"
+    },
+    {
+      "name": "Link Button",
+      "kind": "button",
+      "refersTo": "button-link",
+      "description": "Inline supporting actions.",
+      "html": "<button class=\"ds-btn-link\">Back to search</button>",
+      "css": ".ds-btn-link{display:inline-flex;min-height:44px;align-items:center;justify-content:center;gap:8px;border:0;border-radius:12px;padding:10px 20px;font-family:var(--font-sans,Geist,system-ui,sans-serif);font-size:14px;font-weight:500;cursor:pointer;transition:background-color 180ms ease,color 180ms ease,transform 200ms var(--ease-library,cubic-bezier(.22,1,.36,1)),box-shadow 200ms ease;background:transparent;color:var(--ink-mute,#68716b);padding-inline:4px;text-underline-offset:4px;}.ds-btn-link:hover:not(:disabled){background:transparent;color:var(--ink,#252b28);text-decoration:underline;}.ds-btn-link:focus-visible{outline:2px solid var(--leather,#365b47);outline-offset:4px;}.ds-btn-link:active:not(:disabled){transform:scale(.96)}.ds-btn-link:disabled{opacity:.5;cursor:not-allowed}"
+    },
+    {
+      "name": "Text Field",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "A visibly bordered field with a clear focus outline.",
+      "html": "<input class=\"ds-input\" aria-label=\"Book title\" placeholder=\"Book title\">",
+      "css": ".ds-input{min-height:48px;width:100%;border:1px solid var(--paper-edge,#dfe3da);border-radius:12px;background:var(--bone,#ffffff);color:var(--ink,#252b28);padding:12px 14px;font-family:var(--font-sans,Geist,system-ui,sans-serif);font-size:16px;line-height:1.375;transition:border-color 180ms ease,box-shadow 180ms ease,background-color 180ms ease}.ds-input::placeholder{color:var(--ink-mute,#68716b)}.ds-input:hover{border-color:#bbc6bc}.ds-input:focus-visible{outline:2px solid var(--leather,#365b47);outline-offset:2px}.ds-input:disabled{opacity:.5;cursor:not-allowed}"
+    },
+    {
+      "name": "Active Navigation",
+      "kind": "nav",
+      "refersTo": "navigation-active",
+      "description": "The desktop current route with its quiet active dot.",
+      "html": "<nav aria-label=\"Library\"><a class=\"ds-nav\" href=\"#books\" aria-current=\"page\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" aria-hidden=\"true\"><path d=\"M12 7v14M3 3h6a3 3 0 0 1 3 3 3 3 0 0 1 3-3h6v16h-6a3 3 0 0 0-3 2 3 3 0 0 0-3-2H3Z\"/></svg>Books<span class=\"ds-nav-dot\"></span></a></nav>",
+      "css": ".ds-nav{display:flex;min-height:48px;align-items:center;gap:12px;border-radius:12px;padding:12px 16px;background:var(--paper-soft,#eeefe8);color:var(--leather,#365b47);font-family:var(--font-sans,Geist,system-ui,sans-serif);font-size:14px;font-weight:500;text-decoration:none;transition:background-color 200ms var(--ease-library,cubic-bezier(.22,1,.36,1)),color 200ms var(--ease-library,cubic-bezier(.22,1,.36,1))}.ds-nav:hover{background:var(--paper-soft,#eeefe8);color:var(--leather,#365b47)}.ds-nav:focus-visible{outline:2px solid var(--leather,#365b47);outline-offset:4px;}.ds-nav-dot{margin-left:auto;width:6px;height:6px;border-radius:9999px;background:var(--leather,#365b47)}"
+    },
+    {
+      "name": "Category Badge",
+      "kind": "chip",
+      "refersTo": "badge-accent",
+      "description": "Noninteractive book category metadata.",
+      "html": "<span class=\"ds-badge\">Fiction</span>",
+      "css": ".ds-badge{display:inline-flex;max-width:100%;align-items:center;gap:4px;border-radius:6px;background:var(--accent-soft,#edf2eb);color:var(--leather,#365b47);padding:4px 8px;font-family:var(--font-sans,Geist,system-ui,sans-serif);font-size:11px;font-weight:500}"
+    },
+    {
+      "name": "Book Card and Cover",
+      "kind": "card",
+      "refersTo": "book-card",
+      "description": "A white entry with a tactile fallback cover and adjacent title.",
+      "html": "<article class=\"ds-card\"><div class=\"ds-cover\">The Waves</div><div class=\"ds-card-text\"><h3 class=\"ds-card-title\">The Waves</h3><p class=\"ds-card-author\">Virginia Woolf</p><p class=\"ds-card-meta\">240 pages \u00b7 English</p></div></article>",
+      "css": ".ds-card{display:flex;gap:20px;min-width:0;border-radius:14px;background:var(--bone,#ffffff);padding:20px;color:var(--ink,#252b28);transition:box-shadow 300ms var(--ease-library,cubic-bezier(.22,1,.36,1))}.ds-cover{width:96px;height:144px;flex-shrink:0;overflow:hidden;border-radius:2px 6px 6px 2px;background:var(--leather,#365b47);color:var(--bone,#ffffff);padding:9px;font-family:var(--font-serif,Fraunces,Georgia,serif);font-size:12.48px;transform-origin:15% 70%;box-shadow:2px 4px 6px #2537281a,5px 10px 20px #25372812;transition:transform 380ms var(--ease-library,cubic-bezier(.22,1,.36,1)),box-shadow 380ms var(--ease-library,cubic-bezier(.22,1,.36,1))}.ds-card-text{min-width:0;display:flex;flex-direction:column;padding-top:4px}.ds-card-title{margin:0;font-family:var(--font-serif,Fraunces,Georgia,serif);font-size:20px;font-weight:500;line-height:1.3;letter-spacing:-.02em;overflow-wrap:anywhere}.ds-card-author{margin-top:8px;font-family:var(--font-sans,Geist,system-ui,sans-serif);font-size:14px;color:var(--ink-soft,#4e5952)}.ds-card-meta{margin-top:auto;padding-top:16px;font-family:var(--font-sans,Geist,system-ui,sans-serif);font-size:12px;color:var(--ink-mute,#68716b)}@media(hover:hover) and (pointer:fine){.ds-card:hover{box-shadow:0 8px 24px #25372808}.ds-card:hover .ds-cover{transform:translateY(-4px) rotate(-2deg);box-shadow:3px 6px 8px #2537281a,7px 15px 24px #25372820}}@media(prefers-reduced-motion:reduce){.ds-card,.ds-cover{transition-duration:.01ms}}"
+    },
+    {
+      "name": "Dialog Surface",
+      "kind": "custom",
+      "refersTo": "dialog",
+      "description": "The white modal surface; runtime behavior remains owned by HeroUI.",
+      "html": "<section class=\"ds-dialog\" aria-label=\"Edit book preview\"><header class=\"ds-dialog-head\"><h2 class=\"ds-dialog-title\">Edit book</h2><p class=\"ds-dialog-desc\">Keep your library up to date.</p></header><div class=\"ds-dialog-body\">Book details</div></section>",
+      "css": ".ds-dialog{width:100%;border:0;border-radius:16px;background:var(--bone,#ffffff);color:var(--ink,#252b28);box-shadow:0 24px 80px #1b30292e}.ds-dialog-head{display:flex;flex-direction:column;gap:8px;border-bottom:1px solid var(--paper-soft,#eeefe8);padding:24px 56px 24px 20px}.ds-dialog-title{margin:0;font-family:var(--font-serif,Fraunces,Georgia,serif);font-size:24px;font-weight:400;line-height:1.25;letter-spacing:-.02em}.ds-dialog-desc{margin:0;font-family:var(--font-sans,Geist,system-ui,sans-serif);font-size:14px;color:var(--ink-mute,#68716b)}.ds-dialog-body{padding:24px 20px;font-family:var(--font-sans,Geist,system-ui,sans-serif);font-size:14px}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Personal Reading Room",
+    "overview": "The Personal Reading Room gives a private library a calm, spacious setting. Warm ivory supports white content surfaces, forest green identifies actions and selections, and real book covers give the collection its strongest visual detail. The language is editorial and approachable, with readable controls and visible actions.\n\nDepth belongs chiefly to books and overlays. Covers lift slightly under a fine pointer; dialogs settle into focus over a softened backdrop. These short responses follow an action. Content is present immediately, without a staged entrance or ambient loop. This description records the implemented system; the user delegated its visual language.",
+    "keyCharacteristics": [
+      "Ivory canvas, white panels and restrained forest green controls.",
+      "Fraunces for reading identity; Geist for navigation, labels and data.",
+      "Spacious grouping with visible actions and purposeful motion."
+    ],
+    "rules": [
+      {
+        "name": "The Shared Palette Rule",
+        "body": "Charts reference the same CSS palette as the interface; do not establish a separate hardcoded chart theme.",
+        "section": "colors"
+      },
+      {
+        "name": "The Reading and Control Rule",
+        "body": "Use serif type for page and book identity, and sans serif for navigation, form controls and data.",
+        "section": "typography"
+      },
+      {
+        "name": "The Object Depth Rule",
+        "body": "Preserve the distinction between quiet content surfaces, tactile covers and elevated overlays.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do reuse the shared CSS palette for interface and chart colors.",
+      "Do keep book actions visible for touch and keyboard users.",
+      "Do honor reduced motion in both CSS and chart configuration.",
+      "Do preserve the white surface and ivory canvas relationship."
+    ],
+    "donts": [
+      "Don't hide essential controls behind hover.",
+      "Don't add ambient loops or delay access to page content for an entrance sequence.",
+      "Don't replace HeroUI's accessible modal and selection behavior with decorative replicas."
+    ]
+  }
+}

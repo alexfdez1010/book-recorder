@@ -15,12 +15,23 @@ import {
 import type { CountEntry, TimeseriesPoint } from '@/lib/stats/aggregate';
 import type { YearOverYearRow } from '@/lib/stats/extras';
 import { INK, PALETTE, tooltipStyle } from './primitives';
+import { useChartMotion } from './use-chart-motion';
 
 const grid = (
-  <CartesianGrid strokeDasharray="2 4" stroke={INK} strokeOpacity={0.2} />
+  <CartesianGrid
+    vertical={false}
+    strokeDasharray="3 5"
+    stroke="var(--paper-edge)"
+  />
 );
-const axisProps = { fontSize: 10, stroke: INK, tickLine: false } as const;
+const axisProps = {
+  fontSize: 10,
+  stroke: 'var(--ink-mute)',
+  tickLine: false,
+  axisLine: false,
+} as const;
 
+/** Plots a historical timeseries; motion follows the operating system preference. */
 export function LinePanel({
   data,
   stroke,
@@ -32,9 +43,14 @@ export function LinePanel({
   type: 'stepAfter' | 'monotone';
   dataKey?: string;
 }) {
+  const animate = useChartMotion();
   return (
     <ResponsiveContainer width="100%" height={240}>
-      <LineChart data={data}>
+      <LineChart
+        data={data}
+        margin={{ left: -20, right: 8, top: 8 }}
+        accessibilityLayer
+      >
         {grid}
         <XAxis dataKey="date" {...axisProps} />
         <YAxis {...axisProps} />
@@ -44,17 +60,26 @@ export function LinePanel({
           dataKey={dataKey}
           stroke={stroke}
           strokeWidth={2.5}
-          dot={{ fill: INK, r: 2 }}
+          dot={false}
+          activeDot={{ r: 4 }}
+          animationDuration={450}
+          isAnimationActive={animate}
         />
       </LineChart>
     </ResponsiveContainer>
   );
 }
 
+/** Plots category totals with integer ticks and bounded, rounded columns. */
 export function BarPanel({ data, fill }: { data: CountEntry[]; fill: string }) {
+  const animate = useChartMotion();
   return (
     <ResponsiveContainer width="100%" height={240}>
-      <BarChart data={data.map((e) => ({ name: e.label, value: e.value }))}>
+      <BarChart
+        data={data.map((e) => ({ name: e.label, value: e.value }))}
+        margin={{ left: -20, right: 8, top: 8 }}
+        accessibilityLayer
+      >
         {grid}
         <XAxis dataKey="name" {...axisProps} />
         <YAxis allowDecimals={false} {...axisProps} />
@@ -62,12 +87,20 @@ export function BarPanel({ data, fill }: { data: CountEntry[]; fill: string }) {
           contentStyle={tooltipStyle}
           cursor={{ fill: INK, fillOpacity: 0.06 }}
         />
-        <Bar dataKey="value" fill={fill} />
+        <Bar
+          dataKey="value"
+          fill={fill}
+          radius={[4, 4, 0, 0]}
+          maxBarSize={42}
+          animationDuration={450}
+          isAnimationActive={animate}
+        />
       </BarChart>
     </ResponsiveContainer>
   );
 }
 
+/** Plots longer category labels horizontally, with an optional fixed numeric range. */
 export function HorizontalBarPanel({
   data,
   fill,
@@ -77,12 +110,14 @@ export function HorizontalBarPanel({
   fill: string;
   domain?: [number, number];
 }) {
+  const animate = useChartMotion();
   return (
     <ResponsiveContainer width="100%" height={Math.max(240, data.length * 28)}>
       <BarChart
         layout="vertical"
         data={data.map((e) => ({ name: e.label, value: e.value }))}
         margin={{ left: 12, right: 12 }}
+        accessibilityLayer
       >
         {grid}
         <XAxis
@@ -96,7 +131,14 @@ export function HorizontalBarPanel({
           contentStyle={tooltipStyle}
           cursor={{ fill: INK, fillOpacity: 0.06 }}
         />
-        <Bar dataKey="value" fill={fill} />
+        <Bar
+          dataKey="value"
+          fill={fill}
+          radius={[0, 4, 4, 0]}
+          maxBarSize={22}
+          animationDuration={450}
+          isAnimationActive={animate}
+        />
       </BarChart>
     </ResponsiveContainer>
   );
@@ -115,19 +157,22 @@ export function MultiLinePanel({
   xKey: string;
   series: string[];
 }) {
+  const animate = useChartMotion();
   return (
     <ResponsiveContainer width="100%" height={260}>
-      <LineChart data={data}>
+      <LineChart
+        data={data}
+        margin={{ left: -20, right: 8, top: 8 }}
+        accessibilityLayer
+      >
         {grid}
         <XAxis dataKey={xKey} {...axisProps} />
         <YAxis allowDecimals={false} {...axisProps} />
         <Tooltip contentStyle={tooltipStyle} />
         <Legend
           wrapperStyle={{
-            fontFamily: 'var(--font-jetbrains)',
-            fontSize: 10,
-            textTransform: 'uppercase',
-            letterSpacing: '0.1em',
+            fontFamily: 'var(--font-sans)',
+            fontSize: 11,
           }}
         />
         {series.map((s, i) => (
@@ -137,7 +182,10 @@ export function MultiLinePanel({
             dataKey={s}
             stroke={PALETTE[i % PALETTE.length]}
             strokeWidth={2}
-            dot={{ fill: INK, r: 2 }}
+            dot={false}
+            activeDot={{ r: 4 }}
+            animationDuration={450}
+            isAnimationActive={animate}
           />
         ))}
       </LineChart>

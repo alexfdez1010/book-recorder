@@ -99,6 +99,7 @@ for (const viewport of VIEWPORTS) {
     test('login and every application screen fit the viewport', async ({
       page,
     }) => {
+      await page.emulateMedia({ reducedMotion: 'reduce' });
       await page.goto('/login');
       await expect(
         page.getByRole('heading', { name: 'Book Recorder' }),
@@ -123,19 +124,13 @@ for (const viewport of VIEWPORTS) {
         ).toBeVisible();
         if (screen.path === '/graphs') {
           await expect(page.locator('.recharts-surface').first()).toBeVisible();
-          // Recharts' default entrance animation lasts 1500 ms; capture the
-          // completed geometry instead of the initial empty SVG containers.
-          await page.waitForTimeout(1_600);
-          await expect
-            .poll(async () => {
-              const bar = page.locator('.recharts-bar-rectangle path').first();
-              const box = await bar.boundingBox();
-              return box !== null && box.height > 0;
-            })
-            .toBe(true);
+          await expect(
+            page.getByRole('figure', { name: 'Daily completed pages chart' }),
+          ).toBeVisible();
         }
         await expectNoPageOverflow(page);
         if (viewport.capture) {
+          await page.mouse.move(0, 0);
           const masks =
             screen.path === '/skill'
               ? [

@@ -1,91 +1,41 @@
-import { BookOpinion } from '@/components/book-opinion';
+import { AddBookDialog } from '@/components/add-book-dialog';
+import { BookCollection } from '@/components/library/book-collection';
+import { CollectionHeader } from '@/components/library/collection-header';
 import { listAuthors, listToReadBooks } from '@/lib/books/repository';
 import { listCategories } from '@/lib/books/categories-repository';
-import { languageName } from '@/lib/books/language';
 
 export const dynamic = 'force-dynamic';
-import { AddBookDialog } from '@/components/add-book-dialog';
-import { BookCover } from '@/components/book-cover';
-import { DeleteBookButton } from '@/components/delete-book-button';
-import { EditBookDialog } from '@/components/edit-book-dialog';
-import { MarkAsFinishedButton } from '@/components/mark-as-finished-button';
-import { Badge } from '@/components/ui/badge';
 
-/** Loads the library data and renders the responsive catalogue view. */
+/** Loads the reading queue without counting its unfinished books as completed. */
 export default async function ToReadPage() {
   const [books, authors, categories] = await Promise.all([
     listToReadBooks(),
     listAuthors(),
     listCategories(),
   ]);
-  const totalPages = books.reduce((s, b) => s + b.pages, 0);
-
   return (
-    <section className="flex flex-col gap-10">
-      <div className="lib-section-head">
-        <div className="flex flex-col gap-2">
-          <h1 className="lib-title">To read</h1>
-          <p className="lib-subtitle">
-            {books.length} books · {totalPages.toLocaleString()} pages queued
-          </p>
-        </div>
+    <section className="flex min-w-0 flex-col gap-9">
+      <CollectionHeader
+        title="To read"
+        description="Good things waiting on your shelf."
+        count={books.length}
+        pages={books.reduce((sum, book) => sum + book.pages, 0)}
+        queued
+      >
         <AddBookDialog
           authors={authors}
           categories={categories}
           status="to-read"
         />
-      </div>
-
-      {books.length === 0 ? (
-        <div className="lib-empty">
-          <p className="lib-empty__title">Nothing queued yet.</p>
-          <p className="mx-auto mt-3 max-w-md text-sm text-ink-soft">
-            Keep your next reads here. Choose Add to read, then mark each book
-            finished when you’re done.
-          </p>
-        </div>
-      ) : (
-        <ul className="grid grid-cols-1 gap-x-12 gap-y-10 lg:grid-cols-2">
-          {books.map((b, idx) => (
-            <li key={b.id} className="lib-card">
-              <div className="lib-card__body">
-                <BookCover
-                  title={b.title}
-                  author={b.author}
-                  coverUrl={b.coverUrl}
-                  priority={idx < 6}
-                />
-                <div className="lib-card__text">
-                  <h3 className="lib-card__title" title={b.title}>
-                    {b.title}
-                  </h3>
-                  <p className="lib-card__author" title={b.author}>
-                    {b.author}
-                  </p>
-                  <p className="mt-3 text-sm text-ink-mute">
-                    {b.pages.toLocaleString()} pages ·{' '}
-                    {languageName(b.language)}
-                  </p>
-                  <div className="mt-3">
-                    <Badge variant="accent">{b.category}</Badge>
-                  </div>
-                </div>
-              </div>
-
-              <BookOpinion opinion={b.opinion} />
-              <div className="lib-card__foot">
-                <MarkAsFinishedButton id={b.id} title={b.title} />
-                <EditBookDialog
-                  book={b}
-                  authors={authors}
-                  categories={categories}
-                />
-                <DeleteBookButton id={b.id} title={b.title} />
-              </div>
-            </li>
-          ))}
-        </ul>
-      )}
+      </CollectionHeader>
+      <BookCollection
+        books={books}
+        authors={authors}
+        categories={categories}
+        grouping="none"
+        emptyTitle="Nothing queued yet."
+        emptyDescription="Keep your next reads here. Choose Add to read, then mark each book finished when you’re done."
+      />
     </section>
   );
 }

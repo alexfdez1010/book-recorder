@@ -1,24 +1,42 @@
 @layer components {
-  /* ---- Login (check-in ticket) ------------------------------------- */
-
+  .lib-login {
+    @apply grid min-h-dvh lg:grid-cols-2;
+  }
+  .lib-login-story {
+    @apply relative hidden flex-col justify-between overflow-hidden bg-[#e8eee4] p-12 text-ink lg:flex xl:p-16;
+  }
+  .lib-login-story__title {
+    @apply max-w-lg font-serif text-[4.5rem] font-normal leading-[1.02] tracking-[-0.035em] xl:text-[5.5rem];
+  }
+  .lib-login-form-area {
+    @apply flex min-h-dvh items-center justify-center p-6 sm:p-12;
+  }
   .lib-ticket {
-    width: 100%;
-    max-width: 26rem;
-    background: var(--paper-soft);
-    border: 0;
-    border-radius: 8px;
-    box-shadow: none;
-    position: relative;
+    @apply w-full max-w-[23rem];
   }
   .lib-ticket__head {
-    padding: 1.5rem 1.5rem 1.25rem;
-    background: transparent;
-    border: 0;
+    @apply pb-9;
   }
   .lib-ticket__body {
-    padding: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1.25rem;
+    @apply flex flex-col gap-5;
+  }
+  .lib-login-books {
+    @apply relative my-12 flex h-56 items-end gap-4;
+    perspective: 1200px;
+  }
+  .lib-login-volume {
+    @apply flex h-48 w-36 flex-col justify-between rounded-r-lg rounded-l-sm p-5 font-serif text-xl leading-tight text-bone;
+    box-shadow:
+      4px 8px 16px #263b2b1a,
+      inset 3px 0 3px #ffffff30;
+    transform: rotate(-9deg);
+  }
+  .lib-login-volume:nth-child(2) {
+    height: 14rem;
+    transform: translateY(-10px) rotate(4deg);
+  }
+  .lib-login-volume:nth-child(3) {
+    height: 11rem;
+    transform: rotate(12deg);
   }
 }

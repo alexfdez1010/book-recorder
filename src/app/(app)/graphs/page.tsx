@@ -31,7 +31,9 @@ import {
   ratingDistribution,
 } from '@/lib/stats/extras';
 import { GraphsDashboard } from '@/components/graphs-dashboard';
+import { recentPerformance } from '@/lib/stats/recent';
 
+/** Loads finished books and computes all chart data with one shared server clock. */
 export default async function GraphsPage() {
   const books = await listBooks();
   const plain = books.map((b) => ({
@@ -44,7 +46,10 @@ export default async function GraphsPage() {
     publicationDate: b.publicationDate ? b.publicationDate.toISOString() : null,
     rating: b.rating,
   }));
+  const now = new Date();
   const data = {
+    recentWeek: recentPerformance(plain, 7, now),
+    recentMonth: recentPerformance(plain, 30, now),
     booksPerMonth: booksPerMonth(plain),
     booksPerYear: booksPerYear(plain),
     pagesPerMonth: pagesPerMonth(plain),
@@ -77,7 +82,12 @@ export default async function GraphsPage() {
   return (
     <section className="flex flex-col gap-10">
       <div className="lib-section-head">
-        <h1 className="lib-title">Graphs</h1>
+        <div>
+          <h1 className="lib-title">Graphs</h1>
+          <p className="lib-subtitle mt-3">
+            Find the patterns in every chapter.
+          </p>
+        </div>
       </div>
       <GraphsDashboard data={data} />
     </section>

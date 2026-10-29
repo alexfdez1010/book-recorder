@@ -1,14 +1,23 @@
 @layer components {
   .lib-header {
-    @apply bg-paper text-ink;
+    @apply sticky top-0 z-30 bg-bone text-ink lg:fixed lg:inset-y-0 lg:left-0 lg:w-56 lg:border-r lg:border-paper-edge;
   }
   .lib-header__inner {
-    @apply mx-auto max-w-6xl px-5 pt-6 sm:px-8 sm:pt-8;
+    @apply mx-auto flex max-w-[88rem] flex-col px-5 pt-5 sm:px-9 lg:h-full lg:px-5 lg:pt-9;
   }
   .lib-header__row {
-    @apply flex items-center justify-between gap-4 pb-5;
+    @apply flex items-center justify-between gap-4 pb-5 lg:px-2 lg:pb-12;
   }
   .lib-header__title {
-    @apply text-2xl text-ink;
+    @apply flex items-center gap-3 text-lg leading-[1.05];
+  }
+  .lib-brand-icon {
+    @apply flex size-10 shrink-0 items-center justify-center rounded-xl bg-leather text-bone;
+  }
+  .lib-mobile-logout {
+    @apply lg:hidden;
+  }
+  .lib-sidebar-footer {
+    @apply mt-auto hidden pb-5 lg:block;
   }
 }

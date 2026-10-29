@@ -2,7 +2,7 @@
 
 Your personal reading journal. Search any book, save it, and watch your library — and your reading habits — come to life.
 
-> Brutalist, book-themed UI. Built for readers who want their shelf, their stats, and their to-read pile in one place. ✍️
+> A quiet reading room for your shelf, your stats and your to-read pile. ✍️
 
 ## ✨ What it does
 
@@ -13,7 +13,8 @@ Type part of a title. The app searches **Open Library** and **Google Books** at 
 ### 📖 Your finished shelf
 
 - Add a book with the date you finished it.
-- Browse your library grouped by month, with cover art and inline finish dates.
+- Browse your library grouped by completion month, with cover art and readable title and author details.
+- Search saved titles, authors and categories locally, and choose grid or list view.
 - Edit anything that's wrong. Delete with a confirmation step so you don't lose entries by mistake.
 - To fill a missing cover on a saved book, open **Edit → Cover URL → Find cover by title**, choose a preview, then **Save**. The search uses the current Title field and selection changes only the cover URL; you can still paste a URL manually.
 - Save an optional personal opinion for each book in the add/edit form. Expand **Opinion** on a book card to read it. Opinions also work on queued books and the authors view.
@@ -24,12 +25,13 @@ Queue up books you want to read next — no finish date required. When you're do
 
 ### 👤 Authors view
 
-Every author you've read, with how many of their books you finished. Tap any author to expand the list of titles.
+Every author you've read, with their finished books grouped together and searchable from the collection toolbar.
 
 ### 📊 12 graphs + 8 stats
 
 A whole reading dashboard:
 
+- Last 7/30-day performance against the preceding equal period, with exact daily figures
 - Books per month and per year
 - Pages per month, cumulative pages over time
 - Which weekday you finish books on
@@ -176,6 +178,8 @@ Run `bun run test:e2e` against a disposable test database; it rebuilds the produ
 app and recreates the test database before execution.
 
 Developer-facing details (commands, architecture, conventions) live in [`AGENTS.md`](AGENTS.md).
+
+The implemented visual system is recorded in [`DESIGN.md`](DESIGN.md), with [design responsibilities and isolated verification](docs/design-system.md), [collection interactions](docs/library-collection.md) and [recent-performance behavior](docs/recent-performance.md).
 
 ## 🪪 License
 

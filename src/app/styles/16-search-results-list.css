@@ -9,7 +9,7 @@
     text-align: start;
     background: var(--bone);
     border: 0;
-    border-radius: 6px;
+    border-radius: 12px;
     box-shadow: none;
     transition:
       transform 100ms ease,
@@ -22,7 +22,7 @@
   }
   .lib-result__title {
     font-family: var(--font-serif);
-    font-weight: 700;
+    font-weight: 500;
     font-size: 1rem;
     line-height: 1.2;
     color: var(--ink);
@@ -31,8 +31,8 @@
     text-overflow: ellipsis;
   }
   .lib-result__author {
-    font-family: var(--font-serif);
-    font-style: italic;
+    font-family: var(--font-sans);
+    font-style: normal;
     font-size: 0.85rem;
     color: var(--ink-soft);
     white-space: nowrap;

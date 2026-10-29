@@ -1,87 +1,74 @@
 @layer components {
-  /* ---- Dialog ------------------------------------------------------- */
-
   .lib-dialog-overlay {
-    position: fixed;
-    inset: 0;
-    background: color-mix(in srgb, var(--ink) 35%, transparent);
-    backdrop-filter: blur(2px);
-    z-index: 50;
+    @apply fixed inset-0 z-50;
+    background: #202e2961;
+    backdrop-filter: blur(8px);
   }
   .lib-dialog {
-    width: 100%;
-    background: var(--paper);
-    border: 0;
-    border-radius: 8px;
-    box-shadow: none;
+    @apply w-full rounded-2xl border-0 bg-bone;
+    box-shadow: 0 24px 80px #1b30292e;
   }
   .lib-dialog-container {
     width: min(44rem, calc(100% - 1rem));
   }
-  @media (min-width: 640px) {
-    .lib-dialog-container {
-      width: min(44rem, calc(100% - 2rem));
-    }
-  }
   .lib-dialog__head {
-    display: flex;
-    flex-direction: column;
-    gap: 0.35rem;
-    padding: 1rem 1.25rem;
-    background: transparent;
-    padding-inline-end: 3.5rem;
-  }
-  @media (min-width: 640px) {
-    .lib-dialog__head {
-      padding: 1.25rem 2rem;
-    }
+    @apply flex flex-col gap-2 border-b border-paper-soft px-5 py-6 pr-14 sm:px-8 sm:pr-16;
   }
   .lib-dialog__title {
-    font-family: var(--font-serif);
-    font-weight: 500;
-    font-size: 1.35rem;
-    line-height: 1.1;
-    letter-spacing: -0.01em;
-  }
-  @media (min-width: 640px) {
-    .lib-dialog__title {
-      font-size: 1.65rem;
-    }
+    @apply font-serif text-2xl font-normal leading-tight tracking-[-0.02em] sm:text-3xl;
   }
   .lib-dialog__desc {
-    font-family: var(--font-sans);
-    font-size: 0.8rem;
-    letter-spacing: 0;
-    text-transform: none;
-    color: var(--ink-mute);
+    @apply font-sans text-sm text-ink-mute;
   }
   .lib-dialog__body {
-    padding: 1.25rem;
-  }
-  @media (min-width: 640px) {
-    .lib-dialog__body {
-      padding: 1.5rem 2rem 1.75rem;
-    }
+    @apply px-5 py-6 sm:px-8 sm:pb-8;
   }
   .lib-dialog__close {
-    position: absolute;
-    right: 0.75rem;
-    top: 0.75rem;
-    width: 2.25rem;
-    height: 2.25rem;
-    display: grid;
-    place-items: center;
-    border: 0;
-    border-radius: 8px;
-    background: transparent;
-    color: var(--ink);
-    cursor: pointer;
-    transition:
-      background-color 120ms ease,
-      color 120ms ease;
+    @apply absolute right-3 top-4 flex size-11 cursor-pointer items-center justify-center rounded-xl border-0 bg-paper text-ink-mute transition-colors hover:bg-paper-edge hover:text-ink sm:right-5 sm:top-5;
   }
-  .lib-dialog__close:hover {
-    background: var(--oxblood);
-    color: var(--paper);
+  .lib-dialog-overlay[data-entering] {
+    animation: lib-backdrop-in 240ms ease-out;
+  }
+  .lib-dialog-overlay[data-exiting] {
+    animation: lib-backdrop-in 160ms ease-in reverse;
+  }
+  .lib-dialog[data-entering] {
+    animation: lib-dialog-in 360ms var(--ease-library);
+  }
+  .lib-dialog[data-exiting] {
+    animation: lib-dialog-out 160ms ease-in;
+  }
+  @media (min-width: 640px) {
+    .lib-dialog-container {
+      width: min(44rem, calc(100% - 3rem));
+    }
+  }
+}
+@keyframes lib-backdrop-in {
+  from {
+    opacity: 0;
+    backdrop-filter: blur(0);
+  }
+  to {
+    opacity: 1;
+    backdrop-filter: blur(8px);
+  }
+}
+@keyframes lib-dialog-in {
+  from {
+    opacity: 0.3;
+    transform: translateY(18px) scale(0.97);
+    filter: blur(3px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+@keyframes lib-dialog-out {
+  to {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
   }
 }

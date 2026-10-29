@@ -24,7 +24,7 @@
     "database:deploy": "bun scripts/migrate-deploy.ts",
     "database:check": "prisma migrate diff --to-schema-datamodel prisma/ --from-schema-datasource prisma/ --exit-code",
     "database": "docker compose up -d",
-    "database:test": "docker compose -f compose-test.yml down -v && docker compose -f compose-test.yml up -d && bun run database:create",
+    "database:test": "docker compose -f compose-test.yml down -v && docker compose -f compose-test.yml up -d --wait && bun run database:create",
     "database:down": "docker compose -f compose-test.yml down -v",
     "database:create": "prisma generate && prisma migrate deploy",
     "database:studio": "bun run database && bunx prisma studio",

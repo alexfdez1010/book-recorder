@@ -20,9 +20,9 @@
   .lib-empty {
     padding: 3rem 1.5rem;
     text-align: center;
-    background: var(--paper-soft);
+    background: var(--bone);
     border: 0;
-    border-radius: 6px;
+    border-radius: 14px;
   }
   .lib-empty__title {
     font-family: var(--font-serif);
@@ -109,7 +109,8 @@
     padding: 0.35rem;
     background: var(--bone);
     border: var(--rule) solid var(--paper-edge);
-    box-shadow: none;
+    border-radius: 12px;
+    box-shadow: 0 12px 30px #2537281f;
     z-index: 60;
   }
   .lib-combobox__popover[data-entering='true'],
@@ -150,8 +151,8 @@
   .lib-combobox__list .list-box-item[data-selected='true'],
   .lib-select__list .list-box-item[data-focused='true'],
   .lib-select__list .list-box-item[data-selected='true'] {
-    background: color-mix(in srgb, var(--brass) 22%, var(--bone));
-    border-color: var(--ink);
+    background: #edf2eb;
+    border-color: transparent;
   }
   .lib-combobox__list .list-box-item[data-disabled='true'],
   .lib-select__list .list-box-item[data-disabled='true'] {

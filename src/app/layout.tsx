@@ -1,9 +1,5 @@
 import type { Metadata } from 'next';
-import {
-  Fraunces,
-  Bricolage_Grotesque,
-  JetBrains_Mono,
-} from 'next/font/google';
+import { Fraunces, Geist, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 
 const fraunces = Fraunces({
@@ -11,7 +7,7 @@ const fraunces = Fraunces({
   subsets: ['latin'],
   weight: ['400', '500', '600', '700'],
 });
-const grotesk = Bricolage_Grotesque({
+const grotesk = Geist({
   variable: '--font-grotesk',
   subsets: ['latin'],
   weight: ['400', '500', '600', '700'],
@@ -23,8 +19,8 @@ const jetbrains = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'BOOK RECORDER — personal reading ledger',
-  description: 'A library ledger of volumes finished.',
+  title: 'Book Recorder · Your personal library',
+  description: 'The books you finish. The stories you keep.',
 };
 
 /** Provides document metadata and root-scoped font variables for the shared theme. */

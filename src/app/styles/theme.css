@@ -1,43 +1,37 @@
-/* Quiet reading room: warm paper, charcoal ink, restrained botanical accents. */
+/* Shared palette and interaction tokens for the personal library. */
 :root {
-  /* ---- Palette ------------------------------------------------------- */
-  --paper: #f8f7f3;
-  --paper-soft: #f0eee8;
-  --paper-edge: #dedbd2;
-  --bone: #fffefa;
-
-  --ink: #292b26;
-  --ink-soft: #45483f;
-  --ink-mute: #6c6f64;
-
-  --leather: #435044;
-  --walnut: #737b68;
-  --chestnut: #998d76;
-
-  --oxblood: #804d43;
-  --brass: #a18a58;
-  --moss: #53684e;
-
-  /* ---- Semantic roles ------------------------------------------------ */
+  --paper: #f7f7f2;
+  --paper-soft: #eeefe8;
+  --paper-edge: #dfe3da;
+  --bone: #ffffff;
+  --ink: #252b28;
+  --ink-soft: #4e5952;
+  --ink-mute: #68716b;
+  --leather: #365b47;
+  --walnut: #7c8973;
+  --chestnut: #b5a182;
+  --oxblood: #a14f43;
+  --brass: #987231;
+  --moss: #628b6c;
   --background: var(--paper);
   --foreground: var(--ink);
   --binding: var(--leather);
-  --accent: var(--oxblood);
+  --accent: var(--leather);
+  --accent-foreground: var(--bone);
   --gilt: var(--brass);
-
-  /* ---- Structure ----------------------------------------------------- */
-  --radius: 6px;
+  --surface: var(--bone);
+  --surface-foreground: var(--ink);
+  --field-background: var(--bone);
+  --field-foreground: var(--ink);
+  --muted: var(--ink-mute);
+  --radius: 0.75rem;
   --rule: 1px;
-  --rule-double: 1px; /* for border-style: double */
-  --offset: 0px; /* hard-shadow depth cue */
   --measure: 72ch;
-
-  /* Font aliases live outside @theme so semantic CSS can resolve them too. */
+  --ease-library: cubic-bezier(0.22, 1, 0.36, 1);
   --font-sans: var(--font-grotesk), ui-sans-serif, system-ui, sans-serif;
   --font-serif: var(--font-fraunces), 'Iowan Old Style', Georgia, serif;
-  --font-mono: var(--font-jetbrains), ui-monospace, 'SFMono-Regular', monospace;
+  --font-mono: var(--font-jetbrains), ui-monospace, monospace;
 }
-
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -54,39 +48,42 @@
   --color-oxblood: var(--oxblood);
   --color-brass: var(--brass);
   --color-moss: var(--moss);
-  /* historic aliases */
   --color-blood: var(--oxblood);
   --color-ochre: var(--brass);
-
   --font-sans: var(--font-grotesk), ui-sans-serif, system-ui, sans-serif;
   --font-serif: var(--font-fraunces), 'Iowan Old Style', Georgia, serif;
-  --font-mono: var(--font-jetbrains), ui-monospace, 'SFMono-Regular', monospace;
-
-  --radius: 6px;
+  --font-mono: var(--font-jetbrains), ui-monospace, monospace;
 }
-
 body {
   background: var(--paper);
   color: var(--ink);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
-  line-height: 1.6;
+  line-height: 1.55;
+  font-variant-numeric: tabular-nums;
 }
-
 ::selection {
-  background: var(--ink);
-  color: var(--paper);
+  background: #dce9de;
+  color: var(--ink);
 }
-
+input,
+textarea {
+  caret-color: var(--leather);
+}
 :focus-visible {
   outline: 2px solid var(--leather);
   outline-offset: 4px;
+}
+html {
+  scrollbar-color: #bbc6bc var(--paper);
+  scroll-padding-top: 9rem;
 }
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }

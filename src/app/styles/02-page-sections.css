@@ -1,42 +1,30 @@
 @layer components {
-  /* ---- Page sections ------------------------------------------------ */
-
   .lib-shell {
-    color: var(--ink);
-    min-height: 100dvh;
+    @apply min-h-dvh text-ink;
   }
   .lib-main {
-    margin-inline: auto;
-    max-width: 72rem;
-    padding: 2.5rem 1.25rem 4rem;
+    @apply mx-auto max-w-[88rem] px-5 pb-16 pt-8 sm:px-9 sm:pt-10 lg:ml-56 lg:px-12 lg:pt-0 xl:px-16;
   }
-  @media (min-width: 640px) {
-    .lib-main {
-      padding: 3.5rem 2rem 5rem;
-    }
-  }
-
   .lib-section-head {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: 1.25rem;
+    @apply flex flex-wrap items-center justify-between gap-5;
   }
-
   .lib-month-head {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 1rem;
+    @apply flex items-center justify-between gap-4 border-b border-paper-edge pb-4;
   }
   .lib-month-head__title {
-    font-family: var(--font-serif);
-    font-weight: 500;
-    font-size: clamp(1.15rem, 2vw, 1.55rem);
-    letter-spacing: -0.01em;
-    line-height: 1.1;
-    color: var(--ink);
-    word-break: break-word;
+    @apply font-sans text-base font-medium tracking-[-0.02em] text-ink;
+    overflow-wrap: anywhere;
+  }
+  .lib-month-head .lib-meta {
+    @apply flex min-h-7 shrink-0 items-center justify-center rounded-full bg-paper-soft px-3 text-xs;
+  }
+  .lib-workspace-bar {
+    @apply mb-11 hidden h-20 items-center justify-between border-b border-paper-edge text-xs text-ink-mute lg:flex;
+  }
+  @media (min-width: 1664px) {
+    .lib-main {
+      margin-inline: auto;
+      padding-inline-start: 18rem;
+    }
   }
 }

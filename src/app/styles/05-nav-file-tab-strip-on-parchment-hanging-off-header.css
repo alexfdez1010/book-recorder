@@ -1,22 +1,25 @@
 @layer components {
   .lib-nav {
-    @apply flex gap-5 border-b border-paper-edge sm:gap-8;
+    @apply flex justify-between gap-1 border-b border-paper-edge lg:flex-col lg:justify-start lg:gap-2 lg:border-0;
   }
   .lib-nav-item {
-    @apply flex min-h-11 items-center border-b-2 border-transparent py-3 text-sm text-ink-mute transition-colors;
+    @apply relative flex min-h-12 flex-col items-center justify-center gap-1 rounded-t-lg px-2 py-2 text-[0.6875rem] font-medium text-ink-mute sm:flex-row sm:gap-2 sm:px-4 sm:text-sm lg:justify-start lg:gap-3 lg:rounded-xl lg:px-4 lg:py-3;
+    transition:
+      background-color 200ms var(--ease-library),
+      color 200ms var(--ease-library);
   }
   .lib-nav-item:hover {
-    @apply text-ink;
+    @apply bg-paper text-ink;
   }
   .lib-nav-item[aria-current='page'] {
-    @apply border-leather font-medium text-ink;
+    @apply bg-paper-soft text-leather;
+  }
+  .lib-nav-item__dot {
+    @apply ml-auto hidden size-1.5 rounded-full bg-leather lg:block;
   }
   @media (max-width: 359px) {
-    .lib-nav {
-      @apply justify-between gap-2;
-    }
     .lib-nav-item {
-      @apply text-xs;
+      padding-inline: 0.5rem;
     }
   }
 }

@@ -1,63 +1,24 @@
 @layer components {
-  /* ---- KPI plate (engraved) ---------------------------------------- */
-
   .lib-plate {
-    position: relative;
-    min-width: 0;
-    background: var(--paper-soft);
-    border: 0;
-    border-radius: 8px;
-    box-shadow: none;
+    @apply relative min-w-0 rounded-xl bg-paper-soft px-4 py-5 sm:px-5;
   }
   .lib-plate__head {
-    padding: 0.5rem 0.85rem;
-    background: transparent;
-    border: 0;
+    @apply mb-3;
   }
   .lib-plate__label {
-    /* same as kicker */
-    font-family: var(--font-sans);
-    font-size: 0.8rem;
-    letter-spacing: 0;
-    text-transform: none;
-    color: var(--ink-mute);
+    @apply text-xs font-medium text-ink-mute;
   }
   .lib-plate__body {
-    display: flex;
-    min-width: 0;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 0.75rem;
-    padding: 1rem 0.85rem 0.85rem;
-  }
-  @media (min-width: 640px) {
-    .lib-plate__body {
-      padding: 1.25rem 1.25rem 1rem;
-    }
+    @apply flex min-w-0 flex-col gap-2;
   }
   .lib-plate__value {
-    font-family: var(--font-serif);
-    font-weight: 500;
-    font-size: clamp(1.75rem, 4vw, 2.75rem);
-    line-height: 0.95;
-    letter-spacing: -0.02em;
-    color: var(--binding);
-    font-variation-settings: 'opsz' 144;
+    @apply font-sans text-3xl font-medium leading-tight tracking-[-0.035em] text-ink;
   }
   .lib-plate__value--compact {
-    font-size: clamp(1.1rem, 1.8vw, 1.5rem);
-    line-height: 1.15;
-    letter-spacing: 0;
-    word-break: break-word;
+    @apply break-words text-lg tracking-[-0.02em];
   }
   .lib-plate__note {
-    max-width: 100%;
+    @apply max-w-full text-xs leading-relaxed text-ink-mute;
     overflow-wrap: anywhere;
-    font-family: var(--font-sans);
-    font-size: 0.75rem;
-    letter-spacing: 0;
-    text-transform: none;
-    color: var(--ink-mute);
   }
 }

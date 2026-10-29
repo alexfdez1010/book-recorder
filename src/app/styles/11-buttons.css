@@ -1,12 +1,17 @@
 @layer components {
   .lib-btn {
-    @apply inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-md border-0 bg-paper-soft px-5 py-2.5 font-sans text-sm font-medium text-ink transition-colors;
+    @apply inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-xl border-0 bg-paper-soft px-5 py-2.5 font-sans text-sm font-medium text-ink;
+    transition:
+      background-color 180ms ease,
+      color 180ms ease,
+      transform 200ms var(--ease-library),
+      box-shadow 200ms ease;
   }
   .lib-btn:hover:not(:disabled) {
     @apply bg-paper-edge;
   }
   .lib-btn:active:not(:disabled) {
-    transform: scale(0.98);
+    transform: scale(0.96);
   }
   .lib-btn:disabled {
     @apply cursor-not-allowed opacity-50;
@@ -14,16 +19,18 @@
   .lib-btn--primary,
   .lib-btn--accent {
     @apply bg-leather text-bone;
+    box-shadow: 0 3px 6px #365b4714;
   }
   .lib-btn--primary:hover:not(:disabled),
   .lib-btn--accent:hover:not(:disabled) {
-    @apply bg-ink;
+    @apply bg-[#294a38];
+    box-shadow: 0 4px 10px #365b4726;
   }
   .lib-btn--destructive {
     @apply bg-oxblood text-bone;
   }
   .lib-btn--destructive:hover:not(:disabled) {
-    @apply bg-ink;
+    @apply bg-[#873c32];
   }
   .lib-btn--ghost,
   .lib-btn--ghost-light {
@@ -43,7 +50,7 @@
     @apply px-3 text-sm;
   }
   .lib-btn--lg {
-    @apply px-6 py-3 text-base;
+    @apply min-h-12 px-6 py-3 text-sm;
   }
   .lib-btn--block {
     @apply w-full;

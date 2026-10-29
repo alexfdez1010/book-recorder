@@ -58,3 +58,6 @@ generated
 .claude
 .agents
 skills-lock.json
+
+# Local design verification captures
+/.impeccable/review/
