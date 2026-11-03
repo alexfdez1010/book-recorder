@@ -1,21 +1,42 @@
 import 'server-only';
-import { getAuthConfig } from '@/lib/auth/config';
-import { hashToken, timingSafeEqual } from '@/lib/auth/token';
+import { requireMcpAuth } from '@better-auth/mcp';
+import { getAuth } from '@/lib/auth/server';
+import { mcpResource } from '@/lib/auth/config';
+import { prisma } from '@/lib/db/prisma';
 
-/**
- * Bearer token expected by the MCP route. Derived deterministically from
- * `PASSWORD` and `AUTH_SECRET`, so no extra storage is needed — the same hash
- * is used for the browser session cookie.
- */
-export async function expectedMcpToken(): Promise<string> {
-  const cfg = getAuthConfig();
-  return hashToken(cfg.password, cfg.secret);
-}
-
-export async function isValidMcpToken(
-  token: string | undefined,
-): Promise<boolean> {
-  if (!token) return false;
-  const expected = await expectedMcpToken();
-  return timingSafeEqual(token, expected);
+/** Verifies OAuth signature, issuer, resource, expiry and scope, and requires the owner and an enabled client. */
+export function protectMcp(handler: (request: Request) => Promise<Response>) {
+  return async (request: Request) =>
+    requireMcpAuth(
+      getAuth(),
+      async (request, claims) => {
+        if (typeof claims.sub !== 'string' || typeof claims.azp !== 'string') {
+          return Response.json({ error: 'Unauthorized' }, { status: 401 });
+        }
+        const [owner, client, consent] = await Promise.all([
+          prisma.user.findUnique({
+            where: { id: claims.sub },
+            select: { id: true },
+          }),
+          prisma.oauthClient.findUnique({
+            where: { clientId: claims.azp },
+            select: { disabled: true },
+          }),
+          prisma.oauthConsent.findFirst({
+            where: { clientId: claims.azp, userId: claims.sub },
+            select: { scopes: true },
+          }),
+        ]);
+        if (
+          !owner ||
+          !client ||
+          client.disabled ||
+          !consent?.scopes.includes('books:rw')
+        ) {
+          return Response.json({ error: 'Unauthorized' }, { status: 401 });
+        }
+        return handler(request);
+      },
+      { resource: mcpResource, requiredScopes: ['books:rw'] },
+    )(request);
 }

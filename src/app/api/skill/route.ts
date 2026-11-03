@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { mcpResource } from '@/lib/auth/config';
 import { isAuthenticated } from '@/lib/auth/session';
 import {
   SKILL_CONFIG_FILENAME,
@@ -10,20 +11,13 @@ import {
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
 
-function mcpUrl(req: NextRequest): string {
-  const host = req.headers.get('x-forwarded-host') ?? req.headers.get('host');
-  const proto =
-    req.headers.get('x-forwarded-proto') ??
-    req.nextUrl.protocol.replace(':', '');
-  return `${proto}://${host}/api/mcp/mcp`;
-}
-
+/** Downloads skill instructions or OAuth MCP configuration for an authenticated reader. */
 export async function GET(req: NextRequest) {
   if (!(await isAuthenticated())) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
   const kind = req.nextUrl.searchParams.get('kind') ?? 'skill';
-  const url = mcpUrl(req);
+  const url = mcpResource;
 
   if (kind === 'config') {
     return new NextResponse(buildMcpJson(url), {

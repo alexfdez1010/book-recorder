@@ -1,4 +1,4 @@
-import { test, expect, type Page } from '@playwright/test';
+import { test, expect, type Page } from '../helpers/fixtures';
 
 const PASSWORD = process.env.PASSWORD ?? 'dev-password';
 const VIEWPORTS = [
@@ -38,6 +38,9 @@ async function expectNoDialogOverflow(page: Page) {
 /** Authenticates through the same login flow used by a reader. */
 async function unlock(page: Page) {
   await page.goto('/login');
+  await page
+    .getByLabel('Email')
+    .fill(process.env.AUTH_OWNER_EMAIL ?? 'owner@example.test');
   await page.getByLabel('Password').fill(PASSWORD);
   await page.getByRole('button', { name: 'Unlock' }).click();
   await expect(page).toHaveURL(/\/books$/);

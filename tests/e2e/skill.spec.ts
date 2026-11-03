@@ -1,9 +1,12 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from '../helpers/fixtures';
 
 const PASSWORD = process.env.PASSWORD ?? 'dev-password';
 
 test.beforeEach(async ({ page }) => {
   await page.goto('/login');
+  await page
+    .getByLabel('Email')
+    .fill(process.env.AUTH_OWNER_EMAIL ?? 'owner@example.test');
   await page.getByLabel('Password').fill(PASSWORD);
   await page.getByRole('button', { name: 'Unlock' }).click();
   await expect(page).toHaveURL(/\/books$/);

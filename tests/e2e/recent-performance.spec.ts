@@ -1,4 +1,4 @@
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Page } from '../helpers/fixtures';
 import { PrismaClient } from '../../generated/prisma';
 
 test.use({ locale: 'es-ES' });
@@ -34,6 +34,9 @@ async function persistedTotals(now: Date, days: number) {
 /** Signs in through the real UI and opens the performance dashboard. */
 async function openGraphs(page: Page) {
   await page.goto('/login');
+  await page
+    .getByLabel('Email')
+    .fill(process.env.AUTH_OWNER_EMAIL ?? 'owner@example.test');
   await page.getByLabel('Password').fill(PASSWORD);
   await page.getByRole('button', { name: 'Unlock' }).click();
   await expect(page).toHaveURL(/\/books$/);

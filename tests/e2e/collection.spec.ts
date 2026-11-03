@@ -1,4 +1,4 @@
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Page } from '../helpers/fixtures';
 
 const PASSWORD = process.env.PASSWORD ?? 'dev-password';
 
@@ -25,6 +25,9 @@ test('collection search, empty recovery and layout controls preserve book action
   page.on('pageerror', (error) => pageErrors.push(error.message));
   const title = `Collection discovery ${crypto.randomUUID()}`;
   await page.goto('/login');
+  await page
+    .getByLabel('Email')
+    .fill(process.env.AUTH_OWNER_EMAIL ?? 'owner@example.test');
   await page.getByLabel('Password').fill(PASSWORD);
   await page.getByRole('button', { name: 'Unlock' }).click();
   await expect(page).toHaveURL(/\/books$/);

@@ -118,11 +118,14 @@ Pre-commit gate (runs before allowing a commit): `bun run pre-commit` = `bun run
 
 ## Architecture
 
-### Auth — edge-safe, single-password
+### Auth — Better Auth and a single owner
 
-- `src/proxy.ts` is a Next 16 **proxy** (the successor to middleware). Runs on every non-public route, validates a SHA-256 cookie against `hashToken(PASSWORD, AUTH_SECRET)` using Web Crypto so the same hash code runs on the Edge runtime and in Node server actions.
-- `src/lib/auth/` — `token.ts` (Web Crypto hash + `timingSafeEqual`), `session.ts` (cookie set/clear), `constants.ts` (`AUTH_COOKIE`), `config.ts`. 1-year HttpOnly cookie.
-- `/login` + `/api/login` are the only public paths; `/api/logout` clears cookie.
+- `src/lib/auth/server.ts` lazily initializes Better Auth with the Prisma adapter, JWT, MCP and CIMD plugins. Compilation never initializes auth or queries the database.
+- `/setup#token=...` creates the owner from scratch. The setup credential is compared to `AUTH_SETUP_TOKEN_HASH`; registration requires `AUTH_OWNER_EMAIL`, and PostgreSQL's `user_single_owner` unique expression index also prevents concurrent second accounts. Preserve that custom index in future schema migrations.
+- Database-backed seven-day browser sessions are validated in `src/proxy.ts` and again by server actions. HTTP auth requests must use `auth.handler`, which applies origin checks and database rate limiting; invoking `auth.api` from a custom route can bypass those HTTP protections.
+- `/api/mcp/mcp` uses OAuth authorization code + S256 PKCE, 15-minute resource-bound access tokens and rotating 30-day refresh tokens. Better Auth checks signature, issuer, audience, expiry and scope; the application also verifies owner, client and current consent to support immediate disconnection.
+- `/api/auth/*` and `/.well-known/*` expose auth and discovery. `/skill` provides connection files and a disconnect control; no static bearer token is displayed or accepted. DCR is supported for current clients, CIMD for newer clients, while the existing MCP transport remains compatible with SDK v1 clients.
+- `prisma/` is a multi-file schema. See `docs/authentication.md` for setup, tests, configuration and recovery.
 
 ### Book search — parallel fan-out with merge
 
@@ -163,7 +166,7 @@ Pre-commit gate (runs before allowing a commit): `bun run pre-commit` = `bun run
 
 ## Environment
 
-`.env` needs `DATABASE_URL` (defaults to Postgres on 5434), `PASSWORD`, `AUTH_SECRET` (long random, e.g. `openssl rand -hex 32`). See `.env.example`.
+`.env` needs `DATABASE_URL` (Postgres on 5434), `BETTER_AUTH_URL`, `BETTER_AUTH_SECRET`, `AUTH_OWNER_EMAIL` and `AUTH_SETUP_TOKEN_HASH`. See `.env.example`. Passwords are created through the private setup link and stored only as hashes.
 
 ## Deployment
 
@@ -171,4 +174,4 @@ Vercel preset. `bun run build` generates Prisma Client and compiles without data
 
 The migration runner prefers `DATABASE_URL_UNPOOLED`, then `DIRECT_URL`, with `DATABASE_URL` as the local fallback. Neon migrations reject pooled connections and default to a 15-second connection timeout. Only connection failures and advisory-lock timeouts retry, at most three attempts; SQL and authentication errors fail immediately. Runtime Prisma continues using the pooled `DATABASE_URL`. Never disable Prisma advisory locking.
 
-Provide `DATABASE_URL` / `DATABASE_URL_UNPOOLED` / `PASSWORD` / `AUTH_SECRET` in Vercel. Preview currently shares production data and does not auto-migrate; isolate it with a Neon branch before schema-change previews. See `docs/deployment.md` for commands and rollback.
+Provide `DATABASE_URL` / `DATABASE_URL_UNPOOLED` / `BETTER_AUTH_URL` / `BETTER_AUTH_SECRET` / `AUTH_OWNER_EMAIL` / `AUTH_SETUP_TOKEN_HASH` in Vercel. Preview currently shares production data and does not auto-migrate; isolate it with a Neon branch before schema-change previews. See `docs/deployment.md` for commands and rollback.

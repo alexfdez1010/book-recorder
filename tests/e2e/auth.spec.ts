@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from '../helpers/fixtures';
 
 const PASSWORD = process.env.PASSWORD ?? 'dev-password';
 
@@ -10,13 +10,19 @@ test('redirects unauthenticated user to /login', async ({ page }) => {
 
 test('rejects wrong password', async ({ page }) => {
   await page.goto('/login');
+  await page
+    .getByLabel('Email')
+    .fill(process.env.AUTH_OWNER_EMAIL ?? 'owner@example.test');
   await page.getByLabel('Password').fill('definitely-wrong');
   await page.getByRole('button', { name: 'Unlock' }).click();
-  await expect(page.getByText(/invalid password/i)).toBeVisible();
+  await expect(page.getByText(/invalid email or password/i)).toBeVisible();
 });
 
 test('accepts correct password and lands on /books', async ({ page }) => {
   await page.goto('/login');
+  await page
+    .getByLabel('Email')
+    .fill(process.env.AUTH_OWNER_EMAIL ?? 'owner@example.test');
   await page.getByLabel('Password').fill(PASSWORD);
   await page.getByRole('button', { name: 'Unlock' }).click();
   await expect(page).toHaveURL(/\/books$/);
@@ -25,6 +31,9 @@ test('accepts correct password and lands on /books', async ({ page }) => {
 
 test('signs out and protects the library again', async ({ page }) => {
   await page.goto('/login');
+  await page
+    .getByLabel('Email')
+    .fill(process.env.AUTH_OWNER_EMAIL ?? 'owner@example.test');
   await page.getByLabel('Password').fill(PASSWORD);
   await page.getByRole('button', { name: 'Unlock' }).click();
   await expect(page).toHaveURL(/\/books$/);

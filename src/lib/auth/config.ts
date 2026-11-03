@@ -1,7 +1,4 @@
-export function getAuthConfig(): { password: string; secret: string } {
-  const password = process.env.PASSWORD;
-  const secret = process.env.AUTH_SECRET;
-  if (!password) throw new Error('PASSWORD env var is required');
-  if (!secret) throw new Error('AUTH_SECRET env var is required');
-  return { password, secret };
-}
+/** Canonical origin for cookies, OAuth issuer and resource binding; never trusts request hosts. */
+export const authOrigin =
+  process.env.BETTER_AUTH_URL ?? 'http://localhost:3000';
+export const mcpResource = `${authOrigin}/api/mcp/mcp`;

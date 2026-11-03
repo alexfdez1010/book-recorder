@@ -33,12 +33,15 @@ describe('public route boundary', () => {
     expect(isPublicPath(path)).toBe(false);
   });
 
-  it.each(['/login', '/api/login', '/api/mcp', '/api/mcp/mcp'])(
-    'preserves the existing authentication and MCP entry point %s',
-    (path) => {
-      expect(isPublicPath(path)).toBe(true);
-    },
-  );
+  it.each([
+    '/login',
+    '/api/auth/sign-in/email',
+    '/.well-known/oauth-protected-resource/api/mcp/mcp',
+    '/api/mcp',
+    '/api/mcp/mcp',
+  ])('preserves the existing authentication and MCP entry point %s', (path) => {
+    expect(isPublicPath(path)).toBe(true);
+  });
 
   it.each(['/login-extra', '/api/login-admin', '/api/mcprivate'])(
     'does not allow partial prefix matches %s',

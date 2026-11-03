@@ -1,6 +1,6 @@
-import { createMcpHandler, withMcpAuth } from 'mcp-handler';
+import { createMcpHandler } from 'mcp-handler';
 import { registerBookTools } from '@/lib/mcp/tools';
-import { isValidMcpToken } from '@/lib/mcp/auth';
+import { protectMcp } from '@/lib/mcp/auth';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -19,17 +19,6 @@ const handler = createMcpHandler(
   },
 );
 
-const authed = withMcpAuth(
-  handler,
-  async (_req, bearerToken) => {
-    if (!(await isValidMcpToken(bearerToken))) return undefined;
-    return {
-      token: bearerToken!,
-      scopes: ['books:rw'],
-      clientId: 'book-recorder',
-    };
-  },
-  { required: true },
-);
+const authed = protectMcp(handler);
 
 export { authed as GET, authed as POST, authed as DELETE };

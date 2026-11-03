@@ -1,27 +1,15 @@
-import { headers } from 'next/headers';
+import { OAuthConnections } from '@/components/oauth-connections';
 import { Button } from '@/components/ui/button';
 import { CopyButton } from '@/components/copy-button';
-import { expectedMcpToken } from '@/lib/mcp/auth';
-import { TOKEN_ENV_VAR, buildMcpJson } from '@/lib/mcp/skill';
+import { mcpResource } from '@/lib/auth/config';
+import { buildMcpJson } from '@/lib/mcp/skill';
 
 export const dynamic = 'force-dynamic';
 
-async function buildServerUrl(): Promise<string> {
-  const h = await headers();
-  const host = h.get('x-forwarded-host') ?? h.get('host') ?? 'localhost:3000';
-  const proto =
-    h.get('x-forwarded-proto') ??
-    (host.startsWith('localhost') ? 'http' : 'https');
-  return `${proto}://${host}/api/mcp/mcp`;
-}
-
-export default async function SkillPage() {
-  const [serverUrl, token] = await Promise.all([
-    buildServerUrl(),
-    expectedMcpToken(),
-  ]);
+/** Renders OAuth connection instructions and downloadable agent configuration. */
+export default function SkillPage() {
+  const serverUrl = mcpResource;
   const mcpJson = buildMcpJson(serverUrl);
-  const exportLine = `export ${TOKEN_ENV_VAR}='${token}'`;
 
   return (
     <section className="flex flex-col gap-10">
@@ -36,6 +24,8 @@ export default async function SkillPage() {
       </div>
 
       <div className="grid grid-cols-1 gap-6 md:gap-8 md:grid-cols-2">
+        <OAuthConnections />
+
         <article className="lib-panel">
           <header className="lib-panel__head">
             <span className="lib-panel__eyebrow">Step 1</span>
@@ -62,9 +52,8 @@ export default async function SkillPage() {
           </header>
           <div className="lib-panel__body flex flex-col gap-4">
             <p className="text-sm">
-              Add the snippet to your MCP config. The bearer token is read from{' '}
-              <code>${TOKEN_ENV_VAR}</code> at runtime — never hard-code it in
-              the file you commit.
+              Add this URL to your MCP client, sign in and approve access to
+              your library in the browser.
             </p>
             <div className="flex flex-wrap gap-2">
               <Button asChild variant="primary" size="md">
@@ -89,18 +78,6 @@ export default async function SkillPage() {
             <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
               <code className="break-all text-sm">{serverUrl}</code>
               <CopyButton value={serverUrl} label="Copy URL" />
-            </div>
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <span className="lib-plate__label">Bearer token</span>
-            <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-              <code className="break-all text-sm">{token}</code>
-              <CopyButton value={token} label="Copy token" />
-            </div>
-            <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-              <code className="break-all text-xs">{exportLine}</code>
-              <CopyButton value={exportLine} label="Copy export" />
             </div>
           </div>
 

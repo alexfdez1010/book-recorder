@@ -1,36 +1,73 @@
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { expectedMcpToken, isValidMcpToken } from '@/lib/mcp/auth';
-import { hashToken } from '@/lib/auth/token';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-const PASSWORD = 'unit-password';
-const SECRET = 'unit-secret-0123456789abcdef';
+const mocks = vi.hoisted(() => ({
+  owner: vi.fn(),
+  client: vi.fn(),
+  consent: vi.fn(),
+  claims: { sub: 'owner', azp: 'app' } as Record<string, unknown>,
+}));
+vi.mock('@/lib/auth/server', () => ({ getAuth: () => ({}) }));
+vi.mock('@better-auth/mcp', () => ({
+  requireMcpAuth: vi.fn(
+    (_auth, handler) => (request: Request) => handler(request, mocks.claims),
+  ),
+}));
+vi.mock('@/lib/db/prisma', () => ({
+  prisma: {
+    user: { findUnique: mocks.owner },
+    oauthClient: { findUnique: mocks.client },
+    oauthConsent: { findFirst: mocks.consent },
+  },
+}));
+import { protectMcp } from '@/lib/mcp/auth';
+import { requireMcpAuth } from '@better-auth/mcp';
 
-describe('mcp auth', () => {
-  let originalPassword: string | undefined;
-  let originalSecret: string | undefined;
+beforeEach(() => {
+  mocks.claims = { sub: 'owner', azp: 'app' };
+  mocks.owner.mockResolvedValue({ id: 'owner' });
+  mocks.client.mockResolvedValue({ disabled: false });
+  mocks.consent.mockResolvedValue({ scopes: ['books:rw'] });
+});
 
-  beforeEach(() => {
-    originalPassword = process.env.PASSWORD;
-    originalSecret = process.env.AUTH_SECRET;
-    process.env.PASSWORD = PASSWORD;
-    process.env.AUTH_SECRET = SECRET;
+const request = new Request('http://localhost/api/mcp/mcp');
+/** Exercises the application policy after the library verifies the OAuth token. */
+function call() {
+  return protectMcp(async () => new Response('ok'))(request);
+}
+
+describe('MCP OAuth policy', () => {
+  it('delegates signature, issuer, expiry, audience and scopes to Better Auth', async () => {
+    expect((await call()).status).toBe(200);
+    expect(requireMcpAuth).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.any(Function),
+      {
+        resource: expect.stringContaining('/api/mcp/mcp'),
+        requiredScopes: ['books:rw'],
+      },
+    );
   });
-
-  afterEach(() => {
-    process.env.PASSWORD = originalPassword;
-    process.env.AUTH_SECRET = originalSecret;
+  it.each([{ azp: 'app' }, { sub: 'owner' }, { sub: 42, azp: 'app' }])(
+    'rejects a token without user/client identity %j',
+    async (claims) => {
+      mocks.claims = claims;
+      expect((await call()).status).toBe(401);
+    },
+  );
+  it('rejects deleted owners', async () => {
+    mocks.owner.mockResolvedValue(null);
+    expect((await call()).status).toBe(401);
   });
-
-  it('expectedMcpToken matches hashToken(PASSWORD::AUTH_SECRET)', async () => {
-    const token = await expectedMcpToken();
-    expect(token).toBe(await hashToken(PASSWORD, SECRET));
-    expect(token).toMatch(/^[0-9a-f]{64}$/);
+  it('rejects disabled and unknown clients', async () => {
+    for (const client of [null, { disabled: true }]) {
+      mocks.client.mockResolvedValue(client);
+      expect((await call()).status).toBe(401);
+    }
   });
-
-  it('isValidMcpToken rejects empty, wrong, and accepts the derived token', async () => {
-    expect(await isValidMcpToken(undefined)).toBe(false);
-    expect(await isValidMcpToken('')).toBe(false);
-    expect(await isValidMcpToken('deadbeef'.repeat(8))).toBe(false);
-    expect(await isValidMcpToken(await expectedMcpToken())).toBe(true);
+  it('rejects revoked or insufficient consent immediately', async () => {
+    for (const consent of [null, { scopes: ['offline_access'] }]) {
+      mocks.consent.mockResolvedValue(consent);
+      expect((await call()).status).toBe(401);
+    }
   });
 });

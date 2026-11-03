@@ -1,9 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import {
-  TOKEN_ENV_VAR,
-  buildMcpJson,
-  buildSkillMarkdown,
-} from '@/lib/mcp/skill';
+import { buildMcpJson, buildSkillMarkdown } from '@/lib/mcp/skill';
 
 const URL = 'https://example.test/api/mcp/mcp';
 
@@ -44,13 +40,12 @@ describe('skill markdown', () => {
 });
 
 describe('mcp.json builder', () => {
-  it('uses an env-var placeholder for the bearer token, never the literal value', () => {
+  it('uses OAuth discovery without embedding a static bearer token', () => {
     const json = buildMcpJson(URL);
     const parsed = JSON.parse(json);
     expect(parsed.mcpServers['book-recorder']).toEqual({
       type: 'http',
       url: URL,
-      headers: { Authorization: `Bearer \${${TOKEN_ENV_VAR}}` },
     });
     expect(json).not.toMatch(/[0-9a-f]{64}/);
   });

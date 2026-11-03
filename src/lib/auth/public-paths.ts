@@ -1,4 +1,10 @@
-const PUBLIC_PREFIXES = ['/login', '/api/login', '/api/mcp'];
+const PUBLIC_PREFIXES = [
+  '/setup',
+  '/login',
+  '/api/auth',
+  '/api/mcp',
+  '/.well-known',
+];
 const PUBLIC_ASSETS = new Set([
   '/manifest.webmanifest',
   '/sw.js',

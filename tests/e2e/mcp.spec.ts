@@ -1,21 +1,9 @@
-import { createHash } from 'node:crypto';
-import { config as loadEnv } from 'dotenv';
-import { test, expect, request } from '@playwright/test';
+import { test, expect, request, type Page } from '../helpers/fixtures';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StreamableHTTPClientTransport } from '@modelcontextprotocol/sdk/client/streamableHttp.js';
+import { authorizeMcp } from '../helpers/oauth';
 
-loadEnv();
-
-const PASSWORD = process.env.PASSWORD ?? 'dev-password';
-const SECRET = process.env.AUTH_SECRET ?? 'dev-secret';
-
-const MCP_URL =
-  process.env.MCP_URL ??
-  `http://localhost:${process.env.BOOK_RECORDER_TEST_APP_PORT || '3000'}/api/mcp/mcp`;
-
-const TOKEN = createHash('sha256')
-  .update(`${PASSWORD}::${SECRET}`)
-  .digest('hex');
+const MCP_URL = `${process.env.BETTER_AUTH_URL ?? 'http://localhost:3000'}/api/mcp/mcp`;
 
 const TOOL_NAMES = [
   'search_books',
@@ -36,7 +24,8 @@ const TOOL_NAMES = [
   'get_stats',
 ];
 
-async function connect(token = TOKEN) {
+async function connect(page: Page) {
+  const { access_token: token } = await authorizeMcp(page);
   const transport = new StreamableHTTPClientTransport(new URL(MCP_URL), {
     requestInit: { headers: { Authorization: `Bearer ${token}` } },
   });
@@ -84,8 +73,8 @@ test('rejects requests with a wrong bearer token', async () => {
   await ctx.dispose();
 });
 
-test('exposes the full tool catalog via tools/list', async () => {
-  const { client, transport } = await connect();
+test('exposes the full tool catalog via tools/list', async ({ page }) => {
+  const { client, transport } = await connect(page);
   try {
     const { tools } = await client.listTools();
     const names = tools.map((t) => t.name).sort();
@@ -95,8 +84,10 @@ test('exposes the full tool catalog via tools/list', async () => {
   }
 });
 
-test('add_book → set_opinion → list_books_by_author → delete_book', async () => {
-  const { client, transport } = await connect();
+test('add_book → set_opinion → list_books_by_author → delete_book', async ({
+  page,
+}) => {
+  const { client, transport } = await connect(page);
   const finishedOn = new Date().toISOString().slice(0, 10);
   const title = `MCP E2E Book ${Date.now()}`;
   const author = `MCP E2E Author ${Date.now()}`;
@@ -192,8 +183,8 @@ test('add_book → set_opinion → list_books_by_author → delete_book', async 
   }
 });
 
-test('get_stats returns the documented shape', async () => {
-  const { client, transport } = await connect();
+test('get_stats returns the documented shape', async ({ page }) => {
+  const { client, transport } = await connect(page);
   try {
     const stats = parseToolJson<{
       totals: { books: number; pages: number; authors: number };

@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from '../helpers/fixtures';
 import { PrismaClient } from '../../generated/prisma';
 
 const prisma = new PrismaClient();
@@ -34,6 +34,9 @@ for (const viewport of [
     });
     try {
       await page.goto('/login');
+      await page
+        .getByLabel('Email')
+        .fill(process.env.AUTH_OWNER_EMAIL ?? 'owner@example.test');
       await page.getByLabel('Password').fill(PASSWORD);
       await page.getByRole('button', { name: 'Unlock' }).click();
       await expect(page).toHaveURL(/\/books$/);

@@ -33,7 +33,11 @@ BOOK_RECORDER_TEST_DB_PORT=5544 \
 BOOK_RECORDER_TEST_APP_PORT=3001 \
 DATABASE_URL='postgresql://postgres:postgres@localhost:5544/book_recorder_test?schema=public' \
 PASSWORD='test-only-password' \
-AUTH_SECRET='test-only-auth-secret-for-local-verification' \
+BETTER_AUTH_SECRET='test-only-auth-secret-for-local-verification' \
+AUTH_OWNER_EMAIL='owner@example.test' \
+BETTER_AUTH_URL='http://localhost:3001' \
+AUTH_SETUP_TOKEN='test-only-setup-token' \
+AUTH_SETUP_TOKEN_HASH="$(printf %s test-only-setup-token | shasum -a 256 | cut -d ' ' -f 1)" \
 bun run pre-commit
 ```
 

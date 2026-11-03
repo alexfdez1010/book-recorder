@@ -1,7 +1,10 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from '../helpers/fixtures';
 
 test.beforeEach(async ({ page }) => {
   await page.goto('/login');
+  await page
+    .getByLabel('Email')
+    .fill(process.env.AUTH_OWNER_EMAIL ?? 'owner@example.test');
   await page
     .getByLabel('Password')
     .fill(process.env.PASSWORD ?? 'dev-password');

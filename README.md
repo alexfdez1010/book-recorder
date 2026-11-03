@@ -81,13 +81,15 @@ cp .env.example .env
 
 Then open `.env` and set:
 
-| Variable       | What to put                                                                                     |
-| -------------- | ----------------------------------------------------------------------------------------------- |
-| `DATABASE_URL` | Leave the default for local dev (`postgresql://postgres:postgres@localhost:5434/book_recorder`) |
-| `PASSWORD`     | Pick the single password you'll use to log in                                                   |
-| `AUTH_SECRET`  | A long random string — generate one with the command below                                      |
+| Variable                | What to put                                                                                     |
+| ----------------------- | ----------------------------------------------------------------------------------------------- |
+| `DATABASE_URL`          | Leave the default for local dev (`postgresql://postgres:postgres@localhost:5434/book_recorder`) |
+| `BETTER_AUTH_URL`       | Canonical app origin, such as `http://localhost:3000`                                           |
+| `BETTER_AUTH_SECRET`    | At least 32 random characters, generated below                                                  |
+| `AUTH_OWNER_EMAIL`      | Email allowed to create the only account                                                        |
+| `AUTH_SETUP_TOKEN_HASH` | SHA-256 hash of the private setup token                                                         |
 
-Generate a strong `AUTH_SECRET`:
+Generate a strong `BETTER_AUTH_SECRET`:
 
 ```bash
 openssl rand -hex 32
@@ -110,7 +112,13 @@ If port 5434 is taken, stop whatever's holding it (or change the port in `compos
 bun run dev                   # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000), log in with the `PASSWORD` you set, and start adding books.
+Generate the private setup token and its hash locally:
+
+```bash
+bun -e 'const token = crypto.randomUUID() + crypto.randomUUID(); console.log("Setup token:", token); console.log("AUTH_SETUP_TOKEN_HASH:", new Bun.CryptoHasher("sha256").update(token).digest("hex"))'
+```
+
+Set `AUTH_SETUP_TOKEN_HASH` in `.env`, restart the server and open `http://localhost:3000/setup#token=YOUR_TOKEN`. Create your account with `AUTH_OWNER_EMAIL` and a new password of at least 12 characters. Registration closes after the account exists. See [authentication and recovery](docs/authentication.md).
 
 ### 6. (Optional) Useful follow-ups
 
@@ -124,14 +132,14 @@ bun run lint-format           # ESLint + Prettier (run before committing)
 
 - **`Can't reach database server at localhost:5434`** — Docker isn't running or the container didn't start. Run `docker ps` and `bun run database` again.
 - **`Environment variable not found: DATABASE_URL`** — your `.env` is missing or in the wrong directory. It must sit at the project root.
-- **Login screen rejects your password** — double-check `PASSWORD` in `.env` and restart `bun run dev` so it picks up the new value.
+- **Login screen rejects your password** — use the email and password created through the private setup link. Passwords are stored as hashes in the database, never as environment variables.
 - **`prisma generate` failed during install** — re-run `bun install` after fixing `DATABASE_URL`; the postinstall hook needs a valid schema.
 
 ## 🚢 Deploy to Vercel
 
 1. Push the repo to GitHub and import it in Vercel.
 2. Provision a Postgres database (Neon, Supabase, Vercel Marketplace, anything).
-3. Set `DATABASE_URL` (pooled), `DATABASE_URL_UNPOOLED` (direct), `PASSWORD`, and `AUTH_SECRET` in Vercel. The Neon integration supplies both database URLs.
+3. Set `DATABASE_URL` (pooled), `DATABASE_URL_UNPOOLED` (direct), `BETTER_AUTH_URL`, `BETTER_AUTH_SECRET`, `AUTH_OWNER_EMAIL` and `AUTH_SETUP_TOKEN_HASH` in Vercel. The Neon integration supplies both database URLs.
 4. Deploy. `vercel.json` runs `bun run vercel-build`: compile first, then apply migrations over the direct connection on production deployments. A migration failure prevents promotion.
 
 `bun run build` only generates Prisma Client and compiles Next.js; it does not connect to the database. `bun run database:deploy` applies migrations separately, with limited retries for connection failures or advisory-lock contention. Local PostgreSQL can continue using only `DATABASE_URL`.
@@ -142,7 +150,8 @@ Preview deployments do not automatically migrate: this project's preview variabl
 
 1. Log in at `/login`.
 2. Visit `/skill` and download **SKILL.md** plus the **mcp.json** snippet.
-3. Drop them into your AI agent's config and copy the bearer token shown on the page.
+3. Add the HTTP MCP URL to an OAuth-capable agent, sign in in the browser and approve access.
+4. Revoke an application's access from **Connected apps** on `/skill`.
 
 Your agent now has the same library tools as the UI — search, list, add, update, delete, stats, the lot.
 

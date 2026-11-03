@@ -1,8 +1,8 @@
 import 'server-only';
 
 const SKILL_NAME = 'book-recorder';
-export const TOKEN_ENV_VAR = 'BOOK_RECORDER_TOKEN';
 
+/** Returns the downloadable agent instructions for the canonical MCP URL. */
 export function buildSkillMarkdown(serverUrl: string): string {
   return `---
 name: ${SKILL_NAME}
@@ -12,6 +12,8 @@ description: Personal reading log. Record finished books, query the user's libra
 # Book Recorder
 
 Personal reading log backed by the \`${SKILL_NAME}\` MCP server at \`${serverUrl}\`.
+
+Connect using OAuth in your MCP client and approve access in the browser. No static token is required.
 
 The server exposes the following tools — discover their exact input schemas via the standard MCP \`tools/list\` call.
 
@@ -45,6 +47,7 @@ The server exposes the following tools — discover their exact input schemas vi
 `;
 }
 
+/** Returns an HTTP MCP configuration; the client manages OAuth credentials. */
 export function buildMcpJson(serverUrl: string): string {
   return JSON.stringify(
     {
@@ -52,7 +55,6 @@ export function buildMcpJson(serverUrl: string): string {
         [SKILL_NAME]: {
           type: 'http',
           url: serverUrl,
-          headers: { Authorization: `Bearer \${${TOKEN_ENV_VAR}}` },
         },
       },
     },
