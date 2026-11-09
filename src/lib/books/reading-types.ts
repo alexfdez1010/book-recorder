@@ -13,6 +13,7 @@ export type CollectionBook = Book & {
 export type FinishedBook = CollectionBook & {
   finishedOn: Date;
   readingId: string;
+  readingNumber: number;
 };
 
 /** Shared snapshots accepted when recording or editing a completed reading. */

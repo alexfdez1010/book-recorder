@@ -32,6 +32,7 @@ import {
 } from '@/lib/stats/extras';
 import { GraphsDashboard } from '@/components/graphs-dashboard';
 import { recentPerformance } from '@/lib/stats/recent';
+import { rereadsByYear } from '@/lib/stats/rereading';
 
 /** Loads finished books and computes all chart data with one shared server clock. */
 export default async function GraphsPage() {
@@ -48,6 +49,7 @@ export default async function GraphsPage() {
   }));
   const now = new Date();
   const data = {
+    rereading: rereadsByYear(books),
     recentWeek: recentPerformance(plain, 7, now),
     recentMonth: recentPerformance(plain, 30, now),
     booksPerMonth: booksPerMonth(plain),

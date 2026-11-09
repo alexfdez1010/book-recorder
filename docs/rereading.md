@@ -12,6 +12,10 @@ The monthly journal shows every reading in its own completion month, including i
 
 All completed readings contribute to activity charts and pages read. Distinct titles are counted by book id, so reading a 300-page book twice produces two readings, one title and 600 completed pages. The MCP's legacy `totals.books` key remains an alias for completed readings; new consumers should use `totals.readings` and `totals.titles`.
 
+The **First readings and rereads** chart compares both groups in stacked horizontal bars by UTC completion year. It replaces the former annual total chart while preserving the annual totals as the sum of both series. The summary reports the number and share of rereads. **View yearly figures** exposes the exact counts without hover, works by keyboard and fits narrow screens. A library without rereads retains its first-reading baseline and explicitly says that no rereads have been recorded.
+
+`rereadsByYear(readings)` in `src/lib/stats/rereading.ts` accepts only completion dates and chronological reading ordinals. For example, `rereadsByYear(await listBooks())` returns ascending `{ year, firstReads, rereads }` rows. Ordinal 1 identifies the earliest recorded reading of a catalogue id; every later ordinal is a reread, including multiple finishes within one year. This preserves backdated and same-day ordering and never infers identity from titles. `RereadingPanel` accepts these rows through its `data` prop, reuses the existing chart palette and reduced-motion subscription, and supplies an exact-data table.
+
 The layout retains the existing palette, typography and HeroUI modals. Controls wrap at narrow widths, action targets remain at least 44 pixels high, and form actions remain reachable while scrolling the modal. Existing modal motion respects the global reduced-motion preference.
 
 ## Data ownership and compatibility
@@ -94,3 +98,5 @@ The final local `bun run pre-commit` run on 2026-11-09 passed 234 unit tests, 6 
 - [Next.js path revalidation](https://nextjs.org/docs/app/api-reference/functions/revalidatePath)
 - [HeroUI modal anatomy, scrolling and dismissal](https://heroui.com/en/docs/react/components/modal)
 - [Tailwind responsive design](https://tailwindcss.com/docs/responsive-design)
+- [Recharts bar series and stacking](https://recharts.github.io/en-US/api/Bar/)
+- [Recharts responsive containers](https://recharts.github.io/en-US/api/ResponsiveContainer/)

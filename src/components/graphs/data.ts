@@ -1,6 +1,7 @@
 import type { CountEntry, TimeseriesPoint } from '@/lib/stats/aggregate';
 import type { YearOverYearRow } from '@/lib/stats/extras';
 import type { RecentPerformance } from '@/lib/stats/recent';
+import type { RereadingYear } from '@/lib/stats/rereading';
 
 export interface GraphsData {
   booksPerMonth: CountEntry[];
@@ -31,4 +32,5 @@ export interface GraphsData {
   totalBooks: number;
   totalTitles: number;
   totalPages: number;
+  rereading: RereadingYear[];
 }

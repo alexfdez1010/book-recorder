@@ -2,6 +2,7 @@
 
 import type { GraphsData } from './graphs/data';
 import { RecentPerformance } from './graphs/recent-performance';
+import { RereadingPanel } from './graphs/rereading-panel';
 import {
   BRASS,
   DistributionPie,
@@ -79,6 +80,7 @@ export function GraphsDashboard({ data }: { data: GraphsData }) {
           </div>
 
           <div className="grid grid-cols-1 gap-6 lg:gap-8 lg:grid-cols-2">
+            <RereadingPanel data={data.rereading} />
             <Panel title="Readings / month">
               <BarPanel data={data.booksPerMonth} fill={LEATHER} />
             </Panel>
@@ -149,9 +151,6 @@ export function GraphsDashboard({ data }: { data: GraphsData }) {
             </Panel>
             <Panel title="Book age at reading">
               <BarPanel data={data.ageWhenRead} fill={OXBLOOD} />
-            </Panel>
-            <Panel title="Readings / year">
-              <BarPanel data={data.booksPerYear} fill={LEATHER} />
             </Panel>
           </div>
         </section>
