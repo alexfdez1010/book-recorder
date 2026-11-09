@@ -12,6 +12,7 @@ interface CollectionToolbarProps {
   onViewChange: (view: CollectionView) => void;
   resultCount: number;
   totalCount: number;
+  readings?: boolean;
 }
 
 /**
@@ -26,6 +27,7 @@ export function CollectionToolbar({
   onViewChange,
   resultCount,
   totalCount,
+  readings = false,
 }: CollectionToolbarProps) {
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -66,8 +68,8 @@ export function CollectionToolbar({
           aria-atomic="true"
         >
           {query.trim()
-            ? `${resultCount} of ${totalCount} books`
-            : `${totalCount} ${totalCount === 1 ? 'book' : 'books'}`}
+            ? `${resultCount} of ${totalCount} ${readings ? 'readings' : 'books'}`
+            : `${totalCount} ${readings ? (totalCount === 1 ? 'reading' : 'readings') : totalCount === 1 ? 'book' : 'books'}`}
         </p>
         <div
           className="lib-view-switch"

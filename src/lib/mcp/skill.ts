@@ -32,6 +32,10 @@ The server exposes the following tools — discover their exact input schemas vi
 | \`set_opinion\` | Set or clear the reader's opinion for a book. |
 | \`set_rating\` | Set or clear the rating for a book. |
 | \`mark_as_finished\` | Promote a to-read book to finished by setting \`finishedOn\`. |
+| \`record_reread\` | Append a completed reread to an existing \`bookId\`, preserving history. |
+| \`list_readings\` | Every reading of a \`bookId\`, newest first. |
+| \`update_reading\` | Edit one reading by its \`id\` and \`bookId\`. |
+| \`delete_reading\` | Remove one reading; the final reading is protected. |
 | \`add_category\` | Add a reusable book category. |
 | \`delete_book\` | Remove a book by id. |
 | \`get_stats\` | Totals, averages, distributions, time series. |
@@ -43,7 +47,10 @@ The server exposes the following tools — discover their exact input schemas vi
 - \`language\` is ISO 639-1 (\`en\`, \`es\`, \`fr\`, \`de\`, \`it\`, \`pt\`, \`ru\`, \`ja\`, \`zh\`, \`ar\`, \`nl\`, \`sv\`, \`no\`, \`da\`, \`pl\`, \`tr\`, \`ko\`, \`hi\`, \`la\`, \`el\`).
 - Default \`finishedOn\` to today (UTC) when the user does not specify a date.
 - \`opinion\` is optional free text up to 10,000 characters. Use \`set_opinion\` with \`null\` to clear it.
-- Confirm destructive operations (\`delete_book\`, \`update_book\`) before invoking.
+- A reread belongs to the existing book. Use \`record_reread\` rather than \`add_book\` or changing its old finish date. Pass \`bookId\`, \`finishedOn\`, \`pages\`, \`language\` and a stable UUID \`requestId\` for retry safety. New ratings and opinions are optional and start blank.
+- \`set_rating\`, \`set_opinion\` and legacy \`update_book\` target the latest chronological reading. Use \`update_reading\` for a specific past reading. Its omitted rating/opinion fields clear them.
+- \`get_book\` includes ordered \`readings\`; its top-level date, pages, language, rating and opinion mirror the latest reading. \`get_stats.totals.readings\` counts finishes, \`titles\` counts distinct book ids, and legacy \`books\` remains an alias for readings. Page totals include rereads.
+- Confirm destructive operations (\`delete_book\`, \`delete_reading\`, \`update_book\`, \`update_reading\`) before invoking. Deleting a book removes all its readings.
 `;
 }
 

@@ -30,7 +30,7 @@ Run `bun run pre-commit` with disposable local database credentials. The unit su
 
 If a migration fails, inspect its error before retrying manually. Never use `migrate reset`, `db push`, or `PRISMA_SCHEMA_DISABLE_ADVISORY_LOCK` in production. A persistent idle lock needs a targeted database-session investigation, not unlimited retries.
 
-This change introduces no schema or data migration. To roll back the deployment configuration, revert its commit and restore the prior Vercel build command; existing records and migration history remain intact. Keep future schema migrations compatible with the previous application version because it continues serving during builds and can be restored independently of the database.
+The rereading release adds a transactional reading-history backfill and compatibility triggers. Production builds run `bun run readings:verify` after migrations and before promotion. Keep the additive schema when rolling back the application; see [rereading migration and recovery](rereading.md#migration-and-rollback). Keep future schema migrations compatible with the previous application version because it continues serving during builds and can be restored independently of the database.
 
 ## Official references
 

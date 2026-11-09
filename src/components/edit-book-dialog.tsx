@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useTransition } from 'react';
+import type { Book } from '../../generated/prisma';
 import { Pencil } from 'lucide-react';
 import { updateBookAction } from '@/lib/books/actions';
 import { LANGUAGE_KEYS, LANGUAGE_NAMES } from '@/lib/books/language';
@@ -20,21 +21,6 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 
-type BookLike = {
-  id: string;
-  title: string;
-  author: string;
-  publicationDate: Date | null;
-  pages: number;
-  coverUrl: string | null;
-  category: string;
-  language: string;
-  status: string;
-  finishedOn: Date | null;
-  rating: number | null;
-  opinion: string | null;
-};
-
 /** Formats nullable dates for native date inputs; null produces an empty field. */
 function dateInput(d: Date | null): string {
   return d ? new Date(d).toISOString().slice(0, 10) : '';
@@ -45,10 +31,12 @@ export function EditBookDialog({
   book,
   authors,
   categories,
+  readingId,
 }: {
-  book: BookLike;
+  book: Book;
   authors: string[];
   categories: string[];
+  readingId?: string;
 }) {
   const [open, setOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -78,6 +66,9 @@ export function EditBookDialog({
         <DialogBody>
           <form action={submit} className="flex flex-col gap-5">
             <input type="hidden" name="status" value={book.status} />
+            {readingId && (
+              <input type="hidden" name="readingId" value={readingId} />
+            )}
             <Field
               label="Title"
               name="title"

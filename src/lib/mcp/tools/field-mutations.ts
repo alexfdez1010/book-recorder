@@ -16,7 +16,7 @@ export function registerFieldMutationTools(server: McpServer): void {
     {
       title: 'Set or clear a book rating',
       description:
-        'Set the 0.5–5 star rating (half-star steps) for a book by id. Pass `rating: null` to clear it.',
+        'Set the latest chronological reading’s 0.5–5 star rating (half-star steps) using its book id. Pass `rating: null` to clear it. Older readings are preserved; use update_reading to target one explicitly.',
       inputSchema: {
         id: z.string().min(1),
         rating: z.union([z.number().min(0.5).max(5).multipleOf(0.5), z.null()]),
@@ -30,7 +30,7 @@ export function registerFieldMutationTools(server: McpServer): void {
     {
       title: 'Set or clear a book opinion',
       description:
-        "Set the reader's optional opinion for a book by id. Pass `opinion: null` or blank text to clear it.",
+        "Set the latest chronological reading's opinion using its book id. Pass `opinion: null` or blank text to clear it. Older opinions are preserved; use update_reading for a specific reading.",
       inputSchema: {
         id: z.string().min(1),
         opinion: z.string().trim().max(10_000).nullable(),
@@ -54,7 +54,8 @@ export function registerFieldMutationTools(server: McpServer): void {
     'delete_book',
     {
       title: 'Delete a book',
-      description: 'Permanently delete a book record by id.',
+      description:
+        'Permanently delete a book and all its readings, ratings and opinions by book id.',
       inputSchema: { id: z.string().min(1) },
     },
     async ({ id }) => {

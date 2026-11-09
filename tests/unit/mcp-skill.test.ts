@@ -33,6 +33,10 @@ describe('skill markdown', () => {
       'mark_as_finished',
       'delete_book',
       'get_stats',
+      'record_reread',
+      'list_readings',
+      'update_reading',
+      'delete_reading',
     ]) {
       expect(md).toContain(tool);
     }

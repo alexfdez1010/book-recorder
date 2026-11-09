@@ -14,7 +14,15 @@ import {
 } from '@/components/ui/dialog';
 
 /** Confirms deletion for the supplied book; disables controls while saving. */
-export function DeleteBookButton({ id, title }: { id: string; title: string }) {
+export function DeleteBookButton({
+  id,
+  title,
+  readingCount = 0,
+}: {
+  id: string;
+  title: string;
+  readingCount?: number;
+}) {
   const [open, setOpen] = useState(false);
   const [pending, start] = useTransition();
 
@@ -40,7 +48,13 @@ export function DeleteBookButton({ id, title }: { id: string; title: string }) {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Delete book?</DialogTitle>
-          <DialogDescription>“{title}” will be removed.</DialogDescription>
+          <DialogDescription>
+            “{title}”
+            {readingCount > 1
+              ? ` and all ${readingCount} readings, ratings and opinions`
+              : ''}{' '}
+            will be removed.
+          </DialogDescription>
         </DialogHeader>
         <DialogBody>
           <div className="flex justify-end gap-3">

@@ -17,9 +17,8 @@ function dateAtOffset(now: Date, offset: number): Date {
 
 /** Queries the persisted finished-book totals independently of the chart reducer. */
 async function persistedTotals(now: Date, days: number) {
-  const result = await database.book.aggregate({
+  const result = await database.reading.aggregate({
     where: {
-      status: 'finished',
       finishedOn: {
         gte: dateAtOffset(now, 1 - days),
         lt: dateAtOffset(now, 1),

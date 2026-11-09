@@ -6,6 +6,7 @@ interface CollectionHeaderProps {
   count: number;
   pages: number;
   queued?: boolean;
+  readingCount?: number;
   children?: ReactNode;
 }
 
@@ -20,6 +21,7 @@ export function CollectionHeader({
   count,
   pages,
   queued = false,
+  readingCount,
   children,
 }: CollectionHeaderProps) {
   return (
@@ -31,7 +33,22 @@ export function CollectionHeader({
           <span className="font-medium text-ink">
             {count.toLocaleString('en-US')}
           </span>{' '}
-          {count === 1 ? 'book' : 'books'}
+          {readingCount === undefined
+            ? count === 1
+              ? 'book'
+              : 'books'
+            : count === 1
+              ? 'title'
+              : 'titles'}
+          {readingCount !== undefined && (
+            <>
+              <span aria-hidden="true" className="px-2.5" />
+              <span className="font-medium text-ink">
+                {readingCount.toLocaleString('en-US')}
+              </span>{' '}
+              {readingCount === 1 ? 'reading' : 'readings'}
+            </>
+          )}
           <span aria-hidden="true" className="px-2.5" />
           <span className="font-medium text-ink">
             {pages.toLocaleString('en-US')}

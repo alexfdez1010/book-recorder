@@ -48,19 +48,25 @@ export function GraphsDashboard({ data }: { data: GraphsData }) {
             </p>
           </div>
           <div className="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
-            <Kpi label="Books" value={data.totalBooks} />
+            <Kpi
+              label="Readings"
+              value={data.totalBooks}
+              note={`${data.totalTitles} distinct ${data.totalTitles === 1 ? 'title' : 'titles'}`}
+            />
             <Kpi
               label="Pages"
               value={data.totalPages.toLocaleString('en-US')}
             />
             <Kpi label="Pages / day" value={data.meanPagesPerDay} />
-            <Kpi label="Pages / book" value={data.avgPagesPerBook} />
+            <Kpi label="Pages / reading" value={data.avgPagesPerBook} />
             <Kpi label="Days between" value={data.avgDaysBetween} />
             <Kpi
               label="Top author"
               value={data.favoriteAuthor?.author ?? '—'}
               note={
-                data.favoriteAuthor ? `${data.favoriteAuthor.count} books` : ''
+                data.favoriteAuthor
+                  ? `${data.favoriteAuthor.count} readings`
+                  : ''
               }
               compact
             />
@@ -73,7 +79,7 @@ export function GraphsDashboard({ data }: { data: GraphsData }) {
           </div>
 
           <div className="grid grid-cols-1 gap-6 lg:gap-8 lg:grid-cols-2">
-            <Panel title="Books / month">
+            <Panel title="Readings / month">
               <BarPanel data={data.booksPerMonth} fill={LEATHER} />
             </Panel>
             <Panel title="Pages / month">
@@ -86,7 +92,7 @@ export function GraphsDashboard({ data }: { data: GraphsData }) {
                 type="stepAfter"
               />
             </Panel>
-            <Panel title="Cumulative books">
+            <Panel title="Cumulative readings">
               <LinePanel
                 data={data.cumulativeBooks}
                 stroke={BRASS}
@@ -100,7 +106,7 @@ export function GraphsDashboard({ data }: { data: GraphsData }) {
                 type="monotone"
               />
             </Panel>
-            <Panel title="Year over year — books / month">
+            <Panel title="Year over year — readings / month">
               <MultiLinePanel
                 data={data.yearOverYear.rows}
                 xKey="month"
@@ -113,7 +119,7 @@ export function GraphsDashboard({ data }: { data: GraphsData }) {
             <Panel title="Languages">
               <DistributionPie entries={data.languages} />
             </Panel>
-            <Panel title="Weekday — books">
+            <Panel title="Weekday — readings">
               <BarPanel data={data.weekday} fill={OXBLOOD} />
             </Panel>
             <Panel title="Weekday — pages">
@@ -144,7 +150,7 @@ export function GraphsDashboard({ data }: { data: GraphsData }) {
             <Panel title="Book age at reading">
               <BarPanel data={data.ageWhenRead} fill={OXBLOOD} />
             </Panel>
-            <Panel title="Books / year">
+            <Panel title="Readings / year">
               <BarPanel data={data.booksPerYear} fill={LEATHER} />
             </Panel>
           </div>

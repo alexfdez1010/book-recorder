@@ -155,6 +155,8 @@ Preview deployments do not automatically migrate: this project's preview variabl
 
 Your agent now has the same library tools as the UI — search, list, add, update, delete, stats, the lot.
 
+Finished books support **Register reread** and a dated reading history. Every reading retains its own pages, language, rating and opinion. Activity counts include rereads, while title counts identify distinct books. See [rereading, migration safety and MCP examples](docs/rereading.md).
+
 Opinions accept up to 10,000 characters. `get_book`, `list_books`, and
 `list_to_read_books` return the saved text (or `null`). Opinions are optional on
 `add_book` and `update_book`; omitting the field during an update preserves it.

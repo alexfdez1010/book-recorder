@@ -7,6 +7,10 @@ import { listCategories } from '@/lib/books/categories-repository';
 import { searchBooks } from '@/lib/books/search';
 import { BOOK_STATUSES } from '@/lib/books/status';
 import {
+  listLibraryBooks,
+  readingOrder,
+} from '@/lib/books/readings-repository';
+import {
   booksPerMonth,
   cumulativePages,
   distribution,
@@ -98,11 +102,11 @@ export function registerQueryTools(server: McpServer): void {
     {
       title: 'List authors',
       description:
-        'List every distinct author with the number of books recorded for them, sorted by count desc.',
+        'List every distinct author with the number of distinct read titles recorded for them, sorted by count desc. Rereads count once per title here.',
       inputSchema: {},
     },
     async () => {
-      const books = await listBooks();
+      const books = await listLibraryBooks();
       return ok(topAuthors(books, books.length));
     },
   );
@@ -128,10 +132,17 @@ export function registerQueryTools(server: McpServer): void {
     'get_book',
     {
       title: 'Get a book by id',
-      description: 'Return a single book record by its database id, or null.',
+      description:
+        'Return a book with its full reading history by database id, or null. Top-level personal fields describe the latest chronological reading.',
       inputSchema: { id: z.string().min(1) },
     },
-    async ({ id }) => ok(await prisma.book.findUnique({ where: { id } })),
+    async ({ id }) =>
+      ok(
+        await prisma.book.findUnique({
+          where: { id },
+          include: { readings: { orderBy: readingOrder } },
+        }),
+      ),
   );
 
   server.registerTool(
@@ -147,6 +158,8 @@ export function registerQueryTools(server: McpServer): void {
       return ok({
         totals: {
           books: books.length,
+          readings: books.length,
+          titles: new Set(books.map((book) => book.id)).size,
           pages: books.reduce((s, b) => s + b.pages, 0),
           authors: new Set(books.map((b) => b.author)).size,
         },

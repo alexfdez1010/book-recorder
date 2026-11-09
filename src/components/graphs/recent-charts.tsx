@@ -56,7 +56,7 @@ export function RecentCharts({ period }: { period: RecentPerformance }) {
           <figcaption className="mb-6 flex flex-wrap items-baseline justify-between gap-2">
             <h3 className="font-medium">Completed pages by day</h3>
             <span className="text-xs text-ink-mute">
-              {period.current.books} books finished
+              {period.current.books} readings finished
             </span>
           </figcaption>
           <ResponsiveContainer width="100%" height={230}>
@@ -91,7 +91,7 @@ export function RecentCharts({ period }: { period: RecentPerformance }) {
           </ResponsiveContainer>
           {period.current.books === 0 && (
             <p className="mt-3 text-sm text-ink-mute">
-              No books finished in this period. Your next finish will appear
+              No readings finished in this period. Your next finish will appear
               here.
             </p>
           )}

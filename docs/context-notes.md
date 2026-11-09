@@ -1,6 +1,12 @@
 # Implementation context
 
-Recorded on 2026-10-29 for subsequent work on the library experience.
+## Rereading decisions in November 2026
+
+The user approved separate book and reading records, a lossless migration, implementation with mobile-first interactions and a push to main. The additive reading migration preserves all Book columns and copies dated finished rows verbatim with deterministic legacy reading ids. Do not merge duplicate titles automatically or remove the existing owner index. Compatibility triggers keep the previous deployment and MCP clients writing the latest reading; retain them during application rollbacks. Repository writes lock Book before Reading. Every completion contributes its historical pages/language to activity; distinct titles use book ids. The monthly journal shows every reading, while authors show each title once. New personal fields start blank, stable UUIDs make create retries safe, and focused edits cannot overwrite sibling readings. The final reading is protected from individual removal; full-book deletion explicitly includes all history. See [rereading](rereading.md).
+
+The final 2026-11-09 pre-commit gate passed 234 unit, 6 live integration, 11 database/migration and 47 browser tests, plus production build, lint and formatting. A legacy-create regression check ensures compatibility triggers do not change timestamps when the projected fields already match. History dialogs live above journal cards so removing their originating reading cannot dismiss them; focus returns to another history control for the same title. Screenshots were inspected at 320, 390 and 1440 pixels. A private pre-deployment snapshot in the ignored `.vercel/` directory contains 80 production books (75 finished, 5 queued) and 28 categories. The optional schema diff reports only the pre-existing Category.updatedAt database default, already present in the older category migration; the reading schema matches its migration.
+
+Earlier implementation context was recorded on 2026-10-29 for subsequent work on the library experience.
 
 ## Product and design decisions
 

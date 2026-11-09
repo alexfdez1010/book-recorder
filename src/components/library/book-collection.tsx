@@ -1,8 +1,9 @@
 'use client';
 
-import { useDeferredValue, useMemo, useState } from 'react';
+import { useDeferredValue, useMemo, useRef, useState } from 'react';
 import { BookOpen, SearchX } from 'lucide-react';
-import type { Book } from '../../../generated/prisma';
+import type { CollectionBook } from '@/lib/books/reading-types';
+import { collectionEntries } from '@/lib/books/readings';
 import {
   filterCollection,
   groupCollection,
@@ -10,10 +11,11 @@ import {
 } from '@/lib/books/collection';
 import { Button } from '@/components/ui/button';
 import { BookEntry } from './book-entry';
+import { ReadingHistoryDialog } from '@/components/readings/reading-history-dialog';
 import { CollectionToolbar, type CollectionView } from './collection-toolbar';
 
 interface BookCollectionProps {
-  books: Book[];
+  books: CollectionBook[];
   authors: string[];
   categories: string[];
   grouping: CollectionGrouping;
@@ -38,15 +40,39 @@ export function BookCollection({
 }: BookCollectionProps) {
   const [query, setQuery] = useState('');
   const [view, setView] = useState<CollectionView>('grid');
+  const [historyId, setHistoryId] = useState<string | null>(null);
+  const historyTrigger = useRef<HTMLButtonElement | null>(null);
+  const collection = useRef<HTMLDivElement>(null);
+  const historyBook = books.find((book) => book.id === historyId);
   const deferredQuery = useDeferredValue(query);
+  const entries = useMemo(
+    () => collectionEntries(books, grouping === 'month'),
+    [books, grouping],
+  );
   const filtered = useMemo(
-    () => filterCollection(books, deferredQuery),
-    [books, deferredQuery],
+    () => filterCollection(entries, deferredQuery),
+    [entries, deferredQuery],
   );
   const groups = useMemo(
     () => groupCollection(filtered, grouping),
     [filtered, grouping],
   );
+  /** Restores focus even when removing a reading also removes its original card. */
+  function closeHistory() {
+    setHistoryId(null);
+    requestAnimationFrame(() => {
+      if (historyTrigger.current?.isConnected) historyTrigger.current.focus();
+      else
+        (
+          collection.current?.querySelector<HTMLButtonElement>(
+            `[data-book-history="${CSS.escape(historyId ?? '')}"]`,
+          ) ??
+          collection.current?.querySelector<HTMLInputElement>(
+            'input[type="search"]',
+          )
+        )?.focus();
+    });
+  }
   if (books.length === 0) {
     return (
       <div className="lib-empty">
@@ -64,14 +90,22 @@ export function BookCollection({
     );
   }
   return (
-    <div className="flex min-w-0 flex-col gap-8">
+    <div ref={collection} className="flex min-w-0 flex-col gap-8">
+      {historyBook?.readings && (
+        <ReadingHistoryDialog
+          title={historyBook.title}
+          readings={historyBook.readings}
+          onClose={closeHistory}
+        />
+      )}
       <CollectionToolbar
         query={query}
         onQueryChange={setQuery}
         view={view}
         onViewChange={setView}
         resultCount={filtered.length}
-        totalCount={books.length}
+        totalCount={entries.length}
+        readings={grouping === 'month'}
       />
       <div
         className="flex min-w-0 flex-col gap-10"
@@ -105,7 +139,13 @@ export function BookCollection({
                   <h2 className="lib-month-head__title">{group.label}</h2>
                   <span className="lib-meta">
                     {group.books.length}{' '}
-                    {group.books.length === 1 ? 'book' : 'books'}
+                    {grouping === 'month'
+                      ? group.books.length === 1
+                        ? 'reading'
+                        : 'readings'
+                      : group.books.length === 1
+                        ? 'book'
+                        : 'books'}
                   </span>
                 </header>
               )}
@@ -114,12 +154,16 @@ export function BookCollection({
               >
                 {group.books.map((book, index) => (
                   <BookEntry
-                    key={book.id}
+                    key={book.readingId ?? book.id}
                     book={book}
                     authors={authors}
                     categories={categories}
                     showRating={showRating}
                     priority={groupIndex === 0 && index < 4}
+                    onShowHistory={(trigger) => {
+                      historyTrigger.current = trigger;
+                      setHistoryId(book.id);
+                    }}
                   />
                 ))}
               </ul>

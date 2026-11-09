@@ -1,6 +1,7 @@
 import { BookCollection } from '@/components/library/book-collection';
 import { CollectionHeader } from '@/components/library/collection-header';
-import { listAuthors, listBooks } from '@/lib/books/repository';
+import { listAuthors } from '@/lib/books/repository';
+import { listLibraryBooks } from '@/lib/books/readings-repository';
 import { listCategories } from '@/lib/books/categories-repository';
 
 export const dynamic = 'force-dynamic';
@@ -8,7 +9,7 @@ export const dynamic = 'force-dynamic';
 /** Loads completed books grouped by author, retaining existing edit actions. */
 export default async function AuthorsPage() {
   const [books, authors, categories] = await Promise.all([
-    listBooks(),
+    listLibraryBooks(),
     listAuthors(),
     listCategories(),
   ]);
@@ -19,7 +20,16 @@ export default async function AuthorsPage() {
         title="Authors"
         description={`${count} ${count === 1 ? 'voice' : 'voices'} in your reading life`}
         count={books.length}
-        pages={books.reduce((sum, book) => sum + book.pages, 0)}
+        readingCount={books.reduce(
+          (sum, book) => sum + book.readings.length,
+          0,
+        )}
+        pages={books.reduce(
+          (sum, book) =>
+            sum +
+            book.readings.reduce((pages, reading) => pages + reading.pages, 0),
+          0,
+        )}
       />
       <BookCollection
         books={books}

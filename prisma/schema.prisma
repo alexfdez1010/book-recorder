@@ -32,6 +32,7 @@ model Book {
   source          String?
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
+  readings        Reading[]
 
   @@index([finishedOn])
   @@index([category])

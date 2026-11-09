@@ -1,7 +1,8 @@
 import { AddBookDialog } from '@/components/add-book-dialog';
 import { BookCollection } from '@/components/library/book-collection';
 import { CollectionHeader } from '@/components/library/collection-header';
-import { listAuthors, listBooks } from '@/lib/books/repository';
+import { listAuthors } from '@/lib/books/repository';
+import { listLibraryBooks } from '@/lib/books/readings-repository';
 import { listCategories } from '@/lib/books/categories-repository';
 
 export const dynamic = 'force-dynamic';
@@ -9,7 +10,7 @@ export const dynamic = 'force-dynamic';
 /** Loads finished books and selection options; collection interaction stays local. */
 export default async function BooksPage() {
   const [books, authors, categories] = await Promise.all([
-    listBooks(),
+    listLibraryBooks(),
     listAuthors(),
     listCategories(),
   ]);
@@ -19,7 +20,16 @@ export default async function BooksPage() {
         title="Books"
         description="The books you finish and the stories you keep"
         count={books.length}
-        pages={books.reduce((sum, book) => sum + book.pages, 0)}
+        readingCount={books.reduce(
+          (sum, book) => sum + book.readings.length,
+          0,
+        )}
+        pages={books.reduce(
+          (sum, book) =>
+            sum +
+            book.readings.reduce((pages, reading) => pages + reading.pages, 0),
+          0,
+        )}
       >
         <AddBookDialog authors={authors} categories={categories} />
       </CollectionHeader>

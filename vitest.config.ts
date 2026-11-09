@@ -1,5 +1,5 @@
 import { defineConfig } from 'vitest/config';
-import { config } from 'dotenv';
+import 'dotenv/config';
 import path from 'path';
 
 export default defineConfig({
@@ -12,8 +12,5 @@ export default defineConfig({
     testTimeout: 20000,
     environment: 'node',
     setupFiles: './tests/setup.ts',
-    env: {
-      ...config().parsed,
-    },
   },
 });

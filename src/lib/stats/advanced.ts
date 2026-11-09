@@ -89,7 +89,10 @@ export function pagesByCategory(books: BookLike[]): CountEntry[] {
 }
 
 /** Top-N authors by book count, descending. */
-export function topAuthors(books: BookLike[], n = 8): CountEntry[] {
+export function topAuthors(
+  books: readonly Pick<BookLike, 'author'>[],
+  n = 8,
+): CountEntry[] {
   const m = new Map<string, number>();
   for (const b of books) {
     const a = (b.author ?? '').trim() || 'Unknown';

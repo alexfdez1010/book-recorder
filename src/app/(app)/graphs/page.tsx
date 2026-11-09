@@ -77,6 +77,7 @@ export default async function GraphsPage() {
     longestBook: longestBook(plain),
     favoriteAuthor: favoriteAuthor(plain),
     totalBooks: books.length,
+    totalTitles: new Set(books.map((book) => book.id)).size,
     totalPages: books.reduce((s, b) => s + b.pages, 0),
   };
   return (

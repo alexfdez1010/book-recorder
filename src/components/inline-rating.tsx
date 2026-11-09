@@ -2,6 +2,7 @@
 
 import { useOptimistic, useRef, useState, useTransition } from 'react';
 import { setBookRatingAction } from '@/lib/books/actions';
+import { setReadingRatingAction } from '@/lib/books/reading-actions';
 import { StarRating } from './star-rating';
 
 /**
@@ -12,9 +13,11 @@ import { StarRating } from './star-rating';
 export function InlineRating({
   id,
   rating,
+  readingId,
 }: {
   id: string;
   rating: number | null;
+  readingId?: string;
 }) {
   const [optimistic, setOptimistic] = useOptimistic(rating);
   const [pending, start] = useTransition();
@@ -29,7 +32,9 @@ export function InlineRating({
     start(async () => {
       setOptimistic(next);
       try {
-        const result = await setBookRatingAction(id, next);
+        const result = readingId
+          ? await setReadingRatingAction(id, readingId, next)
+          : await setBookRatingAction(id, next);
         if (result.error)
           setError('Rating could not be saved. Please try again.');
       } catch {

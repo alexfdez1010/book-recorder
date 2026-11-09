@@ -63,9 +63,11 @@
     }
     .lib-book-list .lib-card__foot {
       @apply m-0 flex-col justify-center border-0 p-0;
+      grid-column: 2;
+      grid-row: 1 / 3;
     }
-    .lib-book-list .lib-card details {
-      grid-column: 1 / -1;
+    .lib-book-list .lib-card__context {
+      grid-column: 1;
       grid-row: 2;
     }
   }

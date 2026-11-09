@@ -22,6 +22,10 @@ const TOOL_NAMES = [
   'mark_as_finished',
   'delete_book',
   'get_stats',
+  'record_reread',
+  'list_readings',
+  'update_reading',
+  'delete_reading',
 ];
 
 async function connect(page: Page) {
@@ -206,6 +210,129 @@ test('get_stats returns the documented shape', async ({ page }) => {
     expect(Array.isArray(stats.booksPerMonth)).toBe(true);
     expect(Array.isArray(stats.cumulativePages)).toBe(true);
   } finally {
+    await transport.close();
+  }
+});
+
+test('MCP rereads preserve original snapshots, statistics and legacy field commands', async ({
+  page,
+}) => {
+  const { client, transport } = await connect(page);
+  let bookId: string | undefined;
+  type Reading = {
+    id: string;
+    pages: number;
+    language: string;
+    rating: number | null;
+    opinion: string | null;
+  };
+  try {
+    const baseline = parseToolJson<{
+      totals: { readings: number; titles: number; pages: number };
+    }>(await client.callTool({ name: 'get_stats', arguments: {} }));
+    const book = parseToolJson<{ id: string }>(
+      await client.callTool({
+        name: 'add_book',
+        arguments: {
+          title: `MCP reread ${crypto.randomUUID()}`,
+          author: 'MCP reread fixture',
+          pages: 300,
+          category: 'Fiction',
+          language: 'en',
+          finishedOn: '2020-01-01',
+          rating: 3.5,
+          opinion: 'Original opinion',
+        },
+      }),
+    );
+    bookId = book.id;
+    const original = parseToolJson<Reading[]>(
+      await client.callTool({ name: 'list_readings', arguments: { bookId } }),
+    )[0];
+    const args = {
+      bookId,
+      requestId: crypto.randomUUID(),
+      finishedOn: '2026-11-09',
+      pages: 320,
+      language: 'es',
+    };
+    const second = parseToolJson<Reading>(
+      await client.callTool({ name: 'record_reread', arguments: args }),
+    );
+    expect(second).toMatchObject({
+      pages: 320,
+      language: 'es',
+      rating: null,
+      opinion: null,
+    });
+    const retry = parseToolJson<Reading>(
+      await client.callTool({ name: 'record_reread', arguments: args }),
+    );
+    expect(retry).toEqual(second);
+    const stats = parseToolJson<{
+      totals: {
+        books: number;
+        readings: number;
+        titles: number;
+        pages: number;
+      };
+    }>(await client.callTool({ name: 'get_stats', arguments: {} }));
+    expect(stats.totals.readings).toBe(baseline.totals.readings + 2);
+    expect(stats.totals.books).toBe(stats.totals.readings);
+    expect(stats.totals.titles).toBe(baseline.totals.titles + 1);
+    expect(stats.totals.pages).toBe(baseline.totals.pages + 620);
+    await client.callTool({
+      name: 'set_rating',
+      arguments: { id: bookId, rating: 5 },
+    });
+    await client.callTool({
+      name: 'update_reading',
+      arguments: {
+        bookId,
+        id: original.id,
+        finishedOn: '2020-01-01',
+        pages: 301,
+        language: 'en',
+        rating: 3.5,
+        opinion: 'Corrected original',
+      },
+    });
+    const fetched = parseToolJson<{ rating: number; readings: Reading[] }>(
+      await client.callTool({ name: 'get_book', arguments: { id: bookId } }),
+    );
+    expect(fetched.rating).toBe(5);
+    expect(fetched.readings).toHaveLength(2);
+    expect(fetched.readings[0]).toMatchObject({
+      id: second.id,
+      pages: 320,
+      rating: 5,
+      opinion: null,
+    });
+    expect(fetched.readings[1]).toMatchObject({
+      id: original.id,
+      pages: 301,
+      rating: 3.5,
+      opinion: 'Corrected original',
+    });
+    parseToolJson(
+      await client.callTool({
+        name: 'delete_reading',
+        arguments: { bookId, id: second.id },
+      }),
+    );
+    const lastDelete = await client.callTool({
+      name: 'delete_reading',
+      arguments: { bookId, id: original.id },
+    });
+    expect(lastDelete.isError).toBe(true);
+    expect(
+      parseToolJson<Reading[]>(
+        await client.callTool({ name: 'list_readings', arguments: { bookId } }),
+      ),
+    ).toHaveLength(1);
+  } finally {
+    if (bookId)
+      await client.callTool({ name: 'delete_book', arguments: { id: bookId } });
     await transport.close();
   }
 });

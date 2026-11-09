@@ -10,8 +10,8 @@ export function RecentFigures({ points }: { points: RecentDay[] }) {
       <div className="mt-2 max-h-64 overflow-auto rounded-xl bg-bone p-4">
         <table className="w-full text-left tabular-nums">
           <caption className="sr-only">
-            Daily completed pages and books, with the preceding period aligned
-            by day
+            Daily completed pages and readings, with the preceding period
+            aligned by day
           </caption>
           <thead>
             <tr>
@@ -19,7 +19,7 @@ export function RecentFigures({ points }: { points: RecentDay[] }) {
                 Date (UTC)
               </th>
               <th scope="col" className="pb-3 font-medium">
-                Books
+                Readings
               </th>
               <th scope="col" className="pb-3 font-medium">
                 Pages

@@ -80,7 +80,7 @@ export function registerMutationTools(server: McpServer): void {
     {
       title: 'Update a recorded book',
       description:
-        'Update an existing book record by id. All metadata fields are required.',
+        'Update shared book metadata and its latest chronological reading by book id. Older readings are preserved. All metadata fields are required; an omitted opinion is preserved. Use update_reading for a specific historical reading.',
       inputSchema: { id: z.string().min(1), ...bookFields },
     },
     async ({ id, ...rest }) => {
@@ -113,7 +113,7 @@ export function registerMutationTools(server: McpServer): void {
     {
       title: 'Move a to-read book to finished',
       description:
-        'Promote a to-read book to the finished shelf by setting `finishedOn` (YYYY-MM-DD). Optionally include a 0.5–5 `rating` in half-star steps.',
+        'Promote a to-read book to the finished shelf by setting `finishedOn` (YYYY-MM-DD). Optionally include a 0.5–5 `rating` in half-star steps. Retrying on an already finished book preserves its history; use record_reread for another reading.',
       inputSchema: {
         id: z.string().min(1),
         finishedOn: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'YYYY-MM-DD'),

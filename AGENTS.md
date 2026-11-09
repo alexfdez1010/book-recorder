@@ -149,6 +149,7 @@ Pre-commit gate (runs before allowing a commit): `bun run pre-commit` = `bun run
 - Client is generated to `generated/prisma` (custom output, committed-ignored). Import via `src/lib/db/prisma.ts`.
 - `Book` records include an optional `opinion` text field (up to 10,000 characters at the input boundary). Missing opinions stay null; legacy updates that omit the field preserve existing text. MCP exposes `set_opinion` to set or clear it.
 - `Book` indexes cover `finishedOn`, `category`, and `status`; categories also have their own model.
+- `Reading` owns per-reading date, pages, language, rating and opinion. `Book` retains a latest-reading projection for legacy clients and deployment rollback, synchronized by PostgreSQL triggers. Keep these custom triggers in future migrations. History writes must lock the parent book before the reading. See `docs/rereading.md` for migration preservation, rollback and APIs.
 
 ### Test pyramid
 

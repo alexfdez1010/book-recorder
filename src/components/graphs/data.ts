@@ -29,5 +29,6 @@ export interface GraphsData {
   recentWeek: RecentPerformance;
   recentMonth: RecentPerformance;
   totalBooks: number;
+  totalTitles: number;
   totalPages: number;
 }

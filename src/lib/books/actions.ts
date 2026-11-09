@@ -84,19 +84,25 @@ export async function updateBookAction(
   }
   const d = parsed.data;
   const isFinished = d.status === 'finished';
-  await updateBook(id, {
-    title: d.title,
-    author: d.author,
-    publicationDate: d.publicationDate ? new Date(d.publicationDate) : null,
-    pages: d.pages,
-    coverUrl: d.coverUrl ? d.coverUrl : null,
-    category: d.category,
-    language: d.language,
-    status: d.status,
-    finishedOn: isFinished && d.finishedOn ? new Date(d.finishedOn) : null,
-    rating: d.rating ?? null,
-    ...(Object.hasOwn(raw, 'opinion') ? { opinion: d.opinion ?? null } : {}),
-  });
+  await updateBook(
+    id,
+    {
+      title: d.title,
+      author: d.author,
+      publicationDate: d.publicationDate ? new Date(d.publicationDate) : null,
+      pages: d.pages,
+      coverUrl: d.coverUrl ? d.coverUrl : null,
+      category: d.category,
+      language: d.language,
+      status: d.status,
+      finishedOn: isFinished && d.finishedOn ? new Date(d.finishedOn) : null,
+      rating: d.rating ?? null,
+      ...(Object.hasOwn(raw, 'opinion') ? { opinion: d.opinion ?? null } : {}),
+    },
+    typeof raw.readingId === 'string' && raw.readingId
+      ? raw.readingId
+      : undefined,
+  );
   revalidateBookPaths();
   return {};
 }

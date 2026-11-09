@@ -32,7 +32,7 @@ function Change({ current, previous }: { current: number; previous: number }) {
 /** Presents four parallel period metrics as one accessible definition list. */
 export function RecentSummary({ period }: { period: RecentPerformance }) {
   const metrics = [
-    { key: 'books', label: 'Books finished' },
+    { key: 'books', label: 'Readings finished' },
     { key: 'pages', label: 'Completed pages' },
     { key: 'pagesPerDay', label: 'Pages / calendar day' },
     { key: 'completionDays', label: 'Days with a finish' },
